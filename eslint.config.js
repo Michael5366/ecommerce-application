@@ -19,6 +19,7 @@ export default defineConfig([
     },
     rules: {
       'prettier/prettier': 'error',
+      'react/react-in-jsx-scope': 'off',
     },
   },
 ]);
