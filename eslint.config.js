@@ -7,20 +7,16 @@ import { defineConfig } from 'eslint/config';
 
 export default defineConfig([
   ...tseslint.configs.recommended,
-  ...pluginReact.configs.flat.recommended,
+  pluginReact.configs.flat.recommended,
   {
     files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'],
     languageOptions: {
       globals: globals.browser,
     },
-  },
-  {
-    files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'],
     plugins: {
       js,
       prettier: pluginPrettier,
     },
-    extends: ['js/recommended', 'plugin:prettier/recommended'],
     rules: {
       'prettier/prettier': 'error',
     },
