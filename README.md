@@ -1,54 +1,83 @@
-# React + TypeScript + Vite
+# 🛍️ RS E-Commerce App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is an e-commerce web application developed as part of the [Rolling Scopes School](https://rs.school/) curriculum. The project is built using modern frontend tools and integrates with CommerceTools for backend services.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 📦 Tech Stack
 
-## Expanding the ESLint configuration
+- 🔧 **Vite** — Project bundler and dev server
+- ⚛️ **React** — Frontend framework
+- 🧠 **TypeScript** — Static typing
+- 🧹 **ESLint** — Linting for code quality
+- 🎨 **Prettier** — Code formatting
+- 🐶 **Husky** — Git hooks for pre-commit checks
+- 🧪 **Vitest** — Unit testing framework
+- 🛒 **CommerceTools** — Headless e-commerce backend
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-});
-```
+## 🧪 Scripts
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- ▶️ `npm run dev` — Start development server
+- 🏗️ `npm run build` — Build the app for production
+- 🔍 `npm run preview` — Preview the production build
+- 🧼 `npm run lint` — Run ESLint to check code
+- 🖌️ `npm run format` — Format code using Prettier
+- 🧪 `npm run test` — Run unit tests using Vitest
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x';
-import reactDom from 'eslint-plugin-react-dom';
+---
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-});
-```
+## 🚀 Getting Started
+
+**To run the project locally:**
+
+- 🖥️ Clone the repository from [GitHub Repository](https://github.com/Michael5366/ecommerce-application)
+- 📂 cd ecommerce-application
+- 📦 npm install
+- 🚀 npm run dev
+
+## 📁 Project Structure
+
+**ecommerce-application/**
+
+- public/
+  - vite.svg
+- src/
+  - assets/
+  - components/
+  - hooks/
+  - pages/
+  - services/
+  - styles/
+  - utils/
+  - App.tsx
+  - index.tsx
+- .gitignore
+- .prettierignore
+- .prettierrc
+- eslint.config.js
+- index.html
+- package-lock.json
+- package.json
+- README.md
+- tsconfig.app.json
+- tsconfig.json
+- tsconfig.node.json
+- vite.config.ts
+
+## ✅ Testing
+
+**This project uses [Vitest](https://vitest.dev/) for unit testing.**
+
+To run tests:
+
+- 🔬 npm run test
+
+## 👥 Team
+
+- 🔧 Project setup: [Michael Elsky](https://github.com/Michael5366)
+- 📋 Task board: [Vladislav Murylev](https://github.com/vlad-m28)
+- 🛒 CommerceTools setup: [Viktoriia Petukhova](https://github.com/viktoriiapet)
+
+**All team members** collaborate on creating components, implementing features, and ensuring the overall functionality of the project.
