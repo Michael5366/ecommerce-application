@@ -1,10 +1,11 @@
-// import { useState } from 'react';
+import { Routes, Route } from 'react-router-dom';
+import LoginPage from './pages/LoginPage';
 
 function App() {
   return (
-    <>
-      <h1>...</h1>
-    </>
+    <Routes>
+      <Route path="/login" element={<LoginPage />} />
+    </Routes>
   );
 }
 
