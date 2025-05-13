@@ -1,4 +1,10 @@
 import { useState } from 'react';
+import { getAnonymousToken, signUpUser, getCustomerToken } from '../services/auth';
+
+
+console.log(import.meta.env.VITE_CTP_PROJECT_KEY);
+console.log(import.meta.env.VITE_CTP_CLIENT_ID);
+console.log(import.meta.env.VITE_CTP_CLIENT_SECRET);
 
 type FormData = {
   username: string;
@@ -56,7 +62,7 @@ function RegisterForm() {
       newErrors.password = 'Пароль должен быть не менее 8 символов, содержать как минимум одну заглавную букву, одну строчную и одну цифру';
     }
 
-    if (!/^[А-Яа-яЁёA-Za-z]+$/.test(formData.username.trim())) {
+    if (!/^[А-Яа-яЁёA-Za-z]+$/.test(formData.surname.trim())) {
       newErrors.surname = 'Введите фамилию без спецфсимволов и цифр';
     }
 
@@ -89,11 +95,11 @@ function RegisterForm() {
     return newErrors;
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSubmitted(true);
 
-
+    
     const validationErrors = validate();
     setErrors(validationErrors);
 
@@ -101,7 +107,21 @@ function RegisterForm() {
 
     if (Object.keys(validationErrors).length === 0) {
       console.log('Отправка данных на сервер:', formData);
-      // API
+      try {
+        const anonToken = await getAnonymousToken();
+
+        await signUpUser(anonToken, {
+          email: formData.email,
+          password: formData.password,
+          firstName: formData.username,
+          lastName: formData.surname
+        });
+        const customerToken = await getCustomerToken(formData.email, formData.password);
+
+        console.log('Успешно авторизован:', customerToken);
+      } catch (e) {
+        console.error('Ошибка регистрации:', e);
+      }
     }
   };
 
@@ -147,6 +167,8 @@ function RegisterForm() {
       onChange={handleChange} />
       {submitted && errors.birthday && <p>{errors.birthday}</p>}
 
+      <div className='adress-block'>
+      <div className='adress-enter'>
       <input name="street"
       placeholder="Улица"
       value={formData.street}
@@ -170,7 +192,10 @@ function RegisterForm() {
       value={formData.country}
       onChange={handleChange} />
       {submitted && errors.country && <p>{errors.country}</p>}
-
+      </div>
+      <p>Добавить как адрес по умолчанию</p>
+      <input type="checkbox" />
+      </div>
       <button type="submit">Зарегистрироваться</button>
       <button style={{backgroundColor: 'violet'}}>Войти без регистрации</button>
     </form>
