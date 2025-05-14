@@ -7,6 +7,10 @@
   box-sizing: border-box;
 }
 
+.container h1 {
+  text-align: center;
+}
+
 .formGroup {
   margin-bottom: 1rem;
   position: relative;
@@ -36,6 +40,8 @@
 }
 
 .error {
+  display: flex;
+  align-items: center;
   color: #d32f2f;
   font-size: 0.8rem;
   margin-top: 0.25rem;
@@ -118,4 +124,34 @@
 
 .togglePassword svg {
   font-size: 1.25rem;
+}
+
+.errorIcon {
+  margin-right: 8px;
+  font-size: 18px;
+  vertical-align: middle;
+}
+
+.submitButton {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.spinner {
+  color: inherit;
+  width: 20px;
+  height: 20px;
+  animation: rotate 1s linear infinite;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
