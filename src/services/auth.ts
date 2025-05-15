@@ -1,5 +1,5 @@
 // services/auth.ts
-import { Address } from '../pages/registration';
+import { Address } from '../types/form';
 
 const clientId = 'your_client_id';
 const clientSecret = 'your_client_secret';

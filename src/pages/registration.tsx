@@ -1,179 +1,37 @@
 import { useState } from 'react';
 import { getAnonymousToken, signUpUser, getCustomerToken } from '../services/auth';
 import { SignUpPayload } from '../services/auth';
+import { Address, AddressErrors, FormErrors } from '../types/form';
+import useRegistrationForm from '../hooks/useRegistrationForm';
+import { validateRegistration } from '../utils/validateRegistration';
 
-export type Address = {
-  streetName: string;
-  city: string;
-  postalCode: string;
-  country: string;
-  defaultShippingAddress?: boolean;
-  defaultBillingAddress?: boolean;
-};
 
-type FormData = {
-  username: string;
-  email: string;
-  password: string;
-  surname: string;
-  birthday: string;
-  shippingAddress: Address;
-  billingAddress: Address;
-};
-
-type AddressErrors = Partial<Record<keyof Address, string>>;
-type FormErrors = Partial<
-  Record<keyof Omit<FormData, 'shippingAddress' | 'billingAddress'>, string>
-> & {
-  shippingAddress?: AddressErrors;
-  billingAddress?: AddressErrors;
-};
 
 function RegisterForm() {
-  const [formData, setFormData] = useState<FormData>({
-    username: '',
-    email: '',
-    password: '',
-    surname: '',
-    birthday: '',
-    shippingAddress: {
-      streetName: '',
-      city: '',
-      postalCode: '',
-      country: '',
-      defaultShippingAddress: false,
-    },
-    billingAddress: {
-      streetName: '',
-      city: '',
-      postalCode: '',
-      country: '',
-      defaultBillingAddress: false,
-    },
-  });
+  const {
+  formData,
+  setFormData,
+  useSameAddress,
+  handleAddressChange,
+  handleCheckboxChange,
+  handleDefaultShippingChange,
+  handleDefaultBillingChange,
+} = useRegistrationForm();
+
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitted, setSubmitted] = useState(false);
-
-  const [useSameAddress, setUseSameAddress] = useState(true);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleAddressChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-    type: 'shippingAddress' | 'billingAddress'
-  ) => {
-    const { name, value } = e.target;
-
-    if (useSameAddress && type === 'shippingAddress') {
-      setFormData((prev) => ({
-        ...prev,
-        shippingAddress: { ...prev.shippingAddress, [name]: value },
-        billingAddress: { ...prev.billingAddress, [name]: value },
-      }));
-    } else {
-      setFormData((prev) => ({
-        ...prev,
-        [type]: { ...prev[type], [name]: value },
-      }));
-    }
-  };
-
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const isChecked = e.target.checked;
-    setUseSameAddress(isChecked);
-
-    if (isChecked) {
-      setFormData((prev) => ({
-        ...prev,
-        billingAddress: { ...prev.shippingAddress }, // копируем адрес
-      }));
-    } else {
-      setFormData((prev) => ({
-        ...prev,
-        billingAddress: { streetName: '', city: '', postalCode: '', country: '' },
-      }));
-    }
-  };
-  const handleDefaultShippingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData((prev) => ({
-      ...prev,
-      shippingAddress: {
-        ...prev.shippingAddress,
-        defaultShippingAddress: e.target.checked,
-      },
-    }));
-  };
-
-  const handleDefaultBillingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData((prev) => ({
-      ...prev,
-      billingAddress: {
-        ...prev.billingAddress,
-        defaultBillingAddress: e.target.checked,
-      },
-    }));
-  };
-  const validate = (): FormErrors => {
-    const newErrors: FormErrors = {};
-
-    if (!formData.username.trim()) {
-      newErrors.username = 'Введите имя пользователя';
-    } else if (!/^[А-Яа-яЁёA-Za-z]+$/.test(formData.username.trim())) {
-      newErrors.username = 'Имя должно содержать только буквы';
-    }
-
-    const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-    if (!emailValid.test(formData.email.trim())) {
-      newErrors.email = 'Введите корректный email';
-    }
-
-    const passwordValid = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
-    if (!passwordValid.test(formData.password.trim())) {
-      newErrors.password =
-        'Пароль должен быть не менее 8 символов и содержать заглавную букву, строчную и цифру';
-    }
-
-    if (!/^[А-Яа-яЁёA-Za-z]+$/.test(formData.surname.trim())) {
-      newErrors.surname = 'Фамилия должна содержать только буквы';
-    }
-
-    if (!formData.birthday) {
-      newErrors.birthday = 'Введите дату рождения';
-    } else {
-      const birthday = new Date(formData.birthday);
-      const age = new Date().getFullYear() - birthday.getFullYear();
-      const month = new Date().getMonth() - birthday.getMonth();
-
-      if (age < 14 || (age === 14 && month < 0)) {
-        newErrors.birthday = 'Пользователю должно быть больше 14 лет';
-      }
-    }
-
-    const validateAddress = (address: Address): AddressErrors => {
-      const errors: AddressErrors = {};
-      if (!address.streetName.trim()) errors.streetName = 'Введите улицу';
-      if (!address.city.trim()) errors.city = 'Введите город';
-      if (!address.postalCode.trim()) errors.postalCode = 'Введите индекс';
-      if (!address.country.trim()) errors.country = 'Выберите страну';
-      return errors;
-    };
-
-    newErrors.shippingAddress = validateAddress(formData.shippingAddress);
-    if (!useSameAddress) {
-      newErrors.billingAddress = validateAddress(formData.billingAddress);
-    }
-
-    return newErrors;
-  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSubmitted(true);
 
-    const validationErrors = validate();
+    const validationErrors = validateRegistration(formData, useSameAddress);
     setErrors(validationErrors);
     console.log('Ошибки:', validationErrors);
 
