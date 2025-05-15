@@ -1,12 +1,22 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { CommerceToolsAuthError, loginUser } from '../services/authAPI';
+import { CommerceToolsAuthError, loginUser, isAuthenticated } from '../services/authAPI';
 import { LoginForm } from '../components/Auth/LoginForm';
+import { Loader } from '../components/UI/Loader';
 import styles from './../components/Auth/LoginForm.module.css';
 
 const LoginPage = () => {
   const [formError, setFormError] = useState<string>('');
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated()) {
+      navigate('/', { replace: true });
+    } else {
+      setIsCheckingAuth(false);
+    }
+  }, [navigate]);
 
   const handleSubmit = async (values: { email: string; password: string }) => {
     try {
@@ -19,7 +29,7 @@ const LoginPage = () => {
       }
       localStorage.setItem('token_expires_in', String(Date.now() + data.expires_in * 1000));
 
-      navigate('/');
+      navigate('/', { replace: true });
     } catch (err: unknown) {
       let errorMessage = 'Invalid email or password';
 
@@ -41,6 +51,10 @@ const LoginPage = () => {
       setFormError(errorMessage);
     }
   };
+
+  if (isCheckingAuth) {
+    return <Loader />;
+  }
 
   return (
     <div className={styles.container}>

@@ -68,3 +68,15 @@ export const loginUser = async (email: string, password: string): Promise<AuthRe
     throw new Error('Network error occurred. Please try again.');
   }
 };
+
+export const isAuthenticated = (): boolean => {
+  const token = localStorage.getItem('access_token');
+  const expiresIn = localStorage.getItem('token_expires_in');
+
+  if (!token || !expiresIn) {
+    return false;
+  }
+
+  const expirationTime = parseInt(expiresIn, 10);
+  return Date.now() < expirationTime;
+};
