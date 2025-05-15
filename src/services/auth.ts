@@ -1,4 +1,5 @@
 // services/auth.ts
+import { Address } from "../pages/registration";
 
 const clientId = 'your_client_id';
 const clientSecret = 'your_client_secret';
@@ -34,19 +35,47 @@ export const getAnonymousToken = async () => {
   return data.access_token;
 };
 
+export type SignUpPayload = {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  addresses: Address[];
+  defaultShippingAddress?: number;
+  defaultBillingAddress?: number;
+};
+
 export const signUpUser = async (
   token: string,
-  {
+  payload: SignUpPayload
+) => {
+  const projectKey = import.meta.env.VITE_CTP_PROJECT_KEY;
+
+  const {
     email,
     password,
     firstName,
     lastName,
-  }: { email: string; password: string; firstName: string; lastName: string }
-) => {
-  const clientId = import.meta.env.VITE_CTP_CLIENT_ID;
-  const clientSecret = import.meta.env.VITE_CTP_CLIENT_SECRET;
-  const projectKey = import.meta.env.VITE_CTP_PROJECT_KEY;
-  console.log('Basic auth header:', btoa(`${clientId}:${clientSecret}`));
+    addresses,
+    defaultShippingAddress,
+    defaultBillingAddress
+  } = payload;
+
+  const body: SignUpPayload = {
+    email,
+    password,
+    firstName,
+    lastName,
+    addresses
+  };
+
+  if (typeof defaultShippingAddress === 'number') {
+    body.defaultShippingAddress = defaultShippingAddress;
+  }
+
+  if (typeof defaultBillingAddress === 'number') {
+    body.defaultBillingAddress = defaultBillingAddress;
+  }
 
   const response = await fetch(
     `https://api.europe-west1.gcp.commercetools.com/${projectKey}/me/signup`,
@@ -54,25 +83,18 @@ export const signUpUser = async (
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        email,
-        password,
-        firstName,
-        lastName,
-      }),
+      body: JSON.stringify(body)
     }
   );
 
-  const data = await response.json();
-
   if (!response.ok) {
-    console.error('Signup failed:', data);
-    throw new Error(data.message || 'Signup failed');
+    const error = await response.json();
+    console.error('Ошибка регистрации:', error);
+    throw new Error(error.message || 'Ошибка при регистрации пользователя');
   }
-  console.log(data);
-  return data;
+  return await response.json();
 };
 export const getCustomerToken = async (email: string, password: string) => {
   const clientId = import.meta.env.VITE_CTP_CLIENT_ID;
@@ -94,6 +116,6 @@ export const getCustomerToken = async (email: string, password: string) => {
   const data = await res.json();
 
   if (!res.ok) throw new Error(data.error_description || 'Login failed');
-
+  
   return data.access_token;
 };
