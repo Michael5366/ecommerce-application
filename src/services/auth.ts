@@ -1,5 +1,5 @@
 // services/auth.ts
-import { Address } from "../pages/registration";
+import { Address } from '../pages/registration';
 
 const clientId = 'your_client_id';
 const clientSecret = 'your_client_secret';
@@ -45,10 +45,7 @@ export type SignUpPayload = {
   defaultBillingAddress?: number;
 };
 
-export const signUpUser = async (
-  token: string,
-  payload: SignUpPayload
-) => {
+export const signUpUser = async (token: string, payload: SignUpPayload) => {
   const projectKey = import.meta.env.VITE_CTP_PROJECT_KEY;
 
   const {
@@ -58,7 +55,7 @@ export const signUpUser = async (
     lastName,
     addresses,
     defaultShippingAddress,
-    defaultBillingAddress
+    defaultBillingAddress,
   } = payload;
 
   const body: SignUpPayload = {
@@ -66,7 +63,7 @@ export const signUpUser = async (
     password,
     firstName,
     lastName,
-    addresses
+    addresses,
   };
 
   if (typeof defaultShippingAddress === 'number') {
@@ -83,9 +80,9 @@ export const signUpUser = async (
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(body)
+      body: JSON.stringify(body),
     }
   );
 
@@ -116,6 +113,6 @@ export const getCustomerToken = async (email: string, password: string) => {
   const data = await res.json();
 
   if (!res.ok) throw new Error(data.error_description || 'Login failed');
-  
+
   return data.access_token;
 };

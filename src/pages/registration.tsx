@@ -31,30 +31,29 @@ type FormErrors = Partial<
 
 function RegisterForm() {
   const [formData, setFormData] = useState<FormData>({
-  username: '',
-  email: '',
-  password: '',
-  surname: '',
-  birthday: '',
-  shippingAddress: {
-    streetName: '',
-    city: '',
-    postalCode: '',
-    country: '',
-    defaultShippingAddress: false,
-  },
-  billingAddress: {
-    streetName: '',
-    city: '',
-    postalCode: '',
-    country: '',
-    defaultBillingAddress: false,
-  },
-});
+    username: '',
+    email: '',
+    password: '',
+    surname: '',
+    birthday: '',
+    shippingAddress: {
+      streetName: '',
+      city: '',
+      postalCode: '',
+      country: '',
+      defaultShippingAddress: false,
+    },
+    billingAddress: {
+      streetName: '',
+      city: '',
+      postalCode: '',
+      country: '',
+      defaultBillingAddress: false,
+    },
+  });
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitted, setSubmitted] = useState(false);
-
 
   const [useSameAddress, setUseSameAddress] = useState(true);
 
@@ -82,41 +81,41 @@ function RegisterForm() {
     }
   };
 
-const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  const isChecked = e.target.checked;
-  setUseSameAddress(isChecked);
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const isChecked = e.target.checked;
+    setUseSameAddress(isChecked);
 
-  if (isChecked) {
+    if (isChecked) {
+      setFormData((prev) => ({
+        ...prev,
+        billingAddress: { ...prev.shippingAddress }, // копируем адрес
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        billingAddress: { streetName: '', city: '', postalCode: '', country: '' },
+      }));
+    }
+  };
+  const handleDefaultShippingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({
       ...prev,
-      billingAddress: { ...prev.shippingAddress }, // копируем адрес
+      shippingAddress: {
+        ...prev.shippingAddress,
+        defaultShippingAddress: e.target.checked,
+      },
     }));
-  } else {
+  };
+
+  const handleDefaultBillingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({
       ...prev,
-      billingAddress: { streetName: '', city: '', postalCode: '', country: '' },
+      billingAddress: {
+        ...prev.billingAddress,
+        defaultBillingAddress: e.target.checked,
+      },
     }));
-  }
-};
-const handleDefaultShippingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  setFormData((prev) => ({
-    ...prev,
-    shippingAddress: {
-      ...prev.shippingAddress,
-      defaultShippingAddress: e.target.checked,
-    },
-  }));
-};
-
-const handleDefaultBillingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  setFormData((prev) => ({
-    ...prev,
-    billingAddress: {
-      ...prev.billingAddress,
-      defaultBillingAddress: e.target.checked,
-    },
-  }));
-};
+  };
   const validate = (): FormErrors => {
     const newErrors: FormErrors = {};
 
@@ -170,60 +169,56 @@ const handleDefaultBillingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     return newErrors;
   };
 
-const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
-  setSubmitted(true);
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setSubmitted(true);
 
-  const validationErrors = validate();
-  setErrors(validationErrors);
-  console.log('Ошибки:', validationErrors);
+    const validationErrors = validate();
+    setErrors(validationErrors);
+    console.log('Ошибки:', validationErrors);
 
-  const hasErrors = Object.values(validationErrors).some(
-    (val) => typeof val === 'string' || (typeof val === 'object' && Object.keys(val).length)
-  );
+    const hasErrors = Object.values(validationErrors).some(
+      (val) => typeof val === 'string' || (typeof val === 'object' && Object.keys(val).length)
+    );
 
-  if (!hasErrors) {
-    try {
-      const anonToken = await getAnonymousToken();
+    if (!hasErrors) {
+      try {
+        const anonToken = await getAnonymousToken();
 
-      const addresses = useSameAddress
-        ? [formData.shippingAddress]
-        : [formData.shippingAddress, formData.billingAddress];
+        const addresses = useSameAddress
+          ? [formData.shippingAddress]
+          : [formData.shippingAddress, formData.billingAddress];
 
-      const defaultShippingIndex = formData.shippingAddress.defaultShippingAddress ? 0 : undefined;
-      const defaultBillingIndex = formData.billingAddress.defaultBillingAddress
-        ? (useSameAddress ? 0 : 1)
-        : undefined;
+        const sanitizedAddresses = addresses.map((addr) => {
+          const copy = { ...addr };
+          delete copy.defaultShippingAddress;
+          delete copy.defaultBillingAddress;
+          return copy;
+        });
 
-      const sanitizedAddresses = addresses.map(({ defaultShippingAddress, defaultBillingAddress, ...rest }) => rest);
+        const payload: SignUpPayload = {
+          email: formData.email,
+          password: formData.password,
+          firstName: formData.username,
+          lastName: formData.surname,
+          addresses: sanitizedAddresses,
+          ...(formData.shippingAddress.defaultShippingAddress ? { defaultShippingAddress: 0 } : {}),
+          ...(formData.billingAddress.defaultBillingAddress
+            ? { defaultBillingAddress: useSameAddress ? 0 : 1 }
+            : {}),
+        };
 
-      const payload: SignUpPayload = {
-        email: formData.email,
-        password: formData.password,
-        firstName: formData.username,
-        lastName: formData.surname,
-        addresses: sanitizedAddresses,
-      };
+        console.log('Данные для регистрации:', payload);
 
-      if (defaultShippingIndex !== undefined) {
-        payload.defaultShippingAddress = defaultShippingIndex;
+        await signUpUser(anonToken, payload);
+
+        const customerToken = await getCustomerToken(formData.email, formData.password);
+        console.log('Успешно авторизован:', customerToken);
+      } catch (e) {
+        console.error('Ошибка регистрации:', e);
       }
-
-      if (defaultBillingIndex !== undefined) {
-        payload.defaultBillingAddress = defaultBillingIndex;
-      }
-
-      console.log('Данные для регистрации:', payload);
-
-      await signUpUser(anonToken, payload);
-
-      const customerToken = await getCustomerToken(formData.email, formData.password);
-      console.log('Успешно авторизован:', customerToken);
-    } catch (e) {
-      console.error('Ошибка регистрации:', e);
     }
-  }
-};
+  };
 
   return (
     <form onSubmit={handleSubmit}>
@@ -232,7 +227,12 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       <input name="username" placeholder="Имя" value={formData.username} onChange={handleChange} />
       {submitted && errors.username && <p>{errors.username}</p>}
 
-      <input name="surname" placeholder="Фамилия" value={formData.surname} onChange={handleChange} />
+      <input
+        name="surname"
+        placeholder="Фамилия"
+        value={formData.surname}
+        onChange={handleChange}
+      />
       {submitted && errors.surname && <p>{errors.surname}</p>}
 
       <input name="email" placeholder="Email" value={formData.email} onChange={handleChange} />
@@ -259,36 +259,32 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       />
 
       <label>
-        <input
-          type="checkbox"
-          checked={useSameAddress}
-          onChange={handleCheckboxChange}
-        />
+        <input type="checkbox" checked={useSameAddress} onChange={handleCheckboxChange} />
         Использовать тот же адрес для выставления счетов
       </label>
 
       <label>
         <input
-        type="checkbox"
-        checked={formData.shippingAddress.defaultShippingAddress}
-        onChange={handleDefaultShippingChange}
+          type="checkbox"
+          checked={formData.shippingAddress.defaultShippingAddress}
+          onChange={handleDefaultShippingChange}
         />
         Сделать дефолтным адресом доставки
       </label>
 
-        <AddressForm
+      <AddressForm
         type="billingAddress"
         title="Адрес для выставления счетов"
         address={useSameAddress ? formData.shippingAddress : formData.billingAddress}
         errors={errors.billingAddress || {}}
         onChange={handleAddressChange}
-        />
+      />
 
-        <label>
+      <label>
         <input
-        type="checkbox"
-        checked={formData.billingAddress.defaultBillingAddress}
-        onChange={handleDefaultBillingChange}
+          type="checkbox"
+          checked={formData.billingAddress.defaultBillingAddress}
+          onChange={handleDefaultBillingChange}
         />
         Сделать дефолтным адресом для платежей
       </label>
@@ -306,7 +302,10 @@ type AddressFormProps = {
   title: string;
   address: Address;
   errors: AddressErrors;
-  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>, type: 'shippingAddress' | 'billingAddress') => void;
+  onChange: (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    type: 'shippingAddress' | 'billingAddress'
+  ) => void;
 };
 
 function AddressForm({ type, title, address, errors, onChange }: AddressFormProps) {
@@ -337,10 +336,7 @@ function AddressForm({ type, title, address, errors, onChange }: AddressFormProp
       />
       {errors.postalCode && <p>{errors.postalCode}</p>}
 
-      <select 
-      name="country"
-      value={address.country}
-      onChange={(e) => onChange(e, type)}>
+      <select name="country" value={address.country} onChange={(e) => onChange(e, type)}>
         <option value="">-- Выберите --</option>
         <option value="US">США</option>
         <option value="ES">Испания</option>
