@@ -52,34 +52,37 @@ export default function RegisterForm() {
           return copy;
         });
 
-let defaultShippingAddress: number | undefined;
-let defaultBillingAddress: number | undefined;
+        let defaultShippingAddress: number | undefined;
+        let defaultBillingAddress: number | undefined;
 
-if (useSameAddress) {
-  if (formData.shippingAddress.defaultShippingAddress || formData.billingAddress.defaultBillingAddress) {
-    defaultShippingAddress = 0;
-    defaultBillingAddress = 0;
-  }
-} else {
-  defaultShippingAddress = formData.shippingAddress.defaultShippingAddress ? 0 : undefined;
-  defaultBillingAddress = formData.billingAddress.defaultBillingAddress ? 1 : undefined;
-}
+        if (useSameAddress) {
+          if (
+            formData.shippingAddress.defaultShippingAddress ||
+            formData.billingAddress.defaultBillingAddress
+          ) {
+            defaultShippingAddress = 0;
+            defaultBillingAddress = 0;
+          }
+        } else {
+          defaultShippingAddress = formData.shippingAddress.defaultShippingAddress ? 0 : undefined;
+          defaultBillingAddress = formData.billingAddress.defaultBillingAddress ? 1 : undefined;
+        }
 
-const payload: SignUpPayload = {
-  email: formData.email,
-  password: formData.password,
-  firstName: formData.username,
-  lastName: formData.surname,
-  addresses: sanitizedAddresses,
-  ...(defaultShippingAddress !== undefined ? { defaultShippingAddress } : {}),
-  ...(defaultBillingAddress !== undefined ? { defaultBillingAddress } : {}),
-};
+        const payload: SignUpPayload = {
+          email: formData.email,
+          password: formData.password,
+          firstName: formData.username,
+          lastName: formData.surname,
+          addresses: sanitizedAddresses,
+          ...(defaultShippingAddress !== undefined ? { defaultShippingAddress } : {}),
+          ...(defaultBillingAddress !== undefined ? { defaultBillingAddress } : {}),
+        };
 
         console.log('Данные для регистрации:', payload);
         console.log('Отправляем payload:', {
-            addresses: sanitizedAddresses,
-            defaultShippingAddress,
-            defaultBillingAddress,
+          addresses: sanitizedAddresses,
+          defaultShippingAddress,
+          defaultBillingAddress,
         });
         await signUpUser(anonToken, payload);
         console.log(formData.billingAddress.defaultBillingAddress);

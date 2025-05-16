@@ -51,19 +51,27 @@ export default function useRegistrationForm() {
     setUseSameAddress(isChecked);
 
     if (isChecked) {
-  setFormData((prev) => ({
-    ...prev,
-    billingAddress: {
-      ...prev.shippingAddress,
-      defaultBillingAddress: prev.billingAddress.defaultBillingAddress ?? prev.shippingAddress.defaultShippingAddress,
-    },
-  }));
-} else {
-  setFormData((prev) => ({
-    ...prev,
-    billingAddress: { streetName: '', city: '', postalCode: '', country: '', defaultBillingAddress: false },
-  }));
-}
+      setFormData((prev) => ({
+        ...prev,
+        billingAddress: {
+          ...prev.shippingAddress,
+          defaultBillingAddress:
+            prev.billingAddress.defaultBillingAddress ??
+            prev.shippingAddress.defaultShippingAddress,
+        },
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        billingAddress: {
+          streetName: '',
+          city: '',
+          postalCode: '',
+          country: '',
+          defaultBillingAddress: false,
+        },
+      }));
+    }
   };
 
   const handleDefaultShippingChange = (e: React.ChangeEvent<HTMLInputElement>) => {

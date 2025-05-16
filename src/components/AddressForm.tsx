@@ -1,6 +1,5 @@
 import { Address, AddressErrors } from '../types/form';
 
-
 type AddressFormProps = {
   type: 'shippingAddress' | 'billingAddress';
   title: string;
