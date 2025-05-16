@@ -1,9 +1,6 @@
 import { FormData, FormErrors, Address, AddressErrors } from '../types/form';
 
-export const validateRegistration = (
-  formData: FormData,
-  useSameAddress: boolean
-): FormErrors => {
+export const validateRegistration = (formData: FormData, useSameAddress: boolean): FormErrors => {
   const newErrors: FormErrors = {};
 
   if (!formData.username.trim()) {
