@@ -110,15 +110,15 @@ export const signUpUser = async (token: string, payload: SignUpPayload) => {
     if (duplicateEmailError) {
       // TODO: показать модальное окно с сообщением о дублировании email
 
-      console.log('польхователь уже зарегистриравн! Показать окощко')
-      
+      console.log('польхователь уже зарегистриравн! Показать окощко');
+
       throw new Error('DuplicateEmail');
     }
     throw new Error(error.message || 'Ошибка при регистрации пользователя');
   }
   const successData: ApiSuccessResponse = await response.json();
   // router.push('/');
-  console.log(successData)
+  console.log(successData);
   return successData;
 };
 

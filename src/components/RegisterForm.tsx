@@ -59,10 +59,20 @@ export default function RegisterForm() {
 
       if (useSameAddress) {
         if (
-          formData.shippingAddress.defaultShippingAddress ||
+          formData.shippingAddress.defaultShippingAddress &&
           formData.billingAddress.defaultBillingAddress
         ) {
           defaultShippingAddress = 0;
+          defaultBillingAddress = 0;
+        } else if (
+          formData.shippingAddress.defaultShippingAddress
+        ) {
+          defaultShippingAddress = 0;
+          defaultBillingAddress = undefined
+        } else if (
+          formData.billingAddress.defaultBillingAddress
+        ) {
+          defaultShippingAddress = undefined;
           defaultBillingAddress = 0;
         }
       } else {
@@ -111,7 +121,7 @@ export default function RegisterForm() {
 
         setErrors(fieldErrors);
       } else if (err instanceof Error && err.message === 'DuplicateEmail') {
-      setShowDuplicateEmailModal(true);
+        setShowDuplicateEmailModal(true);
       } else {
         console.error('Ошибка при регистрации:', err);
       }
@@ -120,76 +130,81 @@ export default function RegisterForm() {
 
   return (
     <>
-    <form onSubmit={handleSubmit}>
-      <h2>Регистрация</h2>
-      <input name="username" placeholder="Имя" value={formData.username} onChange={handleChange} />
-      {submitted && errors.username && <p style={{ color: 'red' }}>{errors.username}</p>}
-      <input
-        name="surname"
-        placeholder="Фамилия"
-        value={formData.surname}
-        onChange={handleChange}
-      />
-      {submitted && errors.surname && <p style={{ color: 'red' }}>{errors.surname}</p>}
-      <input name="email" placeholder="Email" value={formData.email} onChange={handleChange} />
-      {submitted && errors.email && <p style={{ color: 'red' }}>{errors.email}</p>}
-      <input
-        name="password"
-        type="password"
-        placeholder="Пароль"
-        value={formData.password}
-        onChange={handleChange}
-      />
-      {submitted && errors.password && <p style={{ color: 'red' }}>{errors.password}</p>}
-      <input name="birthday" type="date" value={formData.birthday} onChange={handleChange} />
-      {submitted && errors.birthday && <p style={{ color: 'red' }}>{errors.birthday}</p>}
-      <AddressForm
-        type="shippingAddress"
-        title="Адрес доставки"
-        address={formData.shippingAddress}
-        errors={errors.shippingAddress || {}}
-        onChange={handleAddressChange}
-      />
-      <label>
-        <input type="checkbox" checked={useSameAddress} onChange={handleCheckboxChange} />
-        Использовать тот же адрес для выставления счетов
-      </label>
-      <label>
+      <form onSubmit={handleSubmit}>
+        <h2>Регистрация</h2>
         <input
-          type="checkbox"
-          checked={formData.shippingAddress.defaultShippingAddress}
-          onChange={handleDefaultShippingChange}
+          name="username"
+          placeholder="Имя"
+          value={formData.username}
+          onChange={handleChange}
         />
-        Сделать дефолтным адресом доставки
-      </label>
-      (
-      <>
+        {submitted && errors.username && <p style={{ color: 'red' }}>{errors.username}</p>}
+        <input
+          name="surname"
+          placeholder="Фамилия"
+          value={formData.surname}
+          onChange={handleChange}
+        />
+        {submitted && errors.surname && <p style={{ color: 'red' }}>{errors.surname}</p>}
+        <input name="email" placeholder="Email" value={formData.email} onChange={handleChange} />
+        {submitted && errors.email && <p style={{ color: 'red' }}>{errors.email}</p>}
+        <input
+          name="password"
+          type="password"
+          placeholder="Пароль"
+          value={formData.password}
+          onChange={handleChange}
+        />
+        {submitted && errors.password && <p style={{ color: 'red' }}>{errors.password}</p>}
+        <input name="birthday" type="date" value={formData.birthday} onChange={handleChange} />
+        {submitted && errors.birthday && <p style={{ color: 'red' }}>{errors.birthday}</p>}
         <AddressForm
-          type="billingAddress"
-          title="Адрес для выставления счетов"
-          address={formData.billingAddress}
-          errors={errors.billingAddress || {}}
+          type="shippingAddress"
+          title="Адрес доставки"
+          address={formData.shippingAddress}
+          errors={errors.shippingAddress || {}}
           onChange={handleAddressChange}
         />
-
+        <label>
+          <input type="checkbox" checked={useSameAddress} onChange={handleCheckboxChange} />
+          Использовать тот же адрес для выставления счетов
+        </label>
         <label>
           <input
             type="checkbox"
-            checked={formData.billingAddress.defaultBillingAddress}
-            onChange={handleDefaultBillingChange}
+            checked={formData.shippingAddress.defaultShippingAddress}
+            onChange={handleDefaultShippingChange}
           />
-          Сделать дефолтным адресом для платежей
+          Сделать дефолтным адресом доставки
         </label>
-      </>
-      )<button type="submit">Зарегистрироваться</button>
-    </form>
-    {console.log('showDuplicateEmailModal =', showDuplicateEmailModal)}
-    {showDuplicateEmailModal && (
-      <DuplicateEmailModal
-        isOpen={showDuplicateEmailModal}
-        onClose={handleCloseModal}
-        onLoginRedirect={handleLoginRedirect}
-      />
+        (
+        <>
+          <AddressForm
+            type="billingAddress"
+            title="Адрес для выставления счетов"
+            address={formData.billingAddress}
+            errors={errors.billingAddress || {}}
+            onChange={handleAddressChange}
+          />
+
+          <label>
+            <input
+              type="checkbox"
+              checked={formData.billingAddress.defaultBillingAddress}
+              onChange={handleDefaultBillingChange}
+            />
+            Сделать дефолтным адресом для платежей
+          </label>
+        </>
+        )<button type="submit">Зарегистрироваться</button>
+      </form>
+      {console.log('showDuplicateEmailModal =', showDuplicateEmailModal)}
+      {showDuplicateEmailModal && (
+        <DuplicateEmailModal
+          isOpen={showDuplicateEmailModal}
+          onClose={handleCloseModal}
+          onLoginRedirect={handleLoginRedirect}
+        />
       )}
     </>
   );
