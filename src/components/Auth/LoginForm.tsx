@@ -20,9 +20,10 @@ interface FormErrors {
 
 interface LoginFormProps {
   onSubmit: (values: LoginFormValues) => Promise<void>;
+  isSubmitting?: boolean;
 }
 
-export const LoginForm = ({ onSubmit }: LoginFormProps) => {
+export const LoginForm = ({ onSubmit, isSubmitting = false }: LoginFormProps) => {
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
 
@@ -167,10 +168,10 @@ export const LoginForm = ({ onSubmit }: LoginFormProps) => {
       <button
         type="submit"
         className={styles.submitButton}
-        disabled={!formik.isValid || formik.isSubmitting}
-        aria-busy={formik.isSubmitting}
+        disabled={!formik.isValid || isSubmitting}
+        aria-busy={isSubmitting}
       >
-        {formik.isSubmitting ? (
+        {isSubmitting ? (
           <>
             <CircularProgress size={20} className={styles.spinner} />
             <span className={styles.buttonText}>Processing...</span>
