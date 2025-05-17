@@ -21,7 +21,7 @@ export default function AddressForm({ type, title, address, errors, onChange }: 
         value={address.streetName}
         onChange={(e) => onChange(e, type)}
       />
-      {errors.streetName && <p>{errors.streetName}</p>}
+      {errors.streetName && <p style={{ color: 'red' }}>{errors.streetName}</p>}
 
       <input
         name="city"
@@ -29,7 +29,7 @@ export default function AddressForm({ type, title, address, errors, onChange }: 
         value={address.city}
         onChange={(e) => onChange(e, type)}
       />
-      {errors.city && <p>{errors.city}</p>}
+      {errors.city && <p style={{ color: 'red' }}>{errors.city}</p>}
 
       <input
         name="postalCode"
@@ -37,7 +37,7 @@ export default function AddressForm({ type, title, address, errors, onChange }: 
         value={address.postalCode}
         onChange={(e) => onChange(e, type)}
       />
-      {errors.postalCode && <p>{errors.postalCode}</p>}
+      {errors.postalCode && <p style={{ color: 'red' }}>{errors.postalCode}</p>}
 
       <select name="country" value={address.country} onChange={(e) => onChange(e, type)}>
         <option value="">-- Выберите --</option>
@@ -45,7 +45,7 @@ export default function AddressForm({ type, title, address, errors, onChange }: 
         <option value="ES">Испания</option>
         <option value="FR">Франция</option>
       </select>
-      {errors.country && <p>{errors.country}</p>}
+      {errors.country && <p style={{ color: 'red' }}>{errors.country}</p>}
     </div>
   );
 }

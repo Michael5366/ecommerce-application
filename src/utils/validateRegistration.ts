@@ -1,54 +1,76 @@
-import { FormData, FormErrors, Address, AddressErrors } from '../types/form';
+import { z } from 'zod';
 
-export const validateRegistration = (formData: FormData, useSameAddress: boolean): FormErrors => {
-  const newErrors: FormErrors = {};
-
-  if (!formData.username.trim()) {
-    newErrors.username = 'Введите имя пользователя';
-  } else if (!/^[А-Яа-яЁёA-Za-z]+$/.test(formData.username.trim())) {
-    newErrors.username = 'Имя должно содержать только буквы';
-  }
-
-  const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-  if (!emailValid.test(formData.email.trim())) {
-    newErrors.email = 'Введите корректный email';
-  }
-
-  const passwordValid = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
-  if (!passwordValid.test(formData.password.trim())) {
-    newErrors.password =
-      'Пароль должен быть не менее 8 символов и содержать заглавную букву, строчную и цифру';
-  }
-
-  if (!/^[А-Яа-яЁёA-Za-z]+$/.test(formData.surname.trim())) {
-    newErrors.surname = 'Фамилия должна содержать только буквы';
-  }
-
-  if (!formData.birthday) {
-    newErrors.birthday = 'Введите дату рождения';
-  } else {
-    const birthday = new Date(formData.birthday);
-    const age = new Date().getFullYear() - birthday.getFullYear();
-    const month = new Date().getMonth() - birthday.getMonth();
-
-    if (age < 14 || (age === 14 && month < 0)) {
-      newErrors.birthday = 'Пользователю должно быть больше 14 лет';
-    }
-  }
-
-  const validateAddress = (address: Address): AddressErrors => {
-    const errors: AddressErrors = {};
-    if (!address.streetName.trim()) errors.streetName = 'Введите улицу';
-    if (!address.city.trim()) errors.city = 'Введите город';
-    if (!address.postalCode.trim()) errors.postalCode = 'Введите индекс';
-    if (!address.country.trim()) errors.country = 'Выберите страну';
-    return errors;
-  };
-
-  newErrors.shippingAddress = validateAddress(formData.shippingAddress);
-  if (!useSameAddress) {
-    newErrors.billingAddress = validateAddress(formData.billingAddress);
-  }
-
-  return newErrors;
+const postalCodeRegex = {
+  US: /^\d{5}(-\d{4})?$/,
+  FR: /^\d{5}$/,
+  ES: /^\d{5}$/,
 };
+
+const addressSchema = z.object({
+  streetName: z.string().min(1, 'Введите улицу'),
+  city: z
+    .string()
+    .min(1, 'Введите город')
+    .regex(/^[А-Яа-яЁёA-Za-z\s\-]+$/, 'Город не должен содержать цифры или спецсимволы'),
+  postalCode: z
+    .string()
+    .min(1, 'Введите индекс'),
+  country: z
+    .string()
+    .min(1, 'Выберите страну')
+    .refine((val) => ['US', 'FR', 'ES'].includes(val), {
+      message: 'Недопустимая страна',
+    }),
+  defaultShippingAddress: z.boolean().optional(),
+  defaultBillingAddress: z.boolean().optional(),
+}).superRefine((data, ctx) => {
+  const pattern = postalCodeRegex[data.country as keyof typeof postalCodeRegex];
+
+  if (pattern && !pattern.test(data.postalCode)) {
+    ctx.addIssue({code: z.ZodIssueCode.custom,
+      path: ['postalCode'],
+      message:
+        data.country === 'US'
+          ? 'Индекс должен быть в формате 12345 или 12345-6789'
+          : 'Индекс должен состоять из 5 цифр',
+    });
+  }
+});
+
+export const registrationSchema = z.object({
+  username: z
+    .string()
+    .min(1, 'Введите имя пользователя')
+    .regex(/^[А-Яа-яЁёA-Za-z]+$/, 'Имя должно содержать только буквы'),
+
+  surname: z
+    .string()
+    .min(1, 'Введите фамилию')
+    .regex(/^[А-Яа-яЁёA-Za-z]+$/, 'Фамилия должна содержать только буквы'),
+
+  email: z
+    .string()
+    .email('Введите корректный email'),
+
+  password: z
+    .string()
+    .regex(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/,
+      'Пароль должен быть не менее 8 символов и содержать заглавную букву, строчную и цифру'
+    ),
+
+  birthday: z
+    .string()
+    .refine((val) => {
+      const birthDate = new Date(val);
+      const today = new Date();
+      const age = today.getFullYear() - birthDate.getFullYear();
+      const month = today.getMonth() - birthDate.getMonth();
+      return age > 14 || (age === 14 && month >= 0);
+    }, {
+      message: 'Пользователю должно быть больше 14 лет',
+    }),
+
+  shippingAddress: addressSchema,
+  billingAddress: addressSchema,
+});
