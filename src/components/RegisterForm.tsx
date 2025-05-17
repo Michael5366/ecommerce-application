@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import DuplicateEmailModal from './DuplicateEmailModal';
 import { getAnonymousToken, signUpUser, getCustomerToken } from '../services/auth';
 import { SignUpPayload } from '../services/auth';
 import { FormErrors } from '../types/form';
@@ -18,8 +19,16 @@ export default function RegisterForm() {
     handleDefaultBillingChange,
   } = useRegistrationForm();
 
+  const [showDuplicateEmailModal, setShowDuplicateEmailModal] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitted, setSubmitted] = useState(false);
+
+  const handleCloseModal = () => setShowDuplicateEmailModal(false);
+
+  const handleLoginRedirect = () => {
+    // navigate('/login');
+    console.log('Редирект на /login');
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -82,38 +91,39 @@ export default function RegisterForm() {
       const customerToken = await getCustomerToken(formData.email, formData.password);
       console.log('Успешно авторизован:', customerToken);
     } catch (err) {
-       if (err instanceof ZodError) {
-  const fieldErrors: FormErrors = {};
+      if (err instanceof ZodError) {
+        const fieldErrors: FormErrors = {};
 
-  err.errors.forEach(({ path, message }) => {
-    if (path.length === 1) {
-      const key = path[0] as keyof FormErrors;
-      fieldErrors[key] = message;
-    } else if (path.length > 1) {
-      const field = path[0] as 'shippingAddress' | 'billingAddress';
-      const subfield = path[1] as keyof AddressErrors;
+        err.errors.forEach(({ path, message }) => {
+          if (path.length === 1) {
+            const key = path[0] as keyof FormErrors;
+            fieldErrors[key] = message;
+          } else if (path.length > 1) {
+            const field = path[0] as 'shippingAddress' | 'billingAddress';
+            const subfield = path[1] as keyof AddressErrors;
 
-      if (!fieldErrors[field]) {
-        fieldErrors[field] = {};
-      }
-      (fieldErrors[field] as AddressErrors)[subfield] = message;
-    }
-  });
+            if (!fieldErrors[field]) {
+              fieldErrors[field] = {};
+            }
+            (fieldErrors[field] as AddressErrors)[subfield] = message;
+          }
+        });
 
-  setErrors(fieldErrors);
-} else {
+        setErrors(fieldErrors);
+      } else if (err instanceof Error && err.message === 'DuplicateEmail') {
+      setShowDuplicateEmailModal(true);
+      } else {
         console.error('Ошибка при регистрации:', err);
       }
     }
   };
 
   return (
+    <>
     <form onSubmit={handleSubmit}>
       <h2>Регистрация</h2>
-
       <input name="username" placeholder="Имя" value={formData.username} onChange={handleChange} />
       {submitted && errors.username && <p style={{ color: 'red' }}>{errors.username}</p>}
-
       <input
         name="surname"
         placeholder="Фамилия"
@@ -121,10 +131,8 @@ export default function RegisterForm() {
         onChange={handleChange}
       />
       {submitted && errors.surname && <p style={{ color: 'red' }}>{errors.surname}</p>}
-
       <input name="email" placeholder="Email" value={formData.email} onChange={handleChange} />
       {submitted && errors.email && <p style={{ color: 'red' }}>{errors.email}</p>}
-
       <input
         name="password"
         type="password"
@@ -133,10 +141,8 @@ export default function RegisterForm() {
         onChange={handleChange}
       />
       {submitted && errors.password && <p style={{ color: 'red' }}>{errors.password}</p>}
-
       <input name="birthday" type="date" value={formData.birthday} onChange={handleChange} />
       {submitted && errors.birthday && <p style={{ color: 'red' }}>{errors.birthday}</p>}
-
       <AddressForm
         type="shippingAddress"
         title="Адрес доставки"
@@ -144,12 +150,10 @@ export default function RegisterForm() {
         errors={errors.shippingAddress || {}}
         onChange={handleAddressChange}
       />
-
       <label>
         <input type="checkbox" checked={useSameAddress} onChange={handleCheckboxChange} />
         Использовать тот же адрес для выставления счетов
       </label>
-
       <label>
         <input
           type="checkbox"
@@ -158,29 +162,35 @@ export default function RegisterForm() {
         />
         Сделать дефолтным адресом доставки
       </label>
-
       (
-        <>
-          <AddressForm
-            type="billingAddress"
-            title="Адрес для выставления счетов"
-            address={formData.billingAddress}
-            errors={errors.billingAddress || {}}
-            onChange={handleAddressChange}
+      <>
+        <AddressForm
+          type="billingAddress"
+          title="Адрес для выставления счетов"
+          address={formData.billingAddress}
+          errors={errors.billingAddress || {}}
+          onChange={handleAddressChange}
+        />
+
+        <label>
+          <input
+            type="checkbox"
+            checked={formData.billingAddress.defaultBillingAddress}
+            onChange={handleDefaultBillingChange}
           />
-
-          <label>
-            <input
-              type="checkbox"
-              checked={formData.billingAddress.defaultBillingAddress}
-              onChange={handleDefaultBillingChange}
-            />
-            Сделать дефолтным адресом для платежей
-          </label>
-        </>
-      )
-
-      <button type="submit">Зарегистрироваться</button>
+          Сделать дефолтным адресом для платежей
+        </label>
+      </>
+      )<button type="submit">Зарегистрироваться</button>
     </form>
+    {console.log('showDuplicateEmailModal =', showDuplicateEmailModal)}
+    {showDuplicateEmailModal && (
+      <DuplicateEmailModal
+        isOpen={showDuplicateEmailModal}
+        onClose={handleCloseModal}
+        onLoginRedirect={handleLoginRedirect}
+      />
+      )}
+    </>
   );
 }

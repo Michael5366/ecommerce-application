@@ -6,6 +6,21 @@ const clientSecret = 'your_client_secret';
 const credentials = btoa(`${clientId}:${clientSecret}`);
 console.log('Base64 encoded credentials:', credentials);
 
+interface ApiError {
+  code: string;
+  message: string;
+  duplicateValue?: string;
+  field?: string;
+}
+interface ApiErrorResponse {
+  errors: ApiError[];
+  message: string;
+  statusCode: number;
+}
+interface ApiSuccessResponse {
+  customer: string;
+}
+
 export const getAnonymousToken = async () => {
   const clientId = import.meta.env.VITE_CTP_CLIENT_ID;
   const clientSecret = import.meta.env.VITE_CTP_CLIENT_SECRET;
@@ -87,12 +102,26 @@ export const signUpUser = async (token: string, payload: SignUpPayload) => {
   );
 
   if (!response.ok) {
-    const error = await response.json();
+    const error: ApiErrorResponse = await response.json();
     console.error('Ошибка регистрации:', error);
+    const duplicateEmailError = error.errors.find(
+      (err) => err.code === 'DuplicateField' && err.field === 'email'
+    );
+    if (duplicateEmailError) {
+      // TODO: показать модальное окно с сообщением о дублировании email
+
+      console.log('польхователь уже зарегистриравн! Показать окощко')
+      
+      throw new Error('DuplicateEmail');
+    }
     throw new Error(error.message || 'Ошибка при регистрации пользователя');
   }
-  return await response.json();
+  const successData: ApiSuccessResponse = await response.json();
+  // router.push('/');
+  console.log(successData)
+  return successData;
 };
+
 export const getCustomerToken = async (email: string, password: string) => {
   const clientId = import.meta.env.VITE_CTP_CLIENT_ID;
   const clientSecret = import.meta.env.VITE_CTP_CLIENT_SECRET;
