@@ -1,20 +1,18 @@
+import { CommerceToolsErrorResponse, AuthResponse, Customer, LoginResponse } from './authAPI.types';
+
 const CLIENT_ID = import.meta.env.VITE_CTP_CLIENT_ID;
 const CLIENT_SECRET = import.meta.env.VITE_CTP_CLIENT_SECRET;
 const PROJECT_KEY = import.meta.env.VITE_CTP_PROJECT_KEY;
 const AUTH_URL = import.meta.env.VITE_CTP_AUTH_URL;
 const API_URL = import.meta.env.VITE_CTP_API_URL;
 
-interface CommerceToolsErrorResponse {
-  statusCode?: number;
-  message?: string;
-  error?: string;
-  error_description?: string;
-  errors?: Array<{
-    code: string;
-    message: string;
-    detailedErrorMessage?: string;
-  }>;
-}
+const AUTH_FLAG_KEY = 'ct_auth_flag';
+const TOKEN_EXPIRY_KEY = 'ct_token_expiry';
+const CUSTOMER_EMAIL_KEY = 'ct_customer_email';
+
+let authToken: string | null = null;
+let tokenExpiry: number | null = null;
+let customerEmail: string | null = null;
 
 export class CommerceToolsAuthError extends Error {
   public code: string;
@@ -42,36 +40,6 @@ export class CommerceToolsAuthError extends Error {
       }
     }
   }
-}
-
-export interface AuthResponse {
-  access_token: string;
-  refresh_token?: string;
-  expires_in: number;
-  token_type: string;
-  scope: string;
-}
-
-interface Customer {
-  id: string;
-  email: string;
-  firstName?: string;
-  lastName?: string;
-  addresses?: Address[];
-  shippingAddressIds?: string[];
-  billingAddressIds?: string[];
-}
-
-interface Address {
-  id: string;
-  streetName: string;
-  postalCode: string;
-  city: string;
-  country: string;
-}
-
-interface LoginResponse {
-  customer: Customer;
 }
 
 const fetchAuthTokens = async (email: string, password: string): Promise<AuthResponse> => {
@@ -137,6 +105,14 @@ export const loginUser = async (
     const authData = await fetchAuthTokens(email, password);
     const customer = await fetchCustomerData(authData.access_token, email, password);
 
+    authToken = authData.access_token;
+    tokenExpiry = Date.now() + authData.expires_in * 1000;
+    customerEmail = customer.email;
+
+    sessionStorage.setItem(AUTH_FLAG_KEY, 'true');
+    sessionStorage.setItem(TOKEN_EXPIRY_KEY, tokenExpiry.toString());
+    sessionStorage.setItem(CUSTOMER_EMAIL_KEY, customer.email);
+
     return { auth: authData, customer };
   } catch (err) {
     if (err instanceof CommerceToolsAuthError) {
@@ -149,34 +125,50 @@ export const loginUser = async (
   }
 };
 
-export const storeAuthData = (authData: AuthResponse, customer: Customer): void => {
-  try {
-    const expiresAt = Date.now() + authData.expires_in * 1000;
+export const getAuthToken = (): string | null => {
+  return authToken;
+};
 
-    localStorage.setItem('access_token', authData.access_token);
-    if (authData.refresh_token) {
-      localStorage.setItem('refresh_token', authData.refresh_token);
-    }
-    localStorage.setItem('token_expires_in', expiresAt.toString());
-    localStorage.setItem('customer', JSON.stringify(customer));
-  } catch (error) {
-    console.error('Failed to store auth data:', error);
-  }
+export const getCustomerEmail = (): string | null => {
+  return customerEmail || sessionStorage.getItem(CUSTOMER_EMAIL_KEY);
+};
+
+export const clearAuthData = (): void => {
+  authToken = null;
+  tokenExpiry = null;
+  customerEmail = null;
+  sessionStorage.removeItem(AUTH_FLAG_KEY);
+  sessionStorage.removeItem(TOKEN_EXPIRY_KEY);
+  sessionStorage.removeItem(CUSTOMER_EMAIL_KEY);
 };
 
 export const isAuthenticated = (): boolean => {
-  try {
-    const token = localStorage.getItem('access_token');
-    const expiresIn = localStorage.getItem('token_expires_in');
+  if (authToken && tokenExpiry && Date.now() < tokenExpiry) {
+    return true;
+  }
 
-    if (!token || !expiresIn) {
-      return false;
+  const storedFlag = sessionStorage.getItem(AUTH_FLAG_KEY);
+  const storedExpiry = sessionStorage.getItem(TOKEN_EXPIRY_KEY);
+
+  if (storedFlag === 'true' && storedExpiry) {
+    const expiryTime = parseInt(storedExpiry, 10);
+    if (Date.now() < expiryTime) {
+      return true;
     }
+    clearAuthData();
+  }
 
-    const expirationTime = parseInt(expiresIn, 10);
-    return Date.now() < expirationTime;
-  } catch (error) {
-    console.error('Auth check failed:', error);
-    return false;
+  return false;
+};
+
+export const initializeAuth = (): void => {
+  const storedExpiry = sessionStorage.getItem(TOKEN_EXPIRY_KEY);
+  const storedEmail = sessionStorage.getItem(CUSTOMER_EMAIL_KEY);
+
+  if (storedExpiry) {
+    tokenExpiry = parseInt(storedExpiry, 10);
+  }
+  if (storedEmail) {
+    customerEmail = storedEmail;
   }
 };

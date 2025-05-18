@@ -1,27 +1,12 @@
 import { useState } from 'react';
 import { useFormik } from 'formik';
+import { LoginFormValues, FormErrors, LoginFormProps } from './LoginForm.types';
+import { loginValidation } from '../../utils/loginValidation';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import CircularProgress from '@mui/material/CircularProgress';
-import { loginValidation } from '../../utils/loginValidation';
 import styles from './LoginForm.module.css';
-
-interface LoginFormValues {
-  email: string;
-  password: string;
-}
-
-interface FormErrors {
-  email?: string;
-  password?: string;
-  form?: string;
-}
-
-interface LoginFormProps {
-  onSubmit: (values: LoginFormValues) => Promise<void>;
-  isSubmitting?: boolean;
-}
 
 export const LoginForm = ({ onSubmit, isSubmitting = false }: LoginFormProps) => {
   const [showPassword, setShowPassword] = useState(false);

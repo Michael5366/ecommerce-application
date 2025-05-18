@@ -1,11 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import {
-  CommerceToolsAuthError,
-  loginUser,
-  isAuthenticated,
-  storeAuthData,
-} from '../services/authAPI';
+import { CommerceToolsAuthError, loginUser, isAuthenticated } from '../services/authAPI';
 import { LoginForm } from '../components/Auth/LoginForm';
 import { Loader } from '../components/UI/Loader';
 import styles from './../components/Auth/LoginForm.module.css';
@@ -29,9 +24,7 @@ const LoginPage = () => {
       setFormError('');
       setIsSubmitting(true);
 
-      const { auth, customer } = await loginUser(values.email, values.password);
-      storeAuthData(auth, customer);
-
+      await loginUser(values.email, values.password);
       navigate('/', { replace: true });
     } catch (err: unknown) {
       let errorMessage = 'Invalid email or password';
@@ -78,9 +71,6 @@ const LoginPage = () => {
       <LoginForm onSubmit={handleSubmit} isSubmitting={isSubmitting} />
       <div className={styles.registerLink}>
         Don&apos;t have an account? <Link to="/register">Register</Link>
-      </div>
-      <div className={styles.forgotPasswordLink}>
-        <Link to="/forgot-password">Forgot password?</Link>
       </div>
     </div>
   );
