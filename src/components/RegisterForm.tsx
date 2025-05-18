@@ -7,6 +7,7 @@ import useRegistrationForm from '../hooks/useRegistrationForm';
 import { registrationSchema } from '../utils/validateRegistration';
 import { ZodError } from 'zod';
 import AddressForm from './AddressForm';
+import '../styles/cssRegistration.css'
 
 export default function RegisterForm() {
   const {
@@ -41,6 +42,8 @@ export default function RegisterForm() {
     try {
       registrationSchema.parse({ ...formData, useSameAddress });
 
+      setErrors({});
+
       const anonToken = await getAnonymousToken();
 
       const addresses = useSameAddress
@@ -64,14 +67,10 @@ export default function RegisterForm() {
         ) {
           defaultShippingAddress = 0;
           defaultBillingAddress = 0;
-        } else if (
-          formData.shippingAddress.defaultShippingAddress
-        ) {
+        } else if (formData.shippingAddress.defaultShippingAddress) {
           defaultShippingAddress = 0;
-          defaultBillingAddress = undefined
-        } else if (
-          formData.billingAddress.defaultBillingAddress
-        ) {
+          defaultBillingAddress = undefined;
+        } else if (formData.billingAddress.defaultBillingAddress) {
           defaultShippingAddress = undefined;
           defaultBillingAddress = 0;
         }
@@ -130,7 +129,7 @@ export default function RegisterForm() {
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className='form-position'>
         <h2>Регистрация</h2>
         <input
           name="username"
@@ -177,7 +176,7 @@ export default function RegisterForm() {
           />
           Сделать дефолтным адресом доставки
         </label>
-        (
+        
         <>
           <AddressForm
             type="billingAddress"
@@ -196,7 +195,7 @@ export default function RegisterForm() {
             Сделать дефолтным адресом для платежей
           </label>
         </>
-        )<button type="submit">Зарегистрироваться</button>
+        <button type="submit">Зарегистрироваться</button>
       </form>
       {console.log('showDuplicateEmailModal =', showDuplicateEmailModal)}
       {showDuplicateEmailModal && (

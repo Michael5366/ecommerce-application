@@ -1,5 +1,8 @@
 // services/auth.ts
 import { Address } from '../types/form';
+import Toastify from 'toastify-js';
+import 'toastify-js/src/toastify.css';
+
 
 const clientId = 'your_client_id';
 const clientSecret = 'your_client_secret';
@@ -103,7 +106,6 @@ export const signUpUser = async (token: string, payload: SignUpPayload) => {
 
   if (!response.ok) {
     const error: ApiErrorResponse = await response.json();
-    console.error('Ошибка регистрации:', error);
     const duplicateEmailError = error.errors.find(
       (err) => err.code === 'DuplicateField' && err.field === 'email'
     );
@@ -114,9 +116,32 @@ export const signUpUser = async (token: string, payload: SignUpPayload) => {
 
       throw new Error('DuplicateEmail');
     }
-    throw new Error(error.message || 'Ошибка при регистрации пользователя');
+    Toastify({
+  text: error.message || 'Ошибка при регистрации пользователя',
+  duration: 3000,
+  close: true,
+  gravity: 'top',
+  position: 'right',
+  style: {
+    background: '#FF6B6B',
+    color: '#fff',
+  },
+}).showToast();
+
+throw new Error(error.message || 'Ошибка при регистрации пользователя');
   }
   const successData: ApiSuccessResponse = await response.json();
+  Toastify({
+  text: 'Регистрация успешно завершена! Переходим на главную страницу!',
+  duration: 3000,
+  close: true,
+  gravity: 'top',
+  position: 'right',
+  style: {
+    background: '#42ff9e',
+    color: '#fff',
+  },
+}).showToast();
   // router.push('/');
   console.log(successData);
   return successData;
