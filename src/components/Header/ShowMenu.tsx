@@ -28,7 +28,7 @@ export const showMenu = (): JSX.Element => {
 
   if (auth) {
     return (
-      <Button color="inherit" onClick={logout}>
+      <Button variant="outlined" color="inherit" onClick={logout}>
         Logout
       </Button>
     );
@@ -37,10 +37,10 @@ export const showMenu = (): JSX.Element => {
   if (!isMobile) {
     return (
       <>
-        <Button color="inherit" component={Link} to={Path.LOGIN}>
+        <Button variant="outlined" color="inherit" component={Link} to={Path.LOGIN}>
           Login
         </Button>
-        <Button color="inherit" component={Link} to={Path.REGISTRATION}>
+        <Button variant="outlined" color="inherit" component={Link} to={Path.REGISTRATION}>
           Registration
         </Button>
       </>
