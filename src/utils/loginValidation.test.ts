@@ -24,7 +24,7 @@ describe('loginValidation', () => {
     it('rejects emails with whitespace', async () => {
       await expect(
         loginValidation.validateAt('email', { email: ' test@example.com ' })
-      ).rejects.toThrow('Invalid email format');
+      ).rejects.toThrow('Email must not contain spaces');
     });
   });
 
@@ -37,7 +37,7 @@ describe('loginValidation', () => {
 
     it('requires password', async () => {
       await expect(loginValidation.validateAt('password', { password: '' })).rejects.toThrow(
-        'Password must be at least 8 characters'
+        'Password is required'
       );
     });
 
@@ -47,16 +47,34 @@ describe('loginValidation', () => {
       );
     });
 
-    it('rejects passwords without special chars', async () => {
+    it('rejects passwords without uppercase letters', async () => {
       await expect(
-        loginValidation.validateAt('password', { password: 'NoSpecial123' })
+        loginValidation.validateAt('password', { password: 'invalidpass1!' })
+      ).rejects.toThrow('Password must contain at least one uppercase letter');
+    });
+
+    it('rejects passwords without lowercase letters', async () => {
+      await expect(
+        loginValidation.validateAt('password', { password: 'INVALIDPASS1!' })
+      ).rejects.toThrow('Password must contain at least one lowercase letter');
+    });
+
+    it('rejects passwords without digits', async () => {
+      await expect(
+        loginValidation.validateAt('password', { password: 'InvalidPass!' })
+      ).rejects.toThrow('Password must contain at least one digit');
+    });
+
+    it('rejects passwords without special characters', async () => {
+      await expect(
+        loginValidation.validateAt('password', { password: 'InvalidPass1' })
       ).rejects.toThrow('Password must contain at least one special character');
     });
 
     it('rejects passwords with whitespace', async () => {
       await expect(
-        loginValidation.validateAt('password', { password: ' Password123! ' })
-      ).rejects.toThrow('Password must not contain leading or trailing whitespace');
+        loginValidation.validateAt('password', { password: ' InvalidPass1! ' })
+      ).rejects.toThrow('Password must not contain spaces');
     });
   });
 
