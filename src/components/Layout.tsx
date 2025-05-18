@@ -1,14 +1,17 @@
 import { Outlet } from 'react-router-dom';
 import Header from './Header/Header';
-import { GlobalStyles } from '@mui/material';
+import { GlobalStyles, ThemeProvider } from '@mui/material';
+import { theme } from '../styles/theme';
 
 const Layout = () => {
   return (
     <>
-      <GlobalStyles styles={{ body: { margin: 0 } }} />
+      <ThemeProvider theme={theme}>
+        <GlobalStyles styles={{ body: { margin: 0 } }} />
 
-      <Header />
-      <Outlet />
+        <Header />
+        <Outlet />
+      </ThemeProvider>
     </>
   );
 };

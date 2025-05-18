@@ -7,12 +7,7 @@ const Header = () => {
   return (
     <AppBar position="static">
       <Toolbar sx={{ justifyContent: 'space-between' }}>
-        <Typography
-          variant="h6"
-          component={Link}
-          to="/"
-          sx={{ color: '#ffffff', textDecoration: 'none' }}
-        >
+        <Typography variant="h6" component={Link} to="/" sx={{ textDecoration: 'none' }}>
           🌸 Flower Shop
         </Typography>
 
