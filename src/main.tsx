@@ -1,7 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
-import { initializeAuth } from './services/authAPI';
+import { initializeAuth } from './services/Auth/authAPI.ts';
 import App from './App.tsx';
 
 initializeAuth();

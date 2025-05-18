@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { CommerceToolsAuthError, loginUser, isAuthenticated } from '../services/authAPI';
+import { CommerceToolsAuthError, loginUser, isAuthenticated } from '../services/Auth/authAPI';
 import { LoginForm } from '../components/Auth/LoginForm';
 import { Loader } from '../components/UI/Loader';
+import SpaIcon from '@mui/icons-material/Spa';
 import styles from './../components/Auth/LoginForm.module.css';
 
 const LoginPage = () => {
@@ -71,6 +72,9 @@ const LoginPage = () => {
       <LoginForm onSubmit={handleSubmit} isSubmitting={isSubmitting} />
       <div className={styles.registerLink}>
         Don&apos;t have an account? <Link to="/register">Register</Link>
+      </div>
+      <div className={styles.plantDecoration + ' ' + styles.plantBottom}>
+        <SpaIcon fontSize="inherit" />
       </div>
     </div>
   );
