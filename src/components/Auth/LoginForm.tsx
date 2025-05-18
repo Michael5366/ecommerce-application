@@ -55,8 +55,12 @@ export const LoginForm = ({ onSubmit, isSubmitting = false }: LoginFormProps) =>
     }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     formik.handleChange(e);
+
+    await formik.validateField(e.target.name);
+    formik.setFieldTouched(e.target.name, true, false);
+
     if (errors[e.target.name as keyof FormErrors]) {
       setErrors((prev) => ({ ...prev, [e.target.name]: undefined }));
     }
