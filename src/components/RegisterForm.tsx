@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import DuplicateEmailModal from './DuplicateEmailModal';
-import { getAnonymousToken, signUpUser, getCustomerToken } from '../services/auth';
-import { SignUpPayload } from '../services/auth';
+import { getAnonymousToken, signUpUser, getCustomerToken } from '../services/auth-registration';
+import { SignUpPayload } from '../services/auth-registration';
 import { FormErrors } from '../types/form';
 import useRegistrationForm from '../hooks/useRegistrationForm';
 import { registrationSchema } from '../utils/validateRegistration';
 import { ZodError } from 'zod';
 import AddressForm from './AddressForm';
-import '../styles/cssRegistration.css'
+import '../styles/cssRegistration.css';
+import Toastify from 'toastify-js';
+import 'toastify-js/src/toastify.css';
 
 export default function RegisterForm() {
   const {
@@ -126,10 +128,41 @@ export default function RegisterForm() {
       }
     }
   };
+  const handleAnonymousLogin = async () => {
+  try {
+    const token = await getAnonymousToken();
+    console.log('Переходим на глуавную', token);
+    Toastify({
+      text: 'Успещно! Выполняется анонимный вход',
+      duration: 3000,
+      close: true,
+      gravity: 'top',
+      position: 'right',
+      style: {
+        background: '#42ff9e',
+        color: '#fff',
+      },
+    }).showToast();
+    {/* navigate('/');*/}
+  } catch (error) {
+    console.error('Ошибка при анонимном входе:', error);
+    Toastify({
+      text: 'Ошибка при анонимном входе, попробуйте в другой раз',
+      duration: 3000,
+      close: true,
+      gravity: 'top',
+      position: 'right',
+      style: {
+        background: '#FF6B6B',
+        color: '#fff',
+      },
+    }).showToast();
+  }
+};
 
   return (
     <>
-      <form onSubmit={handleSubmit} className='form-position'>
+      <form onSubmit={handleSubmit} className="form-position">
         <h2>Регистрация</h2>
         <input
           name="username"
@@ -157,6 +190,7 @@ export default function RegisterForm() {
         {submitted && errors.password && <p style={{ color: 'red' }}>{errors.password}</p>}
         <input name="birthday" type="date" value={formData.birthday} onChange={handleChange} />
         {submitted && errors.birthday && <p style={{ color: 'red' }}>{errors.birthday}</p>}
+        <div className="address-section">
         <AddressForm
           type="shippingAddress"
           title="Адрес доставки"
@@ -176,8 +210,8 @@ export default function RegisterForm() {
           />
           Сделать дефолтным адресом доставки
         </label>
-        
-        <>
+        </div>
+        <div className="address-section">
           <AddressForm
             type="billingAddress"
             title="Адрес для выставления счетов"
@@ -194,8 +228,9 @@ export default function RegisterForm() {
             />
             Сделать дефолтным адресом для платежей
           </label>
-        </>
+        </div>
         <button type="submit">Зарегистрироваться</button>
+        <button type="button" onClick={handleAnonymousLogin}>Войти без регистрации</button>
       </form>
       {console.log('showDuplicateEmailModal =', showDuplicateEmailModal)}
       {showDuplicateEmailModal && (

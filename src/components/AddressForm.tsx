@@ -13,8 +13,9 @@ type AddressFormProps = {
 
 export default function AddressForm({ type, title, address, errors, onChange }: AddressFormProps) {
   return (
-    <div className="adress-block">
+    <div className="adress-general">
       <h3>{title}</h3>
+      <div className="adress-block">
       <input
         name="streetName"
         placeholder="Улица"
@@ -46,6 +47,6 @@ export default function AddressForm({ type, title, address, errors, onChange }: 
         <option value="FR">Франция</option>
       </select>
       {errors.country && <p style={{ color: 'red' }}>{errors.country}</p>}
-    </div>
+    </div></div>
   );
 }

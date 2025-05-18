@@ -3,7 +3,6 @@ import { Address } from '../types/form';
 import Toastify from 'toastify-js';
 import 'toastify-js/src/toastify.css';
 
-
 const clientId = 'your_client_id';
 const clientSecret = 'your_client_secret';
 const credentials = btoa(`${clientId}:${clientSecret}`);
@@ -110,38 +109,36 @@ export const signUpUser = async (token: string, payload: SignUpPayload) => {
       (err) => err.code === 'DuplicateField' && err.field === 'email'
     );
     if (duplicateEmailError) {
-      // TODO: показать модальное окно с сообщением о дублировании email
 
       console.log('польхователь уже зарегистриравн! Показать окощко');
-
       throw new Error('DuplicateEmail');
     }
     Toastify({
-  text: error.message || 'Ошибка при регистрации пользователя',
-  duration: 3000,
-  close: true,
-  gravity: 'top',
-  position: 'right',
-  style: {
-    background: '#FF6B6B',
-    color: '#fff',
-  },
-}).showToast();
+      text: error.message || 'Ошибка при регистрации пользователя',
+      duration: 3000,
+      close: true,
+      gravity: 'top',
+      position: 'right',
+      style: {
+        background: '#FF6B6B',
+        color: '#fff',
+      },
+    }).showToast();
 
-throw new Error(error.message || 'Ошибка при регистрации пользователя');
+    throw new Error(error.message || 'Ошибка при регистрации пользователя');
   }
   const successData: ApiSuccessResponse = await response.json();
   Toastify({
-  text: 'Регистрация успешно завершена! Переходим на главную страницу!',
-  duration: 3000,
-  close: true,
-  gravity: 'top',
-  position: 'right',
-  style: {
-    background: '#42ff9e',
-    color: '#fff',
-  },
-}).showToast();
+    text: 'Регистрация успешно завершена! Переходим на главную страницу!',
+    duration: 3000,
+    close: true,
+    gravity: 'top',
+    position: 'right',
+    style: {
+      background: '#42ff9e',
+      color: '#fff',
+    },
+  }).showToast();
   // router.push('/');
   console.log(successData);
   return successData;
