@@ -1,7 +1,8 @@
 import { Outlet } from 'react-router-dom';
 import Header from './Header/Header';
-import { Box, Container, GlobalStyles, ThemeProvider } from '@mui/material';
+import { Box, Container, GlobalStyles, Stack, ThemeProvider } from '@mui/material';
 import { theme } from '../styles/theme';
+import Footer from '../pages/Footer';
 
 const Layout = () => {
   return (
@@ -9,12 +10,17 @@ const Layout = () => {
       <ThemeProvider theme={theme}>
         <GlobalStyles styles={{ body: { margin: 0 } }} />
 
-        <Header />
-        <Box component={'main'}>
-          <Container>
-            <Outlet />
-          </Container>
-        </Box>
+        <Stack minHeight={'100vh'} direction={'column'} justifyContent={'space-between'}>
+          <Header />
+
+          <Box component={'main'}>
+            <Container>
+              <Outlet />
+            </Container>
+          </Box>
+
+          <Footer />
+        </Stack>
       </ThemeProvider>
     </>
   );
