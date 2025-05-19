@@ -13,8 +13,8 @@ const Layout = () => {
         <Stack minHeight={'100vh'} direction={'column'} justifyContent={'space-between'}>
           <Header />
 
-          <Box component={'main'}>
-            <Container>
+          <Box component={'main'} sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+            <Container sx={{ py: 1 }}>
               <Outlet />
             </Container>
           </Box>
