@@ -165,6 +165,7 @@ export default function RegisterForm() {
   return (
     <>
       <form onSubmit={handleSubmit} className="form-position">
+        <h1>To Good Shop</h1>
         <h2>Регистрация</h2>
         <input
           name="username"
@@ -172,16 +173,16 @@ export default function RegisterForm() {
           value={formData.username}
           onChange={handleChange}
         />
-        {submitted && errors.username && <p className='errors'>{errors.username}</p>}
+        {submitted && errors.username && <p className="errors">{errors.username}</p>}
         <input
           name="surname"
           placeholder="Фамилия"
           value={formData.surname}
           onChange={handleChange}
         />
-        {submitted && errors.surname && <p className='errors'>{errors.surname}</p>}
+        {submitted && errors.surname && <p className="errors">{errors.surname}</p>}
         <input name="email" placeholder="Email" value={formData.email} onChange={handleChange} />
-        {submitted && errors.email && <p className='errors'>{errors.email}</p>}
+        {submitted && errors.email && <p className="errors">{errors.email}</p>}
         <input
           name="password"
           type="password"
@@ -189,9 +190,9 @@ export default function RegisterForm() {
           value={formData.password}
           onChange={handleChange}
         />
-        {submitted && errors.password && <p className='errors'>{errors.password}</p>}
+        {submitted && errors.password && <p className="errors">{errors.password}</p>}
         <input name="birthday" type="date" value={formData.birthday} onChange={handleChange} />
-        {submitted && errors.birthday && <p className='errors'>{errors.birthday}</p>}
+        {submitted && errors.birthday && <p className="errors">{errors.birthday}</p>}
         <div className="address-section">
           <AddressForm
             type="shippingAddress"
@@ -231,14 +232,16 @@ export default function RegisterForm() {
             Сделать дефолтным адресом для платежей
           </label>
         </div>
-        <div className='buttons-block'>
-        <button className='button-reg' type="submit">Зарегистрироваться</button>
-        <button className='button-reg' type="button" onClick={handleAnonymousLogin}>
-          Войти без регистрации
-        </button>
-        <button className='button-reg' type="button" onClick={handleLoginRedirect}>
-          Уже есть учетная запись?
-        </button>
+        <div className="buttons-block">
+          <button className="button-reg" type="submit">
+            Зарегистрироваться
+          </button>
+          <button className="button-reg" type="button" onClick={handleAnonymousLogin}>
+            Войти без регистрации
+          </button>
+          <button className="button-reg" type="button" onClick={handleLoginRedirect}>
+            Уже есть учетная запись?
+          </button>
         </div>
       </form>
       {console.log('showDuplicateEmailModal =', showDuplicateEmailModal)}

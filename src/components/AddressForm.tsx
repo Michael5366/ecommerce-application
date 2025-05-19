@@ -1,5 +1,5 @@
 import { Address, AddressErrors } from '../types/form';
-import '../styles/cssRegistration.css'
+import '../styles/cssRegistration.css';
 
 type AddressFormProps = {
   type: 'shippingAddress' | 'billingAddress';
@@ -23,7 +23,7 @@ export default function AddressForm({ type, title, address, errors, onChange }: 
           value={address.streetName}
           onChange={(e) => onChange(e, type)}
         />
-        {errors.streetName && <p className='errors'>{errors.streetName}</p>}
+        {errors.streetName && <p className="errors">{errors.streetName}</p>}
 
         <input
           name="city"
@@ -31,7 +31,7 @@ export default function AddressForm({ type, title, address, errors, onChange }: 
           value={address.city}
           onChange={(e) => onChange(e, type)}
         />
-        {errors.city && <p className='errors'>{errors.city}</p>}
+        {errors.city && <p className="errors">{errors.city}</p>}
 
         <input
           name="postalCode"
@@ -39,7 +39,7 @@ export default function AddressForm({ type, title, address, errors, onChange }: 
           value={address.postalCode}
           onChange={(e) => onChange(e, type)}
         />
-        {errors.postalCode && <p className='errors'>{errors.postalCode}</p>}
+        {errors.postalCode && <p className="errors">{errors.postalCode}</p>}
 
         <select name="country" value={address.country} onChange={(e) => onChange(e, type)}>
           <option value="">-- Выберите --</option>
@@ -47,7 +47,7 @@ export default function AddressForm({ type, title, address, errors, onChange }: 
           <option value="ES">Испания</option>
           <option value="FR">Франция</option>
         </select>
-        {errors.country && <p className='errors'>{errors.country}</p>}
+        {errors.country && <p className="errors">{errors.country}</p>}
       </div>
     </div>
   );

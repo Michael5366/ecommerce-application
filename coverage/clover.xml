@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1747652496669" clover="3.2.0">
-  <project timestamp="1747652496669" name="All files">
+<coverage generated="1747661122098" clover="3.2.0">
+  <project timestamp="1747661122098" name="All files">
     <metrics statements="37" coveredstatements="37" conditionals="6" coveredconditionals="4" methods="5" coveredmethods="2" elements="48" coveredelements="43" complexity="0" loc="37" ncloc="37" packages="1" files="1" classes="1"/>
     <file name="AddressForm.tsx" path="C:\Users\79995\Desktop\Work\rsschool-cv\ecommerce-application\src\components\AddressForm.tsx">
       <metrics statements="37" coveredstatements="37" conditionals="6" coveredconditionals="4" methods="5" coveredmethods="2"/>

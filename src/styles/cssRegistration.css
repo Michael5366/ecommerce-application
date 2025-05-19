@@ -1,6 +1,28 @@
+h1{
+    margin: 0;
+  font-size: 2rem;
+  font-weight: 600;
+  color: rgb(92, 85, 85);
+  padding: 1vw;
+  background-color: #ffffffd1;
+  box-shadow: 0 0 30px 20px #fffffff0;
+}
 h3 {
   margin: 0;
-  font-size: x-large;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: rgb(92, 85, 85);
+  background-color: #ffffffd1;
+  box-shadow: 0 0 30px 20px #fffffff0;
+  z-index: 3;
+}
+h2{
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: rgb(92, 85, 85);
+  background-color: #ffffffd1;
+  box-shadow: 0 0 30px 20px #fffffff0;
 }
 .overlay {
   position: fixed;
@@ -35,7 +57,7 @@ h3 {
   padding: 8px 16px;
   cursor: pointer;
 }
-.buttons-block{
+.buttons-block {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -59,6 +81,8 @@ h3 {
   flex-direction: column;
   align-items: center;
   gap: 1vw;
+  background-image: url('../../public/flores-phone.jpg');
+  background-size: cover;
 }
 .adress-block {
   gap: 1vw;
@@ -75,27 +99,39 @@ h3 {
 .address-section {
   padding: 1vw;
   border: 1px #dbd9b8 solid;
+  border-radius: 12px;
 }
-.errors{
+.errors {
   color: rgb(180, 12, 12);
   margin: 0;
   font-size: smaller;
+  background-color: #ffffffd1;
+  box-shadow: 0 0 30px 20px #fffffff0;
 }
 .button-reg {
-  background: linear-gradient(135deg, #ff6b6b, #ffcc00);
-  color: #fff;
-  font-weight: bold;
+  width: 100%;
+  height: 3.25rem;
+  padding: 0 1rem;
+  color: rgb(92, 85, 85);
   border: none;
-  border-radius: 1vw;
-  padding: 2vw 2vw;
-  font-size: 16px;
+  border-radius: 8px;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(63, 81, 181, 0.3);
+  margin-top: 1rem;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: #f2a6b57d;
 }
 .bbutton-reg:hover {
-  transform: scale(1.05);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(63, 81, 181, 0.4);
 }
 
 .button-reg:active {
