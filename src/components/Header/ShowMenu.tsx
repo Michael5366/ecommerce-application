@@ -1,4 +1,12 @@
-import { Button, IconButton, Menu, MenuItem, useMediaQuery, useTheme } from '@mui/material';
+import {
+  Button,
+  IconButton,
+  Menu,
+  MenuItem,
+  Tooltip,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Link } from 'react-router-dom';
 import { Path } from '../../types/paths';
@@ -37,12 +45,17 @@ export const showMenu = (): JSX.Element => {
   if (!isMobile) {
     return (
       <>
-        <Button variant="outlined" color="inherit" component={Link} to={Path.LOGIN}>
-          Login
-        </Button>
-        <Button variant="outlined" color="inherit" component={Link} to={Path.REGISTRATION}>
-          Registration
-        </Button>
+        <Tooltip title={'Log in to your account'} arrow placement="bottom-start" enterDelay={500}>
+          <Button variant="outlined" color="inherit" component={Link} to={Path.LOGIN}>
+            Login
+          </Button>
+        </Tooltip>
+
+        <Tooltip title={'Create a new account'} arrow placement="bottom-start" enterDelay={500}>
+          <Button variant="outlined" color="inherit" component={Link} to={Path.REGISTRATION}>
+            Registration
+          </Button>
+        </Tooltip>
       </>
     );
   }
