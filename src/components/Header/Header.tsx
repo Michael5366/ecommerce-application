@@ -1,14 +1,20 @@
-import { AppBar, Container, Stack, Toolbar, Typography } from '@mui/material';
+import { AppBar, Container, Stack, Toolbar, Typography, useTheme } from '@mui/material';
 
 import { Link } from 'react-router-dom';
 import { showMenu } from './ShowMenu';
 
 const Header = () => {
+  const theme = useTheme();
   return (
     <AppBar position="static">
       <Container disableGutters>
         <Toolbar sx={{ justifyContent: 'space-between' }}>
-          <Typography variant="h6" component={Link} to="/" sx={{ textDecoration: 'none' }}>
+          <Typography
+            variant="h6"
+            component={Link}
+            to="/"
+            sx={{ textDecoration: 'none', color: theme.palette.text.primary }}
+          >
             🌸 Flower Shop
           </Typography>
 

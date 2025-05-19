@@ -12,7 +12,7 @@ export const theme = createTheme({
       default: '#ffffff',
     },
     text: {
-      primary: '#ffffff',
+      primary: '#333333',
     },
   },
   components: {
