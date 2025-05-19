@@ -129,36 +129,38 @@ export default function RegisterForm() {
     }
   };
   const handleAnonymousLogin = async () => {
-  try {
-    const token = await getAnonymousToken();
-    console.log('Переходим на глуавную', token);
-    Toastify({
-      text: 'Успещно! Выполняется анонимный вход',
-      duration: 3000,
-      close: true,
-      gravity: 'top',
-      position: 'right',
-      style: {
-        background: '#42ff9e',
-        color: '#fff',
-      },
-    }).showToast();
-    {/* navigate('/');*/}
-  } catch (error) {
-    console.error('Ошибка при анонимном входе:', error);
-    Toastify({
-      text: 'Ошибка при анонимном входе, попробуйте в другой раз',
-      duration: 3000,
-      close: true,
-      gravity: 'top',
-      position: 'right',
-      style: {
-        background: '#FF6B6B',
-        color: '#fff',
-      },
-    }).showToast();
-  }
-};
+    try {
+      const token = await getAnonymousToken();
+      console.log('Переходим на глуавную', token);
+      Toastify({
+        text: 'Успещно! Выполняется анонимный вход',
+        duration: 3000,
+        close: true,
+        gravity: 'top',
+        position: 'right',
+        style: {
+          background: '#42ff9e',
+          color: '#fff',
+        },
+      }).showToast();
+      {
+        /* navigate('/');*/
+      }
+    } catch (error) {
+      console.error('Ошибка при анонимном входе:', error);
+      Toastify({
+        text: 'Ошибка при анонимном входе, попробуйте в другой раз',
+        duration: 3000,
+        close: true,
+        gravity: 'top',
+        position: 'right',
+        style: {
+          background: '#FF6B6B',
+          color: '#fff',
+        },
+      }).showToast();
+    }
+  };
 
   return (
     <>
@@ -170,16 +172,16 @@ export default function RegisterForm() {
           value={formData.username}
           onChange={handleChange}
         />
-        {submitted && errors.username && <p style={{ color: 'red' }}>{errors.username}</p>}
+        {submitted && errors.username && <p className='errors'>{errors.username}</p>}
         <input
           name="surname"
           placeholder="Фамилия"
           value={formData.surname}
           onChange={handleChange}
         />
-        {submitted && errors.surname && <p style={{ color: 'red' }}>{errors.surname}</p>}
+        {submitted && errors.surname && <p className='errors'>{errors.surname}</p>}
         <input name="email" placeholder="Email" value={formData.email} onChange={handleChange} />
-        {submitted && errors.email && <p style={{ color: 'red' }}>{errors.email}</p>}
+        {submitted && errors.email && <p className='errors'>{errors.email}</p>}
         <input
           name="password"
           type="password"
@@ -187,29 +189,29 @@ export default function RegisterForm() {
           value={formData.password}
           onChange={handleChange}
         />
-        {submitted && errors.password && <p style={{ color: 'red' }}>{errors.password}</p>}
+        {submitted && errors.password && <p className='errors'>{errors.password}</p>}
         <input name="birthday" type="date" value={formData.birthday} onChange={handleChange} />
-        {submitted && errors.birthday && <p style={{ color: 'red' }}>{errors.birthday}</p>}
+        {submitted && errors.birthday && <p className='errors'>{errors.birthday}</p>}
         <div className="address-section">
-        <AddressForm
-          type="shippingAddress"
-          title="Адрес доставки"
-          address={formData.shippingAddress}
-          errors={errors.shippingAddress || {}}
-          onChange={handleAddressChange}
-        />
-        <label>
-          <input type="checkbox" checked={useSameAddress} onChange={handleCheckboxChange} />
-          Использовать тот же адрес для выставления счетов
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            checked={formData.shippingAddress.defaultShippingAddress}
-            onChange={handleDefaultShippingChange}
+          <AddressForm
+            type="shippingAddress"
+            title="Адрес доставки"
+            address={formData.shippingAddress}
+            errors={errors.shippingAddress || {}}
+            onChange={handleAddressChange}
           />
-          Сделать дефолтным адресом доставки
-        </label>
+          <label>
+            <input type="checkbox" checked={useSameAddress} onChange={handleCheckboxChange} />
+            Использовать тот же адрес для выставления счетов
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              checked={formData.shippingAddress.defaultShippingAddress}
+              onChange={handleDefaultShippingChange}
+            />
+            Сделать дефолтным адресом доставки
+          </label>
         </div>
         <div className="address-section">
           <AddressForm
@@ -229,8 +231,15 @@ export default function RegisterForm() {
             Сделать дефолтным адресом для платежей
           </label>
         </div>
-        <button type="submit">Зарегистрироваться</button>
-        <button type="button" onClick={handleAnonymousLogin}>Войти без регистрации</button>
+        <div className='buttons-block'>
+        <button className='button-reg' type="submit">Зарегистрироваться</button>
+        <button className='button-reg' type="button" onClick={handleAnonymousLogin}>
+          Войти без регистрации
+        </button>
+        <button className='button-reg' type="button" onClick={handleLoginRedirect}>
+          Уже есть учетная запись?
+        </button>
+        </div>
       </form>
       {console.log('showDuplicateEmailModal =', showDuplicateEmailModal)}
       {showDuplicateEmailModal && (

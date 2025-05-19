@@ -9,7 +9,7 @@ describe('registrationSchema', () => {
       surname: '',
       email: 'invalid-email',
       password: '123',
-      birthday: '2015-01-01', // младше 14 лет
+      birthday: '2015-01-01',
       shippingAddress: {
         streetName: '',
         city: '123',

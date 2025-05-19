@@ -109,7 +109,6 @@ export const signUpUser = async (token: string, payload: SignUpPayload) => {
       (err) => err.code === 'DuplicateField' && err.field === 'email'
     );
     if (duplicateEmailError) {
-
       console.log('польхователь уже зарегистриравн! Показать окощко');
       throw new Error('DuplicateEmail');
     }
