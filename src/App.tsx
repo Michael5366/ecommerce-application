@@ -1,11 +1,8 @@
-// import { useState } from 'react';
+import { RouterProvider } from 'react-router-dom';
+import { routes } from './routes/routes';
 
 function App() {
-  return (
-    <>
-      <h1>...</h1>
-    </>
-  );
+  return <RouterProvider router={routes} />;
 }
 
 export default App;
