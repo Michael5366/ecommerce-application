@@ -1,0 +1,228 @@
+:root {
+  --primary: #3f51b5;
+  --primary-light: #757de8;
+  --primary-dark: #0033a0;
+  --accent: #4fc3f7;
+  --error: #f44336;
+  --text: #263238;
+  --text-light: #607d8b;
+  --bg: #ffffff;
+  --bg-light: #f5f7fa;
+  --border: #e0e0e0;
+  --shadow: rgba(0, 0, 0, 0.08);
+}
+
+.container {
+  max-width: 440px;
+  margin: 2.5rem auto;
+  padding: 2.5rem;
+  background: var(--bg);
+  border-radius: 12px;
+  box-shadow: 0 4px 24px var(--shadow);
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  border: 1px solid var(--border);
+}
+
+.container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, var(--primary-dark) 0%, var(--primary) 100%);
+}
+
+.container h1 {
+  text-align: center;
+  color: var(--primary-dark);
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.formGroup {
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: var(--text);
+  font-size: 0.95rem;
+}
+
+.formGroup input {
+  width: 100%;
+  height: 3rem;
+  padding: 0 1rem;
+  padding-right: 2.8rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-sizing: border-box;
+  font-size: 1rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background-color: var(--bg-light);
+  color: var(--text);
+}
+
+.formGroup input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.15);
+  background-color: var(--bg);
+}
+
+.error {
+  display: flex;
+  align-items: center;
+  color: var(--error);
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+.authError {
+  color: var(--error);
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background-color: rgba(244, 67, 54, 0.08);
+  border-radius: 8px;
+  text-align: center;
+  border-left: 4px solid var(--error);
+}
+
+.submitButton {
+  width: 100%;
+  height: 3.25rem;
+  padding: 0 1rem;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(63, 81, 181, 0.3);
+  margin-top: 1rem;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.submitButton:hover {
+  background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(63, 81, 181, 0.4);
+}
+
+.submitButton:active {
+  transform: translateY(0);
+}
+
+.submitButton:disabled {
+  background: #e0e0e0;
+  color: #9e9e9e;
+  transform: none;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.registerLink {
+  margin-top: 1.5rem;
+  text-align: center;
+  color: var(--text-light);
+  font-size: 0.95rem;
+}
+
+.registerLink a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.registerLink a:hover {
+  color: var(--primary-dark);
+  text-decoration: underline;
+}
+
+.errorInput {
+  border-color: var(--error) !important;
+  background-color: rgba(244, 67, 54, 0.05) !important;
+}
+
+.passwordInputContainer {
+  position: relative;
+}
+
+.togglePassword {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--primary);
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+
+.togglePassword:hover {
+  color: var(--primary-dark);
+  background-color: rgba(63, 81, 181, 0.1);
+}
+
+.togglePassword svg {
+  font-size: 1.3rem;
+}
+
+.errorIcon {
+  margin-right: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.spinner {
+  color: white;
+  width: 22px;
+  height: 22px;
+  animation: rotate 1s linear infinite;
+}
+
+.plantDecoration {
+  position: absolute;
+  opacity: 0.1;
+  z-index: 0;
+  color: var(--primary-dark);
+  animation: sway 6s ease-in-out infinite;
+}
+
+.plantBottom {
+  bottom: -37px;
+  left: -25px;
+  rotate: 45deg;
+  font-size: 6rem !important;
+  animation-delay: 0.5s;
+}
+
+@keyframes sway {
+  0%,
+  100% {
+    transform: rotate(-7deg);
+  }
+  50% {
+    transform: rotate(7deg);
+  }
+}

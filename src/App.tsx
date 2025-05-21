@@ -1,13 +1,8 @@
-// import { useState } from 'react';
-import RegisterForm from './pages/registration';
+import { RouterProvider } from 'react-router-dom';
+import { routes } from './routes/routes';
 
 function App() {
-  return (
-    <>
-      <h1>...</h1>
-      <RegisterForm />
-    </>
-  );
+  return <RouterProvider router={routes} />;
 }
 
 export default App;
