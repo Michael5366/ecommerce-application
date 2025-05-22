@@ -67,12 +67,14 @@ export const showMenu = () => {
               Logout
             </MenuItem>
           ) : (
-            <>
-              <MenuItem onClick={handleMenuClose} component={Link} to={Path.LOGIN}>
+            [
+              <MenuItem key="login" onClick={handleMenuClose} component={Link} to={Path.LOGIN}>
                 Login
-              </MenuItem>
-              <MenuItem onClick={goToRegister}>Registration</MenuItem>
-            </>
+              </MenuItem>,
+              <MenuItem key="register" onClick={goToRegister}>
+                Registration
+              </MenuItem>,
+            ]
           )}
         </Menu>
       </>
