@@ -3,10 +3,10 @@ import { Address } from '../types/form';
 import Toastify from 'toastify-js';
 import 'toastify-js/src/toastify.css';
 
-const clientId = 'your_client_id';
-const clientSecret = 'your_client_secret';
-const credentials = btoa(`${clientId}:${clientSecret}`);
-console.log('Base64 encoded credentials:', credentials);
+// const clientId = 'your_client_id';
+// const clientSecret = 'your_client_secret';
+// const credentials = btoa(`${clientId}:${clientSecret}`);
+// console.log('Base64 encoded credentials:', credentials);
 
 interface ApiError {
   code: string;
@@ -28,7 +28,7 @@ export const getAnonymousToken = async () => {
   const clientSecret = import.meta.env.VITE_CTP_CLIENT_SECRET;
   const projectKey = import.meta.env.VITE_CTP_PROJECT_KEY;
 
-  console.log(clientId, clientSecret, projectKey);
+  // console.log(clientId, clientSecret, projectKey);
 
   const response = await fetch(
     `https://auth.europe-west1.gcp.commercetools.com/oauth/${projectKey}/anonymous/token`,
@@ -109,7 +109,7 @@ export const signUpUser = async (token: string, payload: SignUpPayload) => {
       (err) => err.code === 'DuplicateField' && err.field === 'email'
     );
     if (duplicateEmailError) {
-      console.log('польхователь уже зарегистриравн! Показать окощко');
+      // console.log('польхователь уже зарегистриравн! Показать окощко');
       throw new Error('DuplicateEmail');
     }
     Toastify({
@@ -139,7 +139,7 @@ export const signUpUser = async (token: string, payload: SignUpPayload) => {
     },
   }).showToast();
   // router.push('/');
-  console.log(successData);
+  // console.log(successData);
   return successData;
 };
 

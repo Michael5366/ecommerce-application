@@ -1,17 +1,14 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
-import { initializeAuth } from './services/Auth/authAPI.ts';
 import App from './App.tsx';
-
-initializeAuth();
+import { AuthProvider } from './context/context.tsx';
 
 document.body.innerHTML = '<div id="root"></div>';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <BrowserRouter>
+    <AuthProvider>
       <App />
-    </BrowserRouter>
+    </AuthProvider>
   </StrictMode>
 );
