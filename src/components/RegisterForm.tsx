@@ -10,6 +10,11 @@ import AddressForm from './AddressForm';
 import '../styles/cssRegistration.css';
 import Toastify from 'toastify-js';
 import 'toastify-js/src/toastify.css';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/context.tsx';
+import { useLocation } from 'react-router-dom';
+import { Path } from '../types/paths.ts';
+import { useEffect } from 'react';
 
 export default function RegisterForm() {
   const {
@@ -25,12 +30,23 @@ export default function RegisterForm() {
   const [showDuplicateEmailModal, setShowDuplicateEmailModal] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitted, setSubmitted] = useState(false);
+  const navigate = useNavigate();
+  const { setToken } = useAuth();
+  const { token } = useAuth();
+  const location = useLocation();
+  const from = location.state?.from || Path.MAIN;
+
+  useEffect(() => {
+    if (token) {
+      navigate(Path.MAIN, { replace: true });
+    }
+  }, [token, navigate]);
 
   const handleCloseModal = () => setShowDuplicateEmailModal(false);
 
   const handleLoginRedirect = () => {
-    // navigate('/login');
-    console.log('Редирект на /login');
+    navigate(Path.LOGIN);
+    // console.log('Редирект на /login');
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -91,16 +107,18 @@ export default function RegisterForm() {
         ...(defaultBillingAddress !== undefined ? { defaultBillingAddress } : {}),
       };
 
-      console.log('Данные для регистрации:', payload);
-      console.log('Отправляем payload:', {
-        addresses: sanitizedAddresses,
-        defaultShippingAddress,
-        defaultBillingAddress,
-      });
+      // console.log('Данные для регистрации:', payload);
+      // console.log('Отправляем payload:', {
+      //   addresses: sanitizedAddresses,
+      //   defaultShippingAddress,
+      //   defaultBillingAddress,
+      // });
       await signUpUser(anonToken, payload);
 
       const customerToken = await getCustomerToken(formData.email, formData.password);
-      console.log('Успешно авторизован:', customerToken);
+      setToken(customerToken);
+      navigate(from, { replace: true });
+      // console.log('Успешно авторизован:', customerToken);
     } catch (err) {
       if (err instanceof ZodError) {
         const fieldErrors: FormErrors = {};
@@ -124,14 +142,14 @@ export default function RegisterForm() {
       } else if (err instanceof Error && err.message === 'DuplicateEmail') {
         setShowDuplicateEmailModal(true);
       } else {
-        console.error('Ошибка при регистрации:', err);
+        // console.error('Ошибка при регистрации:', err);
       }
     }
   };
   const handleAnonymousLogin = async () => {
     try {
-      const token = await getAnonymousToken();
-      console.log('Переходим на глуавную', token);
+      // const token = await getAnonymousToken();
+      // console.log('Переходим на глуавную', token);
       Toastify({
         text: 'Успещно! Выполняется анонимный вход',
         duration: 3000,
@@ -144,7 +162,7 @@ export default function RegisterForm() {
         },
       }).showToast();
       {
-        /* navigate('/');*/
+        navigate(Path.MAIN);
       }
     } catch (error) {
       console.error('Ошибка при анонимном входе:', error);
@@ -244,7 +262,7 @@ export default function RegisterForm() {
           </button>
         </div>
       </form>
-      {console.log('showDuplicateEmailModal =', showDuplicateEmailModal)}
+      {/*{console.log('showDuplicateEmailModal =', showDuplicateEmailModal)}*/}
       {showDuplicateEmailModal && (
         <DuplicateEmailModal
           isOpen={showDuplicateEmailModal}

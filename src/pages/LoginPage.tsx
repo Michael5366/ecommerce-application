@@ -1,32 +1,41 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { CommerceToolsAuthError, loginUser, isAuthenticated } from '../services/Auth/authAPI';
+import { CommerceToolsAuthError, loginUser } from '../services/Auth/authAPI';
 import { LoginForm } from '../components/Auth/LoginForm';
 import { Loader } from '../components/UI/Loader';
 import SpaIcon from '@mui/icons-material/Spa';
 import styles from './../components/Auth/LoginForm.module.css';
+import { Path } from '../types/paths.ts';
+import { useAuth } from '../context/context.tsx';
+import { useLocation } from 'react-router-dom';
 
 const LoginPage = () => {
   const [formError, setFormError] = useState<string>('');
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
+  const { setToken } = useAuth();
+  const { token } = useAuth();
+  const location = useLocation();
 
   useEffect(() => {
-    if (isAuthenticated()) {
+    console.log('token:', token);
+    if (token) {
+      console.log('Already logged in, redirecting...');
       navigate('/', { replace: true });
     } else {
       setIsCheckingAuth(false);
     }
-  }, [navigate]);
+  }, [token, navigate]);
 
   const handleSubmit = async (values: { email: string; password: string }) => {
     try {
       setFormError('');
       setIsSubmitting(true);
 
-      await loginUser(values.email, values.password);
-      navigate('/', { replace: true });
+      const { auth } = await loginUser(values.email, values.password);
+      setToken(auth.access_token);
+      navigate(Path.MAIN, { replace: true });
     } catch (err: unknown) {
       let errorMessage = 'Invalid email or password';
 
@@ -71,7 +80,16 @@ const LoginPage = () => {
       )}
       <LoginForm onSubmit={handleSubmit} isSubmitting={isSubmitting} />
       <div className={styles.registerLink}>
-        Don&apos;t have an account? <Link to="/register">Register</Link>
+        Don&apos;t have an account?{' '}
+        <Link
+          to={Path.REGISTRATION}
+          onClick={(e) => {
+            e.preventDefault();
+            navigate(Path.REGISTRATION, { state: { from: location.pathname } });
+          }}
+        >
+          Register
+        </Link>
       </div>
       <div className={styles.plantDecoration + ' ' + styles.plantBottom}>
         <SpaIcon fontSize="inherit" />

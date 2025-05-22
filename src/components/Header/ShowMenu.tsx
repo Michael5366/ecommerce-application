@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import {
   Button,
   IconButton,
@@ -5,26 +6,24 @@ import {
   MenuItem,
   Tooltip,
   useMediaQuery,
-  useTheme,
+  // useTheme,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Path } from '../../types/paths';
-import { useState } from 'react';
-import { JSX } from '@emotion/react/jsx-runtime';
+import { useAuth } from '../../context/context.tsx';
 
-export const showMenu = (): JSX.Element => {
-  const them = useTheme();
-  const getToken: string | null = localStorage.getItem('authToken');
-  const isAuthenticated: boolean = Boolean(getToken);
-  const [auth, setAuth] = useState(isAuthenticated);
+export const showMenu = () => {
+  // const theme = useTheme();
+  // const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMobile = useMediaQuery('(max-width:860px)');
+
+  const { token, logout } = useAuth();
+  const auth = Boolean(token);
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const isMobile: boolean = useMediaQuery(them.breakpoints.down('sm'));
-
-  const logout = () => {
-    localStorage.removeItem('authToken');
-    setAuth(false);
-  };
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -34,46 +33,91 @@ export const showMenu = (): JSX.Element => {
     setAnchorEl(null);
   };
 
-  if (auth) {
-    return (
-      <Button variant="outlined" color="inherit" onClick={logout}>
-        Logout
-      </Button>
-    );
-  }
+  const goToRegister = () => {
+    handleMenuClose();
+    navigate(Path.REGISTRATION, { replace: true, state: { from: location.pathname } });
+  };
 
-  if (!isMobile) {
+  if (isMobile) {
     return (
       <>
-        <Tooltip title={'Log in to your account'} arrow placement="bottom-start" enterDelay={500}>
-          <Button variant="outlined" color="inherit" component={Link} to={Path.LOGIN}>
-            Login
-          </Button>
-        </Tooltip>
+        <IconButton onClick={handleMenuOpen}>
+          <MenuIcon />
+        </IconButton>
 
-        <Tooltip title={'Create a new account'} arrow placement="bottom-start" enterDelay={500}>
-          <Button variant="outlined" color="inherit" component={Link} to={Path.REGISTRATION}>
-            Registration
-          </Button>
-        </Tooltip>
+        <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
+          <MenuItem onClick={handleMenuClose} component={Link} to={'/catalog'}>
+            Catalog
+          </MenuItem>
+          <MenuItem onClick={handleMenuClose} component={Link} to="/cart">
+            Cart
+          </MenuItem>
+          <MenuItem onClick={handleMenuClose} component={Link} to="/profile">
+            Profile
+          </MenuItem>
+
+          {auth ? (
+            <MenuItem
+              onClick={() => {
+                handleMenuClose();
+                logout();
+                navigate(Path.MAIN);
+              }}
+            >
+              Logout
+            </MenuItem>
+          ) : (
+            <>
+              <MenuItem onClick={handleMenuClose} component={Link} to={Path.LOGIN}>
+                Login
+              </MenuItem>
+              <MenuItem onClick={goToRegister}>Registration</MenuItem>
+            </>
+          )}
+        </Menu>
       </>
     );
   }
 
+  // 💡 Меню для desktop
   return (
     <>
-      <IconButton onClick={handleMenuOpen}>
-        <MenuIcon />
-      </IconButton>
+      <Button component={Link} to={'/catalog'} color="inherit" variant="outlined">
+        Catalog
+      </Button>
+      <Button component={Link} to="/cart" color="inherit" variant="outlined">
+        Cart
+      </Button>
+      <Button component={Link} to="/profile" color="inherit" variant="outlined">
+        Profile
+      </Button>
 
-      <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
-        <MenuItem onClick={handleMenuClose} component={Link} to={Path.LOGIN}>
-          Login
-        </MenuItem>
-        <MenuItem onClick={handleMenuClose} component={Link} to={Path.REGISTRATION}>
-          Registration
-        </MenuItem>
-      </Menu>
+      {auth ? (
+        <Button
+          variant="outlined"
+          color="inherit"
+          onClick={() => {
+            logout();
+            navigate(Path.MAIN);
+          }}
+        >
+          Logout
+        </Button>
+      ) : (
+        <>
+          <Tooltip title="Log in to your account" arrow placement="bottom-start" enterDelay={500}>
+            <Button variant="outlined" color="inherit" component={Link} to={Path.LOGIN}>
+              Login
+            </Button>
+          </Tooltip>
+
+          <Tooltip title="Create a new account" arrow placement="bottom-start" enterDelay={500}>
+            <Button variant="outlined" color="inherit" onClick={goToRegister}>
+              Registration
+            </Button>
+          </Tooltip>
+        </>
+      )}
     </>
   );
 };
