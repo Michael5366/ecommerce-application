@@ -61,7 +61,7 @@ export const showMenu = () => {
               onClick={() => {
                 handleMenuClose();
                 logout();
-                navigate(Path.MAIN);
+                navigate(Path.LOGIN);
               }}
             >
               Logout
@@ -98,7 +98,7 @@ export const showMenu = () => {
           color="inherit"
           onClick={() => {
             logout();
-            navigate(Path.MAIN);
+            navigate(Path.LOGIN);
           }}
         >
           Logout
