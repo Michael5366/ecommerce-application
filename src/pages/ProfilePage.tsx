@@ -1,4 +1,4 @@
-import ProfilePageCustomer from "../components/ClientProfile/CustomerProfile";
+import ProfilePageCustomer from '../components/ClientProfile/CustomerProfile';
 
 const ProfilePage = () => {
   return <ProfilePageCustomer />;
