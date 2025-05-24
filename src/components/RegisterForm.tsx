@@ -103,6 +103,7 @@ export default function RegisterForm() {
         firstName: formData.username,
         lastName: formData.surname,
         addresses: sanitizedAddresses,
+        dateOfBirth: formData.birthday,
         ...(defaultShippingAddress !== undefined ? { defaultShippingAddress } : {}),
         ...(defaultBillingAddress !== undefined ? { defaultBillingAddress } : {}),
       };
