@@ -7,6 +7,8 @@ type Address = {
 };
 
 export type CustomerData = {
+  id: string;
+  version: number;
   firstName: string;
   lastName: string;
   dateOfBirth?: string;

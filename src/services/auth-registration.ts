@@ -83,7 +83,7 @@ export const signUpUser = async (token: string, payload: SignUpPayload) => {
     firstName,
     lastName,
     addresses,
-    dateOfBirth
+    dateOfBirth,
   };
 
   if (typeof defaultShippingAddress === 'number') {
