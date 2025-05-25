@@ -56,7 +56,7 @@ export const ProductCard: FC<ProductCardProps> = ({ product, searchQuery }) => {
   const priceInfo = getProductPrice(product);
 
   return (
-    <div className={styles.productCard} onClick={() => navigate(`/products/${product.id}`)}>
+    <div className={styles.productCard} onClick={() => navigate(`/catalog/${product.id}`)}>
       <div className={styles.imageContainer}>
         <img
           src={mainImage || '/placeholder-product.jpg'}

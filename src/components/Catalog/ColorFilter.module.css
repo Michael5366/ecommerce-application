@@ -20,5 +20,7 @@
 .colorOption.selected {
   border-color: var(--primary-color);
   transform: scale(1.1);
-  box-shadow: 0 0 0 2px white, 0 0 0 4px var(--primary-color);
+  box-shadow:
+    0 0 0 2px white,
+    0 0 0 4px var(--primary-color);
 }
