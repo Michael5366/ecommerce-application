@@ -1,0 +1,45 @@
+.categorySection {
+  background: white;
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  box-shadow: var(--shadow);
+  margin-bottom: 1.25rem;
+}
+
+.categoryList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.categoryItem {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 0.5rem;
+}
+
+.categoryItem:hover {
+  background-color: var(--hover-color);
+}
+
+.activeCategory {
+  background-color: var(--active-color);
+  font-weight: 500;
+}
+
+.categoryName {
+  flex-grow: 1;
+  font-size: 0.95rem;
+}
+
+.activeIndicator {
+  width: 4px;
+  height: 1.5rem;
+  background-color: var(--primary-color);
+  border-radius: 2px;
+  margin-left: 0.75rem;
+}

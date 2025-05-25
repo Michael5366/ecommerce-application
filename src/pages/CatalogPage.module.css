@@ -7,8 +7,8 @@
   --active-color: #e3f2fd;
   --error-color: #dc3545;
   --success-color: #28a745;
-  --shadow: 0 2px 8px rgba(0,0,0,0.1);
-  
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
   color: var(--text-color);
   font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   line-height: 1.5;
@@ -61,14 +61,16 @@
   display: inline-block;
   width: 1rem;
   height: 1rem;
-  border: 2px solid rgba(255,255,255,0.3);
+  border: 2px solid rgba(255, 255, 255, 0.3);
   border-radius: 50%;
   border-top-color: white;
   animation: spin 1s ease-in-out infinite;
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @media (max-width: 768px) {
