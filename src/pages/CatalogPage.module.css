@@ -1,0 +1,79 @@
+.catalogContainer {
+  --primary-color: #2a6496;
+  --secondary-color: #f8f9fa;
+  --text-color: #333;
+  --border-color: #e0e0e0;
+  --hover-color: #f5f5f5;
+  --active-color: #e3f2fd;
+  --error-color: #dc3545;
+  --success-color: #28a745;
+  --shadow: 0 2px 8px rgba(0,0,0,0.1);
+  
+  color: var(--text-color);
+  font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+.mainLayout {
+  display: flex;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 1rem;
+  gap: 1.5rem;
+}
+
+.mainContent {
+  flex: 1;
+}
+
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+  grid-column: 1 / -1;
+}
+
+.errorContainer {
+  text-align: center;
+  padding: 2rem;
+  grid-column: 1 / -1;
+}
+
+.retryButton {
+  padding: 0.75rem 1.5rem;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: background 0.2s;
+}
+
+.retryButton:hover {
+  background: #1d4f7c;
+}
+
+.spinner {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (max-width: 768px) {
+  .mainLayout {
+    padding: 0.75rem;
+    flex-direction: column;
+  }
+}
