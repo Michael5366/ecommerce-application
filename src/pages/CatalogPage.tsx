@@ -179,6 +179,11 @@ const CatalogPage = () => {
     setAppliedSearch(searchInput);
   }, [searchInput]);
 
+  const handleResetSearch = useCallback(() => {
+    setSearchInput('');
+    setAppliedSearch('');
+  }, []);
+
   const handlePriceChange = useCallback(
     (index: number) =>
       (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -250,6 +255,7 @@ const CatalogPage = () => {
         searchInput={searchInput}
         setSearchInput={setSearchInput}
         handleSearch={handleSearch}
+        handleResetSearch={handleResetSearch}
         isSearching={isSearching}
         sortOption={sortOption}
         setSortOption={setSortOption}
@@ -262,6 +268,7 @@ const CatalogPage = () => {
           searchInput={searchInput}
           setSearchInput={setSearchInput}
           handleSearch={handleSearch}
+          handleResetSearch={handleResetSearch}
           isSearching={isSearching}
           categories={categories}
           selectedCategory={selectedCategory}

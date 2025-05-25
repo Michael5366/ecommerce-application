@@ -6,6 +6,7 @@ interface MobileHeaderProps {
   searchInput: string;
   setSearchInput: (value: string) => void;
   handleSearch: () => void;
+  handleResetSearch: () => void;
   isSearching: boolean;
   sortOption: string;
   setSortOption: (value: string) => void;
@@ -17,6 +18,7 @@ export const MobileHeader: FC<MobileHeaderProps> = ({
   searchInput,
   setSearchInput,
   handleSearch,
+  handleResetSearch,
   isSearching,
   sortOption,
   setSortOption,
@@ -29,6 +31,7 @@ export const MobileHeader: FC<MobileHeaderProps> = ({
         searchInput={searchInput}
         setSearchInput={setSearchInput}
         handleSearch={handleSearch}
+        handleResetSearch={handleResetSearch}
         isSearching={isSearching}
       />
 

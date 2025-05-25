@@ -5,6 +5,7 @@ interface SearchBarProps {
   searchInput: string;
   setSearchInput: (value: string) => void;
   handleSearch: () => void;
+  handleResetSearch: () => void;
   isSearching: boolean;
   className?: string;
 }
@@ -13,6 +14,7 @@ export const SearchBar: FC<SearchBarProps> = ({
   searchInput,
   setSearchInput,
   handleSearch,
+  handleResetSearch,
   isSearching,
   className = '',
 }) => {
@@ -36,6 +38,8 @@ export const SearchBar: FC<SearchBarProps> = ({
             className={styles.clearSearchButton}
             onClick={() => {
               setSearchInput('');
+              handleResetSearch();
+              searchInputRef.current?.focus();
             }}
           >
             ×

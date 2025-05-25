@@ -11,6 +11,7 @@ interface SidebarProps {
   searchInput: string;
   setSearchInput: (value: string) => void;
   handleSearch: () => void;
+  handleResetSearch: () => void;
   isSearching: boolean;
   categories: Category[];
   selectedCategory: string;
@@ -31,6 +32,7 @@ export const Sidebar: FC<SidebarProps> = ({
   searchInput,
   setSearchInput,
   handleSearch,
+  handleResetSearch,
   isSearching,
   categories,
   selectedCategory,
@@ -50,6 +52,7 @@ export const Sidebar: FC<SidebarProps> = ({
           searchInput={searchInput}
           setSearchInput={setSearchInput}
           handleSearch={handleSearch}
+          handleResetSearch={handleResetSearch}
           isSearching={isSearching}
         />
       </div>
