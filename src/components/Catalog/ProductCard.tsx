@@ -1,14 +1,16 @@
 import { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Product, ProductPriceInfo } from '../../types/productTypes';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import styles from './ProductCard.module.css';
 
 interface ProductCardProps {
   product: Product;
   searchQuery: string;
+  onAddToCart?: (productId: string) => void;
 }
 
-export const ProductCard: FC<ProductCardProps> = ({ product, searchQuery }) => {
+export const ProductCard: FC<ProductCardProps> = ({ product, searchQuery, onAddToCart }) => {
   const navigate = useNavigate();
   const productName = product.masterData?.current?.name?.en || product.id;
   const productDescription = product.masterData?.current?.description?.en;
@@ -54,9 +56,16 @@ export const ProductCard: FC<ProductCardProps> = ({ product, searchQuery }) => {
   };
 
   const priceInfo = getProductPrice(product);
+  const hasDiscount = priceInfo?.hasDiscount || false;
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onAddToCart?.(product.id);
+  };
 
   return (
     <div className={styles.productCard} onClick={() => navigate(`/catalog/${product.id}`)}>
+      {hasDiscount && <div className={styles.discountBadge}>Sale</div>}
       <div className={styles.imageContainer}>
         <img
           src={mainImage || '/placeholder-product.jpg'}
@@ -90,6 +99,9 @@ export const ProductCard: FC<ProductCardProps> = ({ product, searchQuery }) => {
             <span className={styles.currentPrice}>Price not specified</span>
           )}
         </div>
+      </div>
+      <div className={styles.cartIcon} onClick={handleAddToCart} title="Добавить в корзину">
+        <ShoppingCartIcon fontSize="small" />
       </div>
     </div>
   );

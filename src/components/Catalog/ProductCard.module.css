@@ -1,4 +1,5 @@
 .productCard {
+  position: relative;
   background: white;
   border: 1px solid var(--border-color);
   border-radius: 0.75rem;
@@ -6,6 +7,7 @@
   transition: all 0.3s ease;
   cursor: pointer;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  padding-bottom: 15px;
 }
 
 .productCard:hover {
@@ -15,18 +17,24 @@
 
 .imageContainer {
   height: 200px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
   background: #f9f9f9;
 }
 
 .productImage {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-  mix-blend-mode: multiply;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  min-width: 100%;
+  min-height: 100%;
+  transition: transform 0.3s ease;
+}
+
+.productCard:hover .productImage {
+  transform: scale(1.05);
 }
 
 .productInfo {
@@ -53,9 +61,12 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-align: justify;
 }
 
 .priceContainer {
+  position: absolute;
+  bottom: 10px;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -85,8 +96,64 @@
   border-radius: 2px;
 }
 
+.discountBadge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #d32f2f;
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: bold;
+  z-index: 1;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
 @media (max-width: 768px) {
   .productDescription {
     font-size: 0.8rem;
+  }
+}
+
+.cartIcon {
+  position: absolute;
+  bottom: 8px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  background-color: var(--primary-color);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 2;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.cartIcon:hover {
+  background-color: #1d4f7c;
+  transform: scale(1.1);
+}
+
+.cartIcon .MuiSvgIcon-root {
+  width: 18px;
+  height: 18px;
+}
+
+@media (max-width: 768px) {
+  .cartIcon {
+    width: 28px;
+    height: 28px;
+    bottom: 6px;
+    right: 16px;
+  }
+  
+  .cartIcon .MuiSvgIcon-root {
+    width: 16px;
+    height: 16px;
   }
 }

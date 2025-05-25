@@ -8,6 +8,7 @@ import { MobileHeader } from './../components/Catalog/MobileHeader';
 import { FiltersModal } from './../components/Catalog/FiltersModal';
 import { CategoriesModal } from './../components/Catalog/CategoriesModal';
 import styles from './CatalogPage.module.css';
+import { Pagination } from '../components/Catalog/Pagination';
 
 const CatalogPage = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -31,6 +32,8 @@ const CatalogPage = () => {
   const [isSearching, setIsSearching] = useState<boolean>(false);
   const [isFiltersModalOpen, setIsFiltersModalOpen] = useState<boolean>(false);
   const [isCategoriesModalOpen, setIsCategoriesModalOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(9);
 
   const navigate = useNavigate();
   const { makeApiRequest } = useApi();
@@ -131,7 +134,7 @@ const CatalogPage = () => {
         }
       });
 
-      setProducts(results.slice(0, 20));
+      setProducts(results);
       extractAvailableFilters(results);
     } catch (err) {
       setIsSearching(false);
@@ -197,6 +200,12 @@ const CatalogPage = () => {
     []
   );
 
+  const getCurrentProducts = () => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return products.slice(startIndex, endIndex);
+  };
+
   useEffect(() => {
     const loadData = async (): Promise<void> => {
       try {
@@ -225,6 +234,8 @@ const CatalogPage = () => {
     ) {
       setIsSearching(true);
       fetchProducts().finally(() => setIsSearching(false));
+      setCurrentPage(1);
+      fetchProducts();
     }
   }, [appliedSearch, selectedCategory, sortOption, filters, priceRange, fetchProducts]);
 
@@ -283,7 +294,13 @@ const CatalogPage = () => {
         />
 
         <main className={styles.mainContent}>
-          <ProductGrid products={products} searchQuery={appliedSearch} />
+          <ProductGrid products={getCurrentProducts()} searchQuery={appliedSearch} />
+          <Pagination
+            totalItems={products.length}
+            itemsPerPage={itemsPerPage}
+            currentPage={currentPage}
+            onPageChange={setCurrentPage}
+          />
         </main>
       </div>
 
