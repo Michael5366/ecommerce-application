@@ -5,9 +5,12 @@ import RegisterPage from '../pages/registration';
 import NotFoundTest from '../pages/NotFoundTest';
 import { Routes } from '../types/routes';
 import MainPage from '../pages/MainPage';
-import CatalogPage from '../pages/CatalogPage';
+// import CatalogPage from '../pages/CatalogPage';
 import CartPage from '../pages/CartPage';
 import ProfilePage from '../pages/ProfilePage';
+import ProductPage from '../pages/ProductPage';
+import fetchProductsData from '../loaders/catalogLoader';
+import CatalogPageTest from '../pages/CatalogPageTest';
 
 export const routesArray: Routes = [
   {
@@ -17,7 +20,9 @@ export const routesArray: Routes = [
       { index: true, element: <MainPage /> },
       { path: 'login', element: <LoginPage /> },
       { path: 'registration', element: <RegisterPage /> },
-      { path: 'catalog', element: <CatalogPage /> },
+      // { path: 'catalog', element: <CatalogPage />, loader: fetchProductsData },
+      { path: 'catalog', element: <CatalogPageTest />, loader: fetchProductsData },
+      { path: 'product', element: <ProductPage /> },
       { path: 'cart', element: <CartPage /> },
       { path: 'profile', element: <ProfilePage /> },
       { path: '*', element: <NotFoundTest /> },
