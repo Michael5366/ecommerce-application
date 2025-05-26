@@ -79,3 +79,30 @@
     flex-direction: column;
   }
 }
+
+.sortSelect {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  background: white;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+.desktopToolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0.5rem;
+  margin-bottom: 0.6rem;
+}
+
+@media (max-width: 768px) {
+  .desktopToolbar {
+    padding: 0rem 0.5rem;
+  }
+
+  .sortSelect {
+    display: none;
+  }
+}

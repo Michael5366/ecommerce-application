@@ -39,19 +39,21 @@ export const MobileHeader: FC<MobileHeaderProps> = ({
         <button onClick={() => setIsCategoriesModalOpen(true)} className={styles.filterButton}>
           <span className={styles.filterIcon}>📁</span> Categories
         </button>
-        <button onClick={() => setIsFiltersModalOpen(true)} className={styles.filterButton}>
-          <span className={styles.filterIcon}>☰</span> Filters
-        </button>
-        <select
-          value={sortOption}
-          onChange={(e) => setSortOption(e.target.value)}
-          className={styles.sortSelectMobile}
-        >
-          <option value="name asc">A-Z</option>
-          <option value="name desc">Z-А</option>
-          <option value="price asc">Price ↑</option>
-          <option value="price desc">Price ↓</option>
-        </select>
+        <div className={styles.options}>
+          <button onClick={() => setIsFiltersModalOpen(true)} className={styles.filterButton}>
+            <span className={styles.filterIcon}>☰</span> Filters
+          </button>
+          <select
+            value={sortOption}
+            onChange={(e) => setSortOption(e.target.value)}
+            className={styles.sortSelectMobile}
+          >
+            <option value="name asc">A-Z</option>
+            <option value="name desc">Z-А</option>
+            <option value="price asc">Price ↑</option>
+            <option value="price desc">Price ↓</option>
+          </select>
+        </div>
       </div>
     </div>
   );

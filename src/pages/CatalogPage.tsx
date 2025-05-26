@@ -9,6 +9,7 @@ import { FiltersModal } from './../components/Catalog/FiltersModal';
 import { CategoriesModal } from './../components/Catalog/CategoriesModal';
 import styles from './CatalogPage.module.css';
 import { Pagination } from '../components/Catalog/Pagination';
+import { Breadcrumbs } from '../components/Catalog/Breadcrumbs';
 
 const CatalogPage = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -200,6 +201,11 @@ const CatalogPage = () => {
     []
   );
 
+  const handleCategorySelect = (categoryId: string) => {
+    setSelectedCategory(categoryId);
+    setCurrentPage(1);
+  };
+
   const getCurrentProducts = () => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
@@ -294,6 +300,23 @@ const CatalogPage = () => {
         />
 
         <main className={styles.mainContent}>
+          <div className={styles.desktopToolbar}>
+            <Breadcrumbs
+              categories={categories}
+              selectedCategory={selectedCategory}
+              onCategorySelect={handleCategorySelect}
+            />
+            <select
+              value={sortOption}
+              onChange={(e) => setSortOption(e.target.value)}
+              className={styles.sortSelect}
+            >
+              <option value="name asc">Sorting: A-Z</option>
+              <option value="name desc">Sorting: Z-A</option>
+              <option value="price asc">Sorting: Price ascending</option>
+              <option value="price desc">Sorting: Price descending</option>
+            </select>
+          </div>
           <ProductGrid products={getCurrentProducts()} searchQuery={appliedSearch} />
           <Pagination
             totalItems={products.length}

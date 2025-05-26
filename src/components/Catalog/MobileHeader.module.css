@@ -13,6 +13,12 @@
   gap: 0.5rem;
 }
 
+.options {
+  display: flex;
+  gap: 0.5rem;
+  flex: 1;
+}
+
 .filterButton {
   flex: 1;
   padding: 0.6rem;
