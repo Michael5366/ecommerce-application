@@ -114,7 +114,10 @@ const CatalogPage = () => {
       };
 
       const getProductPrice = (product: Product): number => {
-        return product.masterData?.current?.masterVariant?.prices?.[0]?.value?.centAmount || 0;
+        const priceObj = product.masterData?.current?.masterVariant?.prices?.[0];
+        if (!priceObj?.value?.centAmount) return 0;
+
+        return priceObj.discounted?.value?.centAmount || priceObj.value.centAmount;
       };
 
       results = results.sort((a, b) => {
