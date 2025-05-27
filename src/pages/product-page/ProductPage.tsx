@@ -4,6 +4,9 @@ import { Grid, Card, CardMedia, Typography, Box } from '@mui/material';
 import { useParams, useLoaderData } from 'react-router-dom';
 import { Product } from '../../types/product';
 
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+
 const ProductPage = () => {
   const { productName } = useParams();
   const products = useLoaderData() as Product[];
