@@ -58,7 +58,9 @@ export default function ProfilePageCustomer() {
             <p> {dateOfBirth} </p>
           </div>
         </div>
-        <button type="button" onClick={() => setShowDataChangeModal(true)}>Edit profile</button>
+        <button type="button" onClick={() => setShowDataChangeModal(true)}>
+          Edit profile
+        </button>
         <button type="button" onClick={() => setShowPasswordModal(true)}>
           Edit password
         </button>
@@ -92,18 +94,18 @@ export default function ProfilePageCustomer() {
         id={id}
         version={version}
       />
-        <EditDataChangedModal
+      <EditDataChangedModal
         isOpen={showDataChangeModal}
         onClose={() => setShowDataChangeModal(false)}
         id={id}
         version={version}
-        addresses = {addresses}
-        email = {email}
-        firstName = {firstName}
-        lastName = {lastName}
-        dateOfBirth = {dateOfBirth}
-        shippingAddressIds = {shippingAddressIds}
-        billingAddressIds = {billingAddressIds}
+        addresses={addresses}
+        email={email}
+        firstName={firstName}
+        lastName={lastName}
+        dateOfBirth={dateOfBirth}
+        shippingAddressIds={shippingAddressIds}
+        billingAddressIds={billingAddressIds}
       />
     </div>
   );
