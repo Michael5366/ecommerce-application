@@ -1,4 +1,4 @@
-type Address = {
+export type Address = {
   id: string;
   streetName: string;
   postalCode: string;
@@ -15,6 +15,7 @@ export type CustomerData = {
   addresses: Address[];
   billingAddressIds: string[];
   shippingAddressIds: string[];
+  email: string;
 };
 
 export async function getCustomerData(): Promise<CustomerData> {

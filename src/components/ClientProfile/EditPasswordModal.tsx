@@ -6,11 +6,10 @@ interface Props {
   isOpen: boolean;
   onClose: () => void;
   id: string;
-  version: number
+  version: number;
 }
 
 export default function EditPasswordModal({ isOpen, onClose, id, version }: Props) {
-
   const [newPassword, setPassword] = useState('');
   const [currentPassword, setCurrentPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -28,24 +27,23 @@ export default function EditPasswordModal({ isOpen, onClose, id, version }: Prop
     } else {
       setError(null);
       console.log('Отправляем пароль:', newPassword, currentPassword);
-      changeUserPassword( {currentPassword, newPassword, id, version} )
-
-  }
+      changeUserPassword({ currentPassword, newPassword, id, version });
+    }
   };
-   const handlecurrentPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlecurrentPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCurrentPassword(e.target.value);
     if (submitted) setError(null);
   };
-     const handleNewPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleNewPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
     if (submitted) setError(null);
   };
-  
+
   return (
     <div className="modal">
       <div className="modal-content">
         <h2>Change Password</h2>
-                <form onSubmit={handleSubmitPassword}>
+        <form onSubmit={handleSubmitPassword}>
           <input
             type="password"
             placeholder="Current Password"
@@ -60,7 +58,9 @@ export default function EditPasswordModal({ isOpen, onClose, id, version }: Prop
           />
           {error && <p style={{ color: 'red' }}>{error}</p>}
 
-          <button type="button" onClick={onClose}>Cancel</button>
+          <button type="button" onClick={onClose}>
+            Cancel
+          </button>
           <button type="submit">Submit</button>
         </form>
       </div>

@@ -6,7 +6,7 @@ const postalCodeRegex = {
   ES: /^\d{5}$/,
 };
 
-const addressSchema = z
+export const addressSchema = z
   .object({
     streetName: z.string().min(1, 'Введите улицу'),
     city: z
