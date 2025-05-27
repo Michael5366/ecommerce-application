@@ -26,7 +26,7 @@ const ProductPage = () => {
   const priceInfo = masterVariant.prices?.[0]?.value;
 
   return (
-    <Container className="product-page">
+    <Container>
       <Paper elevation={3} sx={{ p: 4, borderRadius: 2 }}>
         <Grid container spacing={4}>
           {imageUrl && (
