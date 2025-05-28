@@ -6,7 +6,7 @@ import { updateCustomer } from '../../services/ClientInfApi/UpdateCustomer';
 //import { string } from "zod/v4";
 
 import { Address } from '../../services/ClientInfApi/GetClientInf';
-interface Props {
+export interface Props {
   isOpen: boolean;
   onClose: () => void;
   id: string;
@@ -57,7 +57,9 @@ export default function EditDataChangedModal({
     index?: number,
     field?: keyof Address
   ) => {
+
     const { name, value } = e.target;
+    console.log('Изменение поля:', name, value);
 
     if (typeof index === 'number' && field) {
       const updatedAddresses = [...formData.addresses];
@@ -108,9 +110,9 @@ export default function EditDataChangedModal({
     setErrors(newErrors);
     setAddressErrors(addrErrors);
 
-  if (Object.keys(newErrors).length > 0 || Object.keys(addrErrors).length > 0) {
-    return;
-  }
+    if (Object.keys(newErrors).length > 0 || Object.keys(addrErrors).length > 0) {
+      return;
+    }
     try {
       const current = await getCustomerData();
 
@@ -139,27 +141,23 @@ export default function EditDataChangedModal({
           existing.country !== address.country
         ) {
           actions.push({
-             action: 'changeAddress' as const,
-         addressId: address.id,
-        address: {
-        streetName: address.streetName,
-        city: address.city,
-        postalCode: address.postalCode,
-        country: address.country,
-         },
+            action: 'changeAddress' as const,
+            addressId: address.id,
+            address: {
+              streetName: address.streetName,
+              city: address.city,
+              postalCode: address.postalCode,
+              country: address.country,
+            },
           });
         }
       });
 
-      if (
-        JSON.stringify(current.billingAddressIds) !== JSON.stringify(billingSelected)
-      ) {
-        actions.push({ action: 'setDefaultBillingAddress' as const, addressIds: billingSelected });
+      if (JSON.stringify(current.billingAddressIds) !== JSON.stringify(billingSelected)) {
+        actions.push({ action: 'setDefaultBillingAddress' as const, addressId: billingSelected });
       }
-      if (
-        JSON.stringify(current.shippingAddressIds) !== JSON.stringify(shippingSelected)
-      ) {
-        actions.push({ action: 'setDefaultBillingAddress' as const, addressIds: shippingSelected });
+      if (JSON.stringify(current.shippingAddressIds) !== JSON.stringify(shippingSelected)) {
+        actions.push({ action: 'setDefaultShippingAddress' as const, addressId: shippingSelected });
       }
 
       if (actions.length === 0) {
@@ -176,7 +174,7 @@ export default function EditDataChangedModal({
       console.error('Ошибка обновления:', err);
       alert('Ошибка при обновлении данных');
     }
-  }
+  };
 
   const handleBillingChange = (id: string) => {
     setBillingSelected((prev) => {
@@ -290,14 +288,14 @@ export default function EditDataChangedModal({
             </div>
           ))}
         </div>
-
         <div className="button-group">
           <button type="button" onClick={onClose}>
             Cancel
           </button>
           <button type="submit">Submit</button>
         </div>
-      </form>
+</form>
+        
     </>
   );
 }

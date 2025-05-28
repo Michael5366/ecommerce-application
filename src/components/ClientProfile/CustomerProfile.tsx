@@ -3,10 +3,12 @@ import { useEffect, useState } from 'react';
 import { CustomerData } from '../../services/ClientInfApi/GetClientInf';
 import EditPasswordModal from './EditPasswordModal';
 import EditDataChangedModal from './EditDataClient';
+import { EditAdressModal } from './EditAdressModal';
 
 export default function ProfilePageCustomer() {
   const [customer, setCustomer] = useState<CustomerData | null>(null);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [showAdressModal, setShowAdressModal] = useState(false);
   const [showDataChangeModal, setShowDataChangeModal] = useState(false);
 
   useEffect(() => {
@@ -58,9 +60,7 @@ export default function ProfilePageCustomer() {
             <p> {dateOfBirth} </p>
           </div>
         </div>
-        <button type="button" onClick={() => setShowDataChangeModal(true)}>
-          Edit profile
-        </button>
+
         <button type="button" onClick={() => setShowPasswordModal(true)}>
           Edit password
         </button>
@@ -86,8 +86,11 @@ export default function ProfilePageCustomer() {
             </p>
           </div>
         ))}
-        <button type="button">Edit adresses</button>
+        <button type="button" onClick={() => setShowAdressModal(true)}>Edit adresses</button>
       </div>
+      <button type="button" onClick={() => setShowDataChangeModal(true)}>
+        Edit profile
+      </button>
       <EditPasswordModal
         isOpen={showPasswordModal}
         onClose={() => setShowPasswordModal(false)}
@@ -104,6 +107,16 @@ export default function ProfilePageCustomer() {
         firstName={firstName}
         lastName={lastName}
         dateOfBirth={dateOfBirth}
+        shippingAddressIds={shippingAddressIds}
+        billingAddressIds={billingAddressIds}
+      />
+      <EditAdressModal
+        isOpen={showAdressModal}
+        id={id}
+        version={version}
+        addresses={addresses}
+        onClose={() => setShowAdressModal(false)}
+        email={email}
         shippingAddressIds={shippingAddressIds}
         billingAddressIds={billingAddressIds}
       />
