@@ -145,15 +145,15 @@ export function EditAdressModal({
       });
 
       current.billingAddressIds.forEach((id) => {
-       if (!billingSelected.includes(id)) {
-    actions.push({ action: 'removeBillingAddressId', addressId: id });
-    }
-    });
+        if (!billingSelected.includes(id)) {
+          actions.push({ action: 'removeBillingAddressId', addressId: id });
+        }
+      });
       current.shippingAddressIds.forEach((id) => {
-       if (!shippingSelected.includes(id)) {
-    actions.push({ action: 'removeShippingAddressId', addressId: id });
-     }
-    });
+        if (!shippingSelected.includes(id)) {
+          actions.push({ action: 'removeShippingAddressId', addressId: id });
+        }
+      });
 
       if (
         JSON.stringify(current.billingAddressIds) !== JSON.stringify(billingSelected) &&
@@ -182,45 +182,55 @@ export function EditAdressModal({
       const payload = { version: current.version, actions };
       console.log('Payload для отправки:', JSON.stringify(payload, null, 2));
 
+      const firstActions = actions.filter(
+        (action) =>
+          action.action !== 'setDefaultBillingAddress' &&
+          action.action !== 'setDefaultShippingAddress'
+      );
 
-      const firstActions = actions.filter(action =>
-  action.action !== 'setDefaultBillingAddress' &&
-  action.action !== 'setDefaultShippingAddress'
-);
+      await updateCustomerAdd({ version: current.version, actions: firstActions });
 
-await updateCustomerAdd({ version: current.version, actions: firstActions });
+      const updatedCustomer = await getCustomerData();
 
-const updatedCustomer = await getCustomerData();
+      const defaultBillingId = updatedCustomer.addresses.find(
+        (addr) =>
+          addr.streetName ===
+            formData.addresses.find((a) => a.id === billingSelected[0])?.streetName &&
+          addr.city === formData.addresses.find((a) => a.id === billingSelected[0])?.city &&
+          addr.postalCode ===
+            formData.addresses.find((a) => a.id === billingSelected[0])?.postalCode &&
+          addr.country === formData.addresses.find((a) => a.id === billingSelected[0])?.country
+      )?.id;
 
-const defaultBillingId = updatedCustomer.addresses.find(
-  addr => addr.streetName === formData.addresses.find(a => a.id === billingSelected[0])?.streetName &&
-          addr.city === formData.addresses.find(a => a.id === billingSelected[0])?.city &&
-          addr.postalCode === formData.addresses.find(a => a.id === billingSelected[0])?.postalCode &&
-          addr.country === formData.addresses.find(a => a.id === billingSelected[0])?.country
-)?.id;
+      const defaultShippingId = updatedCustomer.addresses.find(
+        (addr) =>
+          addr.streetName ===
+            formData.addresses.find((a) => a.id === shippingSelected[0])?.streetName &&
+          addr.city === formData.addresses.find((a) => a.id === shippingSelected[0])?.city &&
+          addr.postalCode ===
+            formData.addresses.find((a) => a.id === shippingSelected[0])?.postalCode &&
+          addr.country === formData.addresses.find((a) => a.id === shippingSelected[0])?.country
+      )?.id;
 
-const defaultShippingId = updatedCustomer.addresses.find(
-  addr => addr.streetName === formData.addresses.find(a => a.id === shippingSelected[0])?.streetName &&
-          addr.city === formData.addresses.find(a => a.id === shippingSelected[0])?.city &&
-          addr.postalCode === formData.addresses.find(a => a.id === shippingSelected[0])?.postalCode &&
-          addr.country === formData.addresses.find(a => a.id === shippingSelected[0])?.country
-)?.id;
+      const secondActions = [];
 
-const secondActions = [];
+      if (defaultBillingId) {
+        secondActions.push({
+          action: 'setDefaultBillingAddress' as const,
+          addressId: defaultBillingId,
+        });
+      }
 
-if (defaultBillingId) {
-  secondActions.push({ action: 'setDefaultBillingAddress' as const, addressId: defaultBillingId });
-}
+      if (defaultShippingId) {
+        secondActions.push({
+          action: 'setDefaultShippingAddress' as const,
+          addressId: defaultShippingId,
+        });
+      }
 
-if (defaultShippingId) {
-  secondActions.push({ action: 'setDefaultShippingAddress' as const, addressId: defaultShippingId });
-}
-
-if (secondActions.length > 0) {
-  await updateCustomerAdd({ version: updatedCustomer.version, actions: secondActions });
-}
-
-      
+      if (secondActions.length > 0) {
+        await updateCustomerAdd({ version: updatedCustomer.version, actions: secondActions });
+      }
 
       alert('Данные обновлены!');
       onClose();

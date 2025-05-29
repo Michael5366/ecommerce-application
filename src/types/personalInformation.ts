@@ -13,8 +13,8 @@ type CustomerUpdateAction =
         country: string;
       };
     }
-  | { action: 'setDefaultBillingAddress'; addressId: string}
-  | { action: 'setDefaultShippingAddress'; addressId: string};
+  | { action: 'setDefaultBillingAddress'; addressId: string }
+  | { action: 'setDefaultShippingAddress'; addressId: string };
 
 export type UpdateCustomerBody = {
   version: number;
@@ -36,11 +36,24 @@ type CustomerAdressAddAcion =
         country: string;
       };
     }
-  | { action: 'setDefaultBillingAddress'; addressId: string}
-  | { action: 'setDefaultShippingAddress'; addressId: string}
+  | { action: 'setDefaultBillingAddress'; addressId: string }
+  | { action: 'setDefaultShippingAddress'; addressId: string }
   | { action: 'removeBillingAddressId'; addressId: string }
   | { action: 'removeShippingAddressId'; addressId: string };
+
 export type UpdateCustomerAdressAddAcionFin = {
   version: number;
   actions: CustomerAdressAddAcion[];
+};
+
+
+type CustomerUpdatePersonalDataAction =
+  | { action: 'setFirstName'; firstName: string }
+  | { action: 'setLastName'; lastName: string }
+  | { action: 'changeEmail'; email: string }
+  | { action: 'setDateOfBirth'; dateOfBirth: string }
+
+export type UpdateCustomerDataPersonalBody = {
+  version: number;
+  actions: CustomerUpdatePersonalDataAction[];
 };

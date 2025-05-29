@@ -152,28 +152,42 @@ export default function EditDataChangedModal({
         }
       });
 
-    const removedBillingIds = current.billingAddressIds.filter(id => !billingSelected.includes(id));
-    const addedBillingIds = billingSelected.filter(id => !current.billingAddressIds.includes(id));
+      const removedBillingIds = current.billingAddressIds.filter(
+        (id) => !billingSelected.includes(id)
+      );
+      const addedBillingIds = billingSelected.filter(
+        (id) => !current.billingAddressIds.includes(id)
+      );
 
-    removedBillingIds.forEach((id) => {
-    actions.push({ action: 'removeBillingAddressId' as const, addressId: id });
-    });
+      removedBillingIds.forEach((id) => {
+        actions.push({ action: 'removeBillingAddressId' as const, addressId: id });
+      });
 
-    if (addedBillingIds.length > 0) {
-    actions.push({ action: 'setDefaultBillingAddress' as const, addressId: addedBillingIds[0] });
-    }
+      if (addedBillingIds.length > 0) {
+        actions.push({
+          action: 'setDefaultBillingAddress' as const,
+          addressId: addedBillingIds[0],
+        });
+      }
 
-// Shipping
-    const removedShippingIds = current.shippingAddressIds.filter(id => !shippingSelected.includes(id));
-    const addedShippingIds = shippingSelected.filter(id => !current.shippingAddressIds.includes(id));
+      // Shipping
+      const removedShippingIds = current.shippingAddressIds.filter(
+        (id) => !shippingSelected.includes(id)
+      );
+      const addedShippingIds = shippingSelected.filter(
+        (id) => !current.shippingAddressIds.includes(id)
+      );
 
-    removedShippingIds.forEach((id) => {
-    actions.push({ action: 'removeShippingAddressId' as const, addressId: id });
-    });
+      removedShippingIds.forEach((id) => {
+        actions.push({ action: 'removeShippingAddressId' as const, addressId: id });
+      });
 
-    if (addedShippingIds.length > 0) {
-    actions.push({ action: 'setDefaultShippingAddress' as const, addressId: addedShippingIds[0] });
-    }
+      if (addedShippingIds.length > 0) {
+        actions.push({
+          action: 'setDefaultShippingAddress' as const,
+          addressId: addedShippingIds[0],
+        });
+      }
 
       if (actions.length === 0) {
         alert('Нет изменений для сохранения.');

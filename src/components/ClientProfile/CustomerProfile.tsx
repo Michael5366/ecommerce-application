@@ -4,13 +4,14 @@ import { CustomerData } from '../../services/ClientInfApi/GetClientInf';
 import EditPasswordModal from './EditPasswordModal';
 import EditDataChangedModal from './EditDataClient';
 import { EditAdressModal } from './EditAdressModal';
+import { ModalPersonalData } from './EditPersonalDataModal';
 
 export default function ProfilePageCustomer() {
   const [customer, setCustomer] = useState<CustomerData | null>(null);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [showAdressModal, setShowAdressModal] = useState(false);
   const [showDataChangeModal, setShowDataChangeModal] = useState(false);
-
+ const [showDataPersonalChangeModal, setDataPersonalChangeModal] = useState(false);
   useEffect(() => {
     async function fetchData() {
       try {
@@ -33,8 +34,17 @@ export default function ProfilePageCustomer() {
       console.error('Ошибка при обновлении данных после редактирования:', error);
     }
   };
-    const handleDataChangeAdressModalClose = async () => {
+  const handleDataChangeAdressModalClose = async () => {
     setShowAdressModal(false);
+    try {
+      const freshData = await getCustomerData();
+      setCustomer(freshData);
+    } catch (error) {
+      console.error('Ошибка при обновлении данных после редактирования:', error);
+    }
+  };
+  const handleDataChangePersonalModalClose = async () => {
+    setDataPersonalChangeModal(false);
     try {
       const freshData = await getCustomerData();
       setCustomer(freshData);
@@ -63,7 +73,6 @@ export default function ProfilePageCustomer() {
 
   console.log(enrichedAddresses);
 
-
   return (
     <div>
       <div className="client-block">
@@ -80,10 +89,17 @@ export default function ProfilePageCustomer() {
             <p>Day of birth</p>
             <p> {dateOfBirth} </p>
           </div>
+          <div className='personal-part'>
+            <p>Email</p>
+            <p> {email} </p>
+          </div>
         </div>
 
         <button type="button" onClick={() => setShowPasswordModal(true)}>
           Edit password
+        </button>
+        <button type="button" onClick={() => setDataPersonalChangeModal(true)}>
+          Edit only personal data
         </button>
       </div>
       <div className="adress-block">
@@ -142,6 +158,16 @@ export default function ProfilePageCustomer() {
         email={email}
         shippingAddressIds={shippingAddressIds}
         billingAddressIds={billingAddressIds}
+      />
+      <ModalPersonalData
+        isOpen={showDataPersonalChangeModal}
+        id={id}
+        version={version}
+        onClose={handleDataChangePersonalModalClose}
+        firstName={firstName}
+        lastName={lastName}
+        dateOfBirth={dateOfBirth}
+        email={email}
       />
     </div>
   );
