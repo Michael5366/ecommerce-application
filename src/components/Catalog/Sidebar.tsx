@@ -3,7 +3,6 @@ import { Category, ProductFilters } from '../../types/productTypes';
 import { CategoryList } from './CategoryList';
 import { PriceFilter } from './PriceFilter';
 import { ColorFilter } from './ColorFilter';
-import { SizeFilter } from './SizeFilter';
 import { OccasionFilter } from './OccasionFilter';
 import { FlowerTypeFilter } from './FlowerTypeFilter';
 import { SearchBar } from './SearchBar';
@@ -41,14 +40,12 @@ export const Sidebar: FC<SidebarProps> = ({
   priceRange,
   handlePriceChange,
   availableColors,
-  availableSizes,
   availableOccasions,
   availableFlowerTypes,
   filters,
   setFilters,
   resetFilters,
 }) => {
-  // console.log('Available colors in Sidebar:', availableColors);
   return (
     <aside className={styles.sidebar}>
       <div className={styles.desktopSearch}>
@@ -77,14 +74,6 @@ export const Sidebar: FC<SidebarProps> = ({
             availableColors={availableColors}
             selectedColor={filters.color}
             onSelectColor={(color) => setFilters({ ...filters, color })}
-          />
-        )}
-
-        {availableSizes.length > 0 && (
-          <SizeFilter
-            availableSizes={availableSizes}
-            selectedSize={filters.size}
-            onSelectSize={(size) => setFilters({ ...filters, size })}
           />
         )}
 

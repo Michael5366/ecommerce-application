@@ -14,7 +14,7 @@ export const FlowerTypeFilter: FC<FlowerTypeFilterProps> = ({
 }) => {
   return (
     <div className={styles.filterGroup}>
-      <label className={styles.filterLabel}>Flower Type</label>
+      <label className={styles.filterLabel}>Sun addiction:</label>
       <div className={styles.flowerTypeFilter}>
         {availableFlowerTypes.map((flowerType) => (
           <button

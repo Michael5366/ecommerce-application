@@ -14,7 +14,7 @@ export const ColorFilter: FC<ColorFilterProps> = ({
 }) => {
   return (
     <div className={styles.filterGroup}>
-      <label className={styles.filterLabel}>Color</label>
+      <label className={styles.filterLabel}>Color:</label>
       <div className={styles.colorFilter}>
         {availableColors.map((color) => (
           <button

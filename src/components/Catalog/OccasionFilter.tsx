@@ -14,7 +14,7 @@ export const OccasionFilter: FC<OccasionFilterProps> = ({
 }) => {
   return (
     <div className={styles.filterGroup}>
-      <label className={styles.filterLabel}>Occasion</label>
+      <label className={styles.filterLabel}>Occasion:</label>
       <div className={styles.occasionFilter}>
         {availableOccasions.map((occasion) => (
           <button

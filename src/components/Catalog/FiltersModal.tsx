@@ -2,7 +2,6 @@ import { FC } from 'react';
 import { ProductFilters } from '../../types/productTypes';
 import { PriceFilter } from './PriceFilter';
 import { ColorFilter } from './ColorFilter';
-import { SizeFilter } from './SizeFilter';
 import { OccasionFilter } from './OccasionFilter';
 import { FlowerTypeFilter } from './FlowerTypeFilter';
 import styles from './FiltersModal.module.css';
@@ -27,7 +26,6 @@ export const FiltersModal: FC<FiltersModalProps> = ({
   priceRange,
   handlePriceChange,
   availableColors,
-  availableSizes,
   availableOccasions,
   availableFlowerTypes,
   filters,
@@ -54,14 +52,6 @@ export const FiltersModal: FC<FiltersModalProps> = ({
               availableColors={availableColors}
               selectedColor={filters.color}
               onSelectColor={(color) => setFilters({ ...filters, color })}
-            />
-          )}
-
-          {availableSizes.length > 0 && (
-            <SizeFilter
-              availableSizes={availableSizes}
-              selectedSize={filters.size}
-              onSelectSize={(size) => setFilters({ ...filters, size })}
             />
           )}
 
