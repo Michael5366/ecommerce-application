@@ -30,7 +30,7 @@ const ProductPage = () => {
   const discountedPrice = price?.discounted?.value;
 
   return (
-    <Container>
+    <Container className={css.container}>
       <Box className={css.product} component={'div'}>
         <SliderDetail id={id} name={name} images={images} />
         <Box component="div">
@@ -43,64 +43,25 @@ const ProductPage = () => {
           </Typography>
 
           <Typography variant="h6">
-            Цена:{' '}
+            Price:{' '}
             {discountedPrice ? (
               <>
-                <Box component="span">
-                  {regularPrice?.centAmount / 100} {regularPrice?.currencyCode}
+                <Box className={css.price__regular} component="span">
+                  {(regularPrice?.centAmount / 100).toFixed(2)} {regularPrice?.currencyCode}
                 </Box>
-                <Box component="span">
-                  {discountedPrice.centAmount / 100} {discountedPrice.currencyCode}
+                <Box className={css.price__discount} component="span">
+                  {(discountedPrice.centAmount / 100).toFixed(2)} {discountedPrice.currencyCode}
                 </Box>
               </>
             ) : (
               <Box component="span">
-                {regularPrice?.centAmount / 100} {regularPrice?.currencyCode}
+                {(regularPrice?.centAmount / 100).toFixed(2)} {regularPrice?.currencyCode}
               </Box>
             )}
           </Typography>
         </Box>
       </Box>
     </Container>
-    // <div className={styles.product}>
-    //   <img className={styles.product__img} src={imageUrl} alt={name.en || name.ru} />
-    //   <h4 className={styles.product__title}> {name.ru || name.en}</h4>
-    //   <p className={styles.product__description}> {description?.ru || description?.en}</p>
-    //   <p className={styles.product__price}>
-    //     Цена: {priceInfo?.centAmount / 100} {priceInfo?.currencyCode}
-    //   </p>
-    // </div>
-    // <Container maxWidth="md" sx={{ mt: 4 }}>
-    //   <Paper elevation={3} sx={{ p: 4, borderRadius: 2 }}>
-    //     <Grid container spacing={4}>
-    //       {imageUrl && (
-    //         <Card sx={{ borderRadius: 2 }}>
-    //           <CardMedia
-    //             component="img"
-    //             image={imageUrl}
-    //             alt={name.ru || name.en}
-    //             sx={{ maxHeight: 400, objectFit: 'contain' }}
-    //           />
-    //         </Card>
-    //       )}
-    //     </Grid>
-
-    //     <Typography variant="h4" fontWeight="bold" gutterBottom>
-    //       {name.ru || name.en}
-    //     </Typography>
-
-    //     <Typography variant="body1" color="text.secondary" sx={{ mb: 2 }}>
-    //       {description?.ru || description?.en}
-    //     </Typography>
-
-    //     <Typography variant="h6">
-    //       Цена:{' '}
-    //       <Box component="span" fontWeight="bold">
-    //         {priceInfo?.centAmount / 100} {priceInfo?.currencyCode}
-    //       </Box>
-    //     </Typography>
-    //   </Paper>
-    // </Container>
   );
 };
 

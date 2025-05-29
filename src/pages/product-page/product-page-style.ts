@@ -1,10 +1,24 @@
 import { makeStyles } from '@mui/styles';
 
 export const useStyles = makeStyles({
+  container: {
+    margin: 'auto',
+  },
   product: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+  },
+
+  price__regular: {
+    textDecoration: 'line-through',
+    color: 'gray',
+    mr: 1,
+  },
+
+  price__discount: {
+    color: 'yellow',
+    fontWeight: 'bold',
   },
 });
 
