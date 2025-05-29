@@ -34,7 +34,7 @@ export const SliderDetail = ({ id, name, images }: SliderDetailProps) => {
     setOpen(false);
   };
 
-  if (images.length === 1) {
+  if (images.length !== 1) {
     return (
       <Box component="div">
         <img className={css.slider__img} src={images[0].url} alt={name.en || name.ru} />
