@@ -24,6 +24,25 @@ export default function ProfilePageCustomer() {
     }
     fetchData();
   }, []);
+  const handleDataChangeModalClose = async () => {
+    setShowDataChangeModal(false);
+    try {
+      const freshData = await getCustomerData();
+      setCustomer(freshData);
+    } catch (error) {
+      console.error('Ошибка при обновлении данных после редактирования:', error);
+    }
+  };
+    const handleDataChangeAdressModalClose = async () => {
+    setShowAdressModal(false);
+    try {
+      const freshData = await getCustomerData();
+      setCustomer(freshData);
+    } catch (error) {
+      console.error('Ошибка при обновлении данных после редактирования:', error);
+    }
+  };
+
   if (!customer) return <div>Загрузка...</div>;
   const {
     id,
@@ -43,6 +62,8 @@ export default function ProfilePageCustomer() {
   }));
 
   console.log(enrichedAddresses);
+
+
   return (
     <div>
       <div className="client-block">
@@ -86,7 +107,9 @@ export default function ProfilePageCustomer() {
             </p>
           </div>
         ))}
-        <button type="button" onClick={() => setShowAdressModal(true)}>Edit adresses</button>
+        <button type="button" onClick={() => setShowAdressModal(true)}>
+          Edit adresses
+        </button>
       </div>
       <button type="button" onClick={() => setShowDataChangeModal(true)}>
         Edit profile
@@ -99,7 +122,7 @@ export default function ProfilePageCustomer() {
       />
       <EditDataChangedModal
         isOpen={showDataChangeModal}
-        onClose={() => setShowDataChangeModal(false)}
+        onClose={handleDataChangeModalClose}
         id={id}
         version={version}
         addresses={addresses}
@@ -115,7 +138,7 @@ export default function ProfilePageCustomer() {
         id={id}
         version={version}
         addresses={addresses}
-        onClose={() => setShowAdressModal(false)}
+        onClose={handleDataChangeAdressModalClose}
         email={email}
         shippingAddressIds={shippingAddressIds}
         billingAddressIds={billingAddressIds}
