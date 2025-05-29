@@ -1,3 +1,11 @@
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
 .colorFilter {
   display: flex;
   flex-wrap: wrap;
@@ -8,7 +16,7 @@
   width: 2rem;
   height: 2rem;
   border-radius: 50%;
-  border: 2px solid transparent;
+  border: 2px solid rgb(180, 180, 180);
   cursor: pointer;
   transition: transform 0.2s;
 }

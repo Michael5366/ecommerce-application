@@ -20,7 +20,7 @@ export const PriceFilter: FC<PriceFilterProps> = ({ priceRange, handlePriceChang
           <input
             type="range"
             min="0"
-            max="200"
+            max="100"
             value={priceRange[0]}
             onChange={handlePriceChange(0)}
             className={styles.rangeInput}
@@ -28,7 +28,7 @@ export const PriceFilter: FC<PriceFilterProps> = ({ priceRange, handlePriceChang
           <input
             type="range"
             min="0"
-            max="200"
+            max="100"
             value={priceRange[1]}
             onChange={handlePriceChange(1)}
             className={styles.rangeInput}

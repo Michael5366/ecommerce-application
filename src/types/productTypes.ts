@@ -21,9 +21,46 @@ export interface Image {
   label?: string;
 }
 
+export interface LocalizedString {
+  [locale: string]: string;
+}
+
+export interface EnumValue {
+  key: string;
+  label?: string | LocalizedString;
+}
+
+export interface LocalizedEnumValue {
+  key: string;
+  label: LocalizedString;
+}
+
+export type PrimitiveAttributeValue = string | number | boolean | null;
+export type ComplexAttributeValue = LocalizedString | EnumValue | LocalizedEnumValue;
+export type SingleAttributeValue = PrimitiveAttributeValue | ComplexAttributeValue;
+export type AttributeValue = SingleAttributeValue | AttributeValue[];
+
 export interface Attribute {
   name: string;
-  value: string | number | boolean | null;
+  value: AttributeValue;
+}
+
+// Type Guards
+export function isEnumValue(value: unknown): value is EnumValue {
+  return typeof value === 'object' && value !== null && 'key' in value;
+}
+
+export function isLocalizedEnumValue(value: unknown): value is LocalizedEnumValue {
+  return isEnumValue(value) && 'label' in value && typeof value.label === 'object';
+}
+
+export function isLocalizedString(value: unknown): value is LocalizedString {
+  return typeof value === 'object' && value !== null && !isEnumValue(value);
+}
+
+export interface CategoryReference {
+  typeId: 'category';
+  id: string;
 }
 
 export interface ProductVariant {
@@ -32,11 +69,6 @@ export interface ProductVariant {
   prices?: Price[];
   images?: Image[];
   attributes?: Attribute[];
-}
-
-export interface CategoryReference {
-  typeId: 'category';
-  id: string;
 }
 
 export interface ProductData {
@@ -86,4 +118,18 @@ export interface ProductPriceInfo {
   current: PriceValue;
   original: PriceValue | null;
   hasDiscount: boolean;
+}
+
+export interface ProductFilters {
+  color: string;
+  size: string;
+  occasion: string;
+  flowerType: string;
+}
+
+export interface AvailableFilters {
+  colors: string[];
+  sizes: string[];
+  occasions: string[];
+  flowerTypes: string[];
 }

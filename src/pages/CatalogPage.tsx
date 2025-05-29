@@ -1,15 +1,38 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useApi } from './../services/Catalog/catalogAPI';
-import { Product, Category } from './../types/productTypes';
-import { ProductGrid } from './../components/Catalog/ProductGrid';
-import { Sidebar } from './../components/Catalog/Sidebar';
-import { MobileHeader } from './../components/Catalog/MobileHeader';
-import { FiltersModal } from './../components/Catalog/FiltersModal';
-import { CategoriesModal } from './../components/Catalog/CategoriesModal';
+import { useApi } from '../services/Catalog/catalogAPI';
+import {
+  Product,
+  Category,
+  ProductFilters,
+  AttributeValue,
+  isEnumValue,
+  isLocalizedString,
+} from '../types/productTypes';
+import { ProductGrid } from '../components/Catalog/ProductGrid';
+import { Sidebar } from '../components/Catalog/Sidebar';
+import { MobileHeader } from '../components/Catalog/MobileHeader';
+import { FiltersModal } from '../components/Catalog/FiltersModal';
+import { CategoriesModal } from '../components/Catalog/CategoriesModal';
 import styles from './CatalogPage.module.css';
 import { Pagination } from '../components/Catalog/Pagination';
 import { Breadcrumbs } from '../components/Catalog/Breadcrumbs';
+
+function useDebounce<T>(value: T, delay: number): T {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [value, delay]);
+
+  return debouncedValue;
+}
 
 const CatalogPage = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -17,19 +40,21 @@ const CatalogPage = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
   const [searchInput, setSearchInput] = useState<string>('');
+  const debouncedSearchInput = useDebounce(searchInput, 500);
   const [appliedSearch, setAppliedSearch] = useState<string>('');
   const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [sortOption, setSortOption] = useState<string>('name asc');
-  const [filters, setFilters] = useState<{
-    color: string;
-    size: string;
-  }>({
+  const [filters, setFilters] = useState<ProductFilters>({
     color: '',
     size: '',
+    occasion: '',
+    flowerType: '',
   });
   const [availableColors, setAvailableColors] = useState<string[]>([]);
   const [availableSizes, setAvailableSizes] = useState<string[]>([]);
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 200]);
+  const [availableOccasions, setAvailableOccasions] = useState<string[]>([]);
+  const [availableFlowerTypes, setAvailableFlowerTypes] = useState<string[]>([]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 100]);
   const [isSearching, setIsSearching] = useState<boolean>(false);
   const [isFiltersModalOpen, setIsFiltersModalOpen] = useState<boolean>(false);
   const [isCategoriesModalOpen, setIsCategoriesModalOpen] = useState(false);
@@ -57,13 +82,42 @@ const CatalogPage = () => {
     }
   }, [makeApiRequest]);
 
+  const extractStringValues = useCallback((value: AttributeValue): string[] => {
+    if (value === null || value === undefined) return [];
+    if (typeof value === 'string') return [value];
+    if (typeof value === 'number') return [String(value)];
+    if (typeof value === 'boolean') return [];
+
+    if (Array.isArray(value)) {
+      return value.flatMap(extractStringValues);
+    }
+
+    if (isEnumValue(value)) {
+      const label = value.label;
+      if (!label) return [value.key];
+
+      if (typeof label === 'string') {
+        return [label];
+      } else {
+        return [label.en || Object.values(label)[0] || value.key];
+      }
+    }
+
+    if (isLocalizedString(value)) {
+      return [value.en || Object.values(value)[0]];
+    }
+
+    return [];
+  }, []);
+
   const fetchProducts = useCallback(async (): Promise<void> => {
     setLoading(true);
     setIsSearching(true);
+
     try {
       const params: Record<string, string> = {
         limit: '100',
-        expand: 'categories',
+        expand: 'masterVariant.attributes',
       };
 
       if (selectedCategory) {
@@ -95,17 +149,41 @@ const CatalogPage = () => {
 
       if (filters.color) {
         results = results.filter((product) =>
-          product.masterData.current.masterVariant?.attributes?.some(
-            (attr) => attr.name === 'color' && attr.value === filters.color
-          )
+          product.masterData.current.masterVariant?.attributes?.some((attr) => {
+            if (attr.name.toLowerCase() !== 'color') return false;
+            const values = extractStringValues(attr.value);
+            return values.includes(filters.color);
+          })
         );
       }
 
       if (filters.size) {
         results = results.filter((product) =>
-          product.masterData.current.masterVariant?.attributes?.some(
-            (attr) => attr.name === 'size' && attr.value === filters.size
-          )
+          product.masterData.current.masterVariant?.attributes?.some((attr) => {
+            if (attr.name.toLowerCase() !== 'size') return false;
+            const values = extractStringValues(attr.value);
+            return values.includes(filters.size);
+          })
+        );
+      }
+
+      if (filters.occasion) {
+        results = results.filter((product) =>
+          product.masterData.current.masterVariant?.attributes?.some((attr) => {
+            if (!attr.name.toLowerCase().includes('occasion')) return false;
+            const values = extractStringValues(attr.value);
+            return values.includes(filters.occasion);
+          })
+        );
+      }
+
+      if (filters.flowerType) {
+        results = results.filter((product) =>
+          product.masterData.current.masterVariant?.attributes?.some((attr) => {
+            if (!attr.name.toLowerCase().includes('flower')) return false;
+            const values = extractStringValues(attr.value);
+            return values.includes(filters.flowerType);
+          })
         );
       }
 
@@ -133,15 +211,45 @@ const CatalogPage = () => {
             return bPrice - aPrice;
           case 'name desc':
             return bName.localeCompare(aName);
-          default:
+          default: // 'name asc'
             return aName.localeCompare(bName);
         }
       });
 
       setProducts(results);
-      extractAvailableFilters(results);
+
+      // Extract available filters from the unfiltered results
+      const colors = new Set<string>();
+      const sizes = new Set<string>();
+      const occasions = new Set<string>();
+      const flowerTypes = new Set<string>();
+
+      data.results.forEach((product) => {
+        const attributes = product.masterData.current.masterVariant?.attributes || [];
+
+        attributes.forEach((attr) => {
+          const values = extractStringValues(attr.value);
+          if (values.length === 0) return;
+
+          const attrName = attr.name.toLowerCase();
+
+          if (attrName.includes('color')) {
+            values.forEach((v) => colors.add(v));
+          } else if (attrName.includes('size')) {
+            values.forEach((v) => sizes.add(v));
+          } else if (attrName.includes('occasion')) {
+            values.forEach((v) => occasions.add(v));
+          } else if (attrName.includes('flower')) {
+            values.forEach((v) => flowerTypes.add(v));
+          }
+        });
+      });
+
+      setAvailableColors(Array.from(colors).filter(Boolean));
+      setAvailableSizes(Array.from(sizes).filter(Boolean));
+      setAvailableOccasions(Array.from(occasions).filter(Boolean));
+      setAvailableFlowerTypes(Array.from(flowerTypes).filter(Boolean));
     } catch (err) {
-      setIsSearching(false);
       const errorMessage = err instanceof Error ? err.message : 'Error loading products';
       setError(errorMessage);
       console.error('API Error:', err);
@@ -149,31 +257,22 @@ const CatalogPage = () => {
       setLoading(false);
       setIsSearching(false);
     }
-  }, [makeApiRequest, appliedSearch, selectedCategory, sortOption, priceRange, filters]);
-
-  const extractAvailableFilters = (products: Product[]): void => {
-    const colors = new Set<string>();
-    const sizes = new Set<string>();
-
-    products.forEach((product) => {
-      product.masterData.current.masterVariant?.attributes?.forEach((attr) => {
-        if (attr.name === 'color' && typeof attr.value === 'string') {
-          colors.add(attr.value);
-        }
-        if (attr.name === 'size' && typeof attr.value === 'string') {
-          sizes.add(attr.value);
-        }
-      });
-    });
-
-    setAvailableColors(Array.from(colors));
-    setAvailableSizes(Array.from(sizes));
-  };
+  }, [
+    makeApiRequest,
+    appliedSearch,
+    selectedCategory,
+    sortOption,
+    priceRange,
+    filters,
+    extractStringValues,
+  ]);
 
   const resetFilters = useCallback((): void => {
     setFilters({
       color: '',
       size: '',
+      occasion: '',
+      flowerType: '',
     });
     setPriceRange([0, 200]);
     setAppliedSearch('');
@@ -204,17 +303,18 @@ const CatalogPage = () => {
     []
   );
 
-  const handleCategorySelect = (categoryId: string) => {
+  const handleCategorySelect = useCallback((categoryId: string) => {
     setSelectedCategory(categoryId);
     setCurrentPage(1);
-  };
+  }, []);
 
-  const getCurrentProducts = () => {
+  const getCurrentProducts = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     return products.slice(startIndex, endIndex);
-  };
+  }, [products, currentPage, itemsPerPage]);
 
+  // Initial data load
   useEffect(() => {
     const loadData = async (): Promise<void> => {
       try {
@@ -231,21 +331,19 @@ const CatalogPage = () => {
     loadData();
   }, [fetchCategories, fetchProducts, navigate]);
 
+  // Update applied search when debounced search input changes
   useEffect(() => {
-    if (
-      appliedSearch !== '' ||
-      selectedCategory ||
-      sortOption !== 'name asc' ||
-      filters.color ||
-      filters.size ||
-      priceRange[0] !== 0 ||
-      priceRange[1] !== 200
-    ) {
-      setIsSearching(true);
-      fetchProducts().finally(() => setIsSearching(false));
-      setCurrentPage(1);
+    setAppliedSearch(debouncedSearchInput);
+  }, [debouncedSearchInput]);
+
+  // Fetch products when filters change
+  useEffect(() => {
+    const timer = setTimeout(() => {
       fetchProducts();
-    }
+      setCurrentPage(1);
+    }, 300);
+
+    return () => clearTimeout(timer);
   }, [appliedSearch, selectedCategory, sortOption, filters, priceRange, fetchProducts]);
 
   if (loading && products.length === 0) {
@@ -297,6 +395,8 @@ const CatalogPage = () => {
           handlePriceChange={handlePriceChange}
           availableColors={availableColors}
           availableSizes={availableSizes}
+          availableOccasions={availableOccasions}
+          availableFlowerTypes={availableFlowerTypes}
           filters={filters}
           setFilters={setFilters}
           resetFilters={resetFilters}
@@ -320,7 +420,7 @@ const CatalogPage = () => {
               <option value="price desc">Sorting: Price descending</option>
             </select>
           </div>
-          <ProductGrid products={getCurrentProducts()} searchQuery={appliedSearch} />
+          <ProductGrid products={getCurrentProducts} searchQuery={appliedSearch} />
           <Pagination
             totalItems={products.length}
             itemsPerPage={itemsPerPage}
@@ -337,6 +437,8 @@ const CatalogPage = () => {
         handlePriceChange={handlePriceChange}
         availableColors={availableColors}
         availableSizes={availableSizes}
+        availableOccasions={availableOccasions}
+        availableFlowerTypes={availableFlowerTypes}
         filters={filters}
         setFilters={setFilters}
         resetFilters={resetFilters}

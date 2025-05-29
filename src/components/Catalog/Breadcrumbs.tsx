@@ -22,7 +22,7 @@ export const Breadcrumbs: FC<BreadcrumbsProps> = ({
 
     breadcrumbs.push({
       id: '',
-      name: 'Home',
+      name: 'All products',
       isCurrent: !selectedCategory,
     });
 

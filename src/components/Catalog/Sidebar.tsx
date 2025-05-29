@@ -1,9 +1,11 @@
 import { FC } from 'react';
-import { Category } from '../../types/productTypes';
+import { Category, ProductFilters } from '../../types/productTypes';
 import { CategoryList } from './CategoryList';
 import { PriceFilter } from './PriceFilter';
 import { ColorFilter } from './ColorFilter';
 import { SizeFilter } from './SizeFilter';
+import { OccasionFilter } from './OccasionFilter';
+import { FlowerTypeFilter } from './FlowerTypeFilter';
 import { SearchBar } from './SearchBar';
 import styles from './Sidebar.module.css';
 
@@ -20,11 +22,10 @@ interface SidebarProps {
   handlePriceChange: (index: number) => (e: React.ChangeEvent<HTMLInputElement>) => void;
   availableColors: string[];
   availableSizes: string[];
-  filters: {
-    color: string;
-    size: string;
-  };
-  setFilters: (filters: { color: string; size: string }) => void;
+  availableOccasions: string[];
+  availableFlowerTypes: string[];
+  filters: ProductFilters;
+  setFilters: (filters: ProductFilters) => void;
   resetFilters: () => void;
 }
 
@@ -41,10 +42,13 @@ export const Sidebar: FC<SidebarProps> = ({
   handlePriceChange,
   availableColors,
   availableSizes,
+  availableOccasions,
+  availableFlowerTypes,
   filters,
   setFilters,
   resetFilters,
 }) => {
+  // console.log('Available colors in Sidebar:', availableColors);
   return (
     <aside className={styles.sidebar}>
       <div className={styles.desktopSearch}>
@@ -81,6 +85,22 @@ export const Sidebar: FC<SidebarProps> = ({
             availableSizes={availableSizes}
             selectedSize={filters.size}
             onSelectSize={(size) => setFilters({ ...filters, size })}
+          />
+        )}
+
+        {availableOccasions.length > 0 && (
+          <OccasionFilter
+            availableOccasions={availableOccasions}
+            selectedOccasion={filters.occasion}
+            onSelectOccasion={(occasion) => setFilters({ ...filters, occasion })}
+          />
+        )}
+
+        {availableFlowerTypes.length > 0 && (
+          <FlowerTypeFilter
+            availableFlowerTypes={availableFlowerTypes}
+            selectedFlowerType={filters.flowerType}
+            onSelectFlowerType={(flowerType) => setFilters({ ...filters, flowerType })}
           />
         )}
 
