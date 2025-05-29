@@ -8,11 +8,34 @@ export const sliderStyles = makeStyles({
     maxWidth: '100%',
     height: '60vh',
   },
+  slide: {
+    '&.slick-active img': {
+      pointerEvents: 'auto',
+    },
+  },
   slider__img: {
     width: '100%',
     height: '60vh',
     objectFit: 'cover',
   },
+  modal__wrapper: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '80%',
+    maxWidth: 800,
+    background: 'background.paper',
+    boxShadow: '24',
+    p: 2,
+    borderRadius: 2,
+    outline: 'none',
+
+    '&.slider__img': {
+      pointerEvents: 'none',
+    },
+  },
+
   // slick arrows
   '@global': {
     '.slick-prev:before, .slick-next:before': {

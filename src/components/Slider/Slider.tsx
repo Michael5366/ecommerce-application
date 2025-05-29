@@ -1,6 +1,6 @@
 import { settings } from './slider-settings';
-// import { useState } from 'react';
-import { Box } from '@mui/material';
+import { useState } from 'react';
+import { Box, Fade, Modal } from '@mui/material';
 import { sliderStyles } from './slider-styles';
 import Slider from 'react-slick';
 
@@ -18,10 +18,21 @@ interface SliderDetailProps {
 }
 
 export const SliderDetail = ({ id, name, images }: SliderDetailProps) => {
-  // const [nav1, setNav1] = useState<Slider | null>(null);
-  // const [nav2, setNav2] = useState<Slider | null>(null);
+  const [nav1, setNav1] = useState<Slider | null>(null);
+  const [nav2, setNav2] = useState<Slider | null>(null);
+  const [open, setOpen] = useState(false);
+  const [activeSlide, setActiveSlide] = useState(0);
 
   const css = sliderStyles();
+
+  const handleOpenModal = (index: number): void => {
+    setActiveSlide(index);
+    setOpen(true);
+  };
+
+  const handleCloseModal = (): void => {
+    setOpen(false);
+  };
 
   if (images.length === 1) {
     return (
@@ -36,14 +47,13 @@ export const SliderDetail = ({ id, name, images }: SliderDetailProps) => {
       <Slider
         className={css.slider}
         {...settings}
-        // asNavFor={nav2 ?? undefined}
-        // ref={(slider1) => setNav1(slider1)}
+        asNavFor={nav2 ?? undefined}
+        ref={(slider1) => setNav1(slider1)}
       >
         {images.map((img, index) => (
           <Box key={id + '-' + index}>
             <img
-              onClick={() => console.log(1)}
-              key={id + '-' + index}
+              onClick={() => handleOpenModal(index)}
               className={css.slider__img}
               src={img.url}
               alt={name.en || name.ru}
@@ -51,6 +61,32 @@ export const SliderDetail = ({ id, name, images }: SliderDetailProps) => {
           </Box>
         ))}
       </Slider>
+
+      <Modal open={open} onClose={handleCloseModal} closeAfterTransition>
+        <Fade in={open}>
+          <Box className={css.modal__wrapper} component={'div'}>
+            <Slider
+              key={activeSlide}
+              {...settings}
+              asNavFor={nav1 ?? undefined}
+              ref={(slider2): void => setNav2(slider2)}
+              swipeToSlide={true}
+              focusOnSelect={true}
+              initialSlide={activeSlide}
+            >
+              {images.map((img, index) => (
+                <Box key={index}>
+                  <img
+                    className={css.slider__img}
+                    src={img.url}
+                    alt={name.en || name.ru || 'Image'}
+                  />
+                </Box>
+              ))}
+            </Slider>
+          </Box>
+        </Fade>
+      </Modal>
     </>
   );
 };
