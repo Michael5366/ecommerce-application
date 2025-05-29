@@ -14,7 +14,9 @@ export const useStyles = makeStyles({
   },
 
   price__discount: {
-    color: 'yellow',
+    display: 'inline-block',
+    paddingLeft: '0.5em',
+    color: 'red',
     fontWeight: 'bold',
   },
 });
