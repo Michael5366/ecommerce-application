@@ -7,12 +7,6 @@ export const sliderStyles = makeStyles({
     width: '45%',
     maxWidth: '100%',
     height: '60vh',
-
-    '&.slider__img': {
-      width: '100%',
-      height: '60vh',
-      objectFit: 'cover',
-    },
   },
   slide: {
     '&.slick-active img': {
@@ -23,6 +17,7 @@ export const sliderStyles = makeStyles({
     width: '35vw',
     height: '60vh',
     objectFit: 'cover',
+    cursor: 'pointer',
   },
   modal__wrapper: {
     position: 'absolute',
@@ -37,7 +32,9 @@ export const sliderStyles = makeStyles({
     borderRadius: 2,
     outline: 'none',
 
-    '&.slider__img': {
+    '& img': {
+      width: '100%',
+      height: '80vh',
       pointerEvents: 'none',
     },
   },

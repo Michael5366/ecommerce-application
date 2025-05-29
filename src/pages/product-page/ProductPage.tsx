@@ -30,7 +30,7 @@ const ProductPage = () => {
   const discountedPrice = price?.discounted?.value;
 
   return (
-    <Container className={css.container}>
+    <Container>
       <Box className={css.product} component={'div'}>
         <SliderDetail id={id} name={name} images={images} />
         <Box component="div">

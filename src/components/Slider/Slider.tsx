@@ -34,10 +34,23 @@ export const SliderDetail = ({ id, name, images }: SliderDetailProps) => {
     setOpen(false);
   };
 
-  if (images.length !== 1) {
+  if (images.length === 1) {
     return (
       <Box component="div">
-        <img className={css.slider__img} src={images[0].url} alt={name.en || name.ru} />
+        <img
+          className={css.slider__img}
+          src={images[0].url}
+          alt={name.en || name.ru}
+          onClick={() => handleOpenModal(0)}
+        />
+
+        <Modal open={open} onClose={handleCloseModal} closeAfterTransition>
+          <Fade in={open}>
+            <Box className={css.modal__wrapper} component="div">
+              <img className={css.slider__img} src={images[0].url} alt={name.en || name.ru} />
+            </Box>
+          </Fade>
+        </Modal>
       </Box>
     );
   }

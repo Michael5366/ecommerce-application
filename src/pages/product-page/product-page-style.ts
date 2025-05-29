@@ -1,9 +1,6 @@
 import { makeStyles } from '@mui/styles';
 
 export const useStyles = makeStyles({
-  container: {
-    margin: 'auto',
-  },
   product: {
     display: 'flex',
     flexDirection: 'column',
