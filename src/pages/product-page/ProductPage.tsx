@@ -23,7 +23,6 @@ const ProductPage = () => {
 
   const { id, name, description, masterVariant } = product;
   const images = masterVariant.images || [];
-  // const images = [{ url: '/1.jpg' }, { url: '/2.jpg' }, { url: '/3.jpg' }];
   const price = masterVariant.prices?.[0];
   const regularPrice = price?.value;
   const discountedPrice = price?.discounted?.value;
