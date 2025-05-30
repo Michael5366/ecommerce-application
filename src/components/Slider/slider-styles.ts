@@ -9,6 +9,21 @@ export const sliderStyles = makeStyles({
     margin: '0 auto',
   },
 
+  'slider__close-btn': {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    background: 'transparent',
+    border: 'none',
+    fontSize: '28px',
+    cursor: 'pointer',
+    color: '#333',
+    zIndex: 10,
+    '&:hover': {
+      color: '#000',
+    },
+  },
+
   slider__img: {
     width: '100%',
     height: '100%',

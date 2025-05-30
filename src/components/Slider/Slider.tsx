@@ -78,6 +78,9 @@ export const SliderDetail = ({ id, name, images }: SliderDetailProps) => {
       <Modal open={open} onClose={handleCloseModal} closeAfterTransition>
         <Fade in={open}>
           <Box className={css.modal__wrapper} component={'div'}>
+            <button className={css['slider__close-btn']} onClick={handleCloseModal}>
+              &times;
+            </button>
             <Slider
               key={activeSlide}
               {...settings}
