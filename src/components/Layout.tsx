@@ -10,26 +10,17 @@ import {
 } from '@mui/material';
 import { theme } from '../styles/theme';
 import Footer from '../pages/Footer';
+import { layout } from './Layout';
 
 const Layout = () => {
   const navigation = useNavigation();
   const isLoading = navigation.state === 'loading';
+  const css = layout();
 
   return (
     <>
       {isLoading && (
-        <Box
-          position="fixed"
-          top={0}
-          left={0}
-          width="100vw"
-          height="100vh"
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          bgcolor="rgba(255, 255, 255, 0.6)"
-          zIndex={9999}
-        >
+        <Box className={css.layout__loader}>
           <CircularProgress size={30} color="primary" thickness={5} />
         </Box>
       )}
