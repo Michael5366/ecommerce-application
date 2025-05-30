@@ -32,13 +32,11 @@ export const sliderStyles = makeStyles({
     cursor: 'pointer',
     display: 'block',
 
-    '@media (max-width: 1280px)': {
-      // height: '50vh',
-    },
     '@media (max-width: 768px)': {
       objectFit: 'cover',
       height: '60vh',
     },
+
     '@media (max-width: 480px)': {
       height: '50vh',
     },
