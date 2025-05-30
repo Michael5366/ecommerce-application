@@ -16,7 +16,6 @@ const ProductPage = () => {
   const product = products.find(
     (product: Product) => product.name.en.toLowerCase() === productName?.toLowerCase()
   );
-  console.log('product:', product);
 
   if (!product) {
     return <div>Product not found</div>;
