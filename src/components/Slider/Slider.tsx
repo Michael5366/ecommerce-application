@@ -47,6 +47,9 @@ export const SliderDetail = ({ id, name, images }: SliderDetailProps) => {
         <Modal open={open} onClose={handleCloseModal} closeAfterTransition>
           <Fade in={open}>
             <Box className={css.modal__wrapper} component="div">
+              <button className={css['slider__close-btn']} onClick={handleCloseModal}>
+                &times;
+              </button>
               <img className={css.slider__img} src={images[0].url} alt={name.en || name.ru} />
             </Box>
           </Fade>
