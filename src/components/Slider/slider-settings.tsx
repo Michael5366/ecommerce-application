@@ -10,4 +10,26 @@ export const settings = {
       document.activeElement.blur();
     }
   },
+  responsive: [
+    {
+      breakpoint: 1280,
+      settings: {
+        slidesToShow: 1,
+      },
+    },
+    {
+      breakpoint: 768,
+      settings: {
+        arrows: false,
+        slidesToShow: 1,
+      },
+    },
+    {
+      breakpoint: 480,
+      settings: {
+        arrows: false,
+        slidesToShow: 1,
+      },
+    },
+  ],
 };

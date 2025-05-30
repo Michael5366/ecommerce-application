@@ -33,7 +33,7 @@ const ProductPage = () => {
     <Container>
       <Box className={css.product} component={'div'}>
         <SliderDetail id={id} name={name} images={images} />
-        <Box component="div">
+        <Box className={css.product__info} component="div">
           <Typography variant="h4" fontWeight="bold" gutterBottom>
             {name.ru || name.en}
           </Typography>

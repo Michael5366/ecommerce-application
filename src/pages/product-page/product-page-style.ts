@@ -7,6 +7,10 @@ export const useStyles = makeStyles({
     alignItems: 'center',
   },
 
+  product__info: {
+    marginTop: '2em',
+  },
+
   price__regular: {
     textDecoration: 'line-through',
     color: 'gray',

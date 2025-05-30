@@ -2,47 +2,65 @@ import { makeStyles } from '@mui/styles';
 
 export const sliderStyles = makeStyles({
   slider: {
-    // outline: '3px solid #bbb',
-    // display: 'flex',
-    width: '45%',
+    width: '1200px',
     maxWidth: '100%',
-    height: '60vh',
+    height: 'auto',
+    maxheight: '58.5vh',
+    margin: '0 auto',
   },
-  slide: {
-    '&.slick-active img': {
-      pointerEvents: 'auto',
-    },
-  },
+
   slider__img: {
-    width: '35vw',
-    height: '60vh',
+    width: '100%',
+    height: '100%',
+    maxHeight: '60vh',
     objectFit: 'cover',
     cursor: 'pointer',
+    display: 'block',
+
+    '@media (max-width: 1280px)': {
+      // height: '50vh',
+    },
+    '@media (max-width: 768px)': {
+      objectFit: 'cover',
+      height: '60vh',
+    },
+    '@media (max-width: 480px)': {
+      height: '50vh',
+    },
   },
   modal__wrapper: {
     position: 'absolute',
     top: '50%',
     left: '50%',
+    width: '90%',
+    maxWidth: '80%',
+    background: '#fff',
     transform: 'translate(-50%, -50%)',
-    width: '80%',
-    maxWidth: 800,
-    background: 'background.paper',
     boxShadow: '24',
-    p: 2,
-    borderRadius: 2,
+    padding: 16,
+    borderRadius: 8,
     outline: 'none',
 
     '& img': {
+      display: 'block',
       width: '100%',
-      height: '80vh',
-      pointerEvents: 'none',
+      height: 'auto',
+      maxHeight: '80vh',
+      objectFit: 'contain',
+      cursor: 'pointer',
+
+      '@media (max-width: 768px)': {
+        objectFit: 'cover',
+      },
+
+      '@media (max-width: 480px)': {
+        objectFit: 'cover',
+      },
     },
   },
 
-  // slick arrows
   '@global': {
     '.slick-prev:before, .slick-next:before': {
-      // background: '#000',
       fontSize: '20px',
       color: '#bbb',
       transition: '0.3s',
