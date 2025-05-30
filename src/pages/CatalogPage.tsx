@@ -60,8 +60,8 @@ const CatalogPage = () => {
       }
 
       setCategories(data.results);
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Error loading categories';
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Error loading categories';
       setError(errorMessage);
     }
   }, [makeApiRequest]);
@@ -232,10 +232,10 @@ const CatalogPage = () => {
       setAvailableSizes(Array.from(sizes).filter(Boolean));
       setAvailableOccasions(Array.from(occasions).filter(Boolean));
       setAvailableFlowerTypes(Array.from(flowerTypes).filter(Boolean));
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Error loading products';
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Error loading products';
       setError(errorMessage);
-      console.error('API Error:', err);
+      console.error('API Error:', error);
     } finally {
       setLoading(false);
       setIsSearching(false);
@@ -321,19 +321,21 @@ const CatalogPage = () => {
 
   useEffect(() => {
     const loadData = async (): Promise<void> => {
+      setLoading(true);
       try {
         await Promise.all([fetchCategories(), fetchProducts()]);
-      } catch (err) {
-        if (err instanceof Error && err.message === 'Authorization required') {
-          navigate('/login');
-        } else {
-          console.error('Error loading data:', err);
+      } catch (error) {
+        console.error('Error loading data:', error);
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        if (!errorMessage.includes('Session expired')) {
           setError('Failed to load data. Please try again later.');
         }
+      } finally {
+        setLoading(false);
       }
     };
     loadData();
-  }, [fetchCategories, fetchProducts, navigate]);
+  }, [fetchCategories, fetchProducts]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
