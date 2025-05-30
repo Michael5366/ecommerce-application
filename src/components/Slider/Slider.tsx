@@ -2,20 +2,8 @@ import { settings } from './slider-settings';
 import { useState } from 'react';
 import { Box, Fade, Modal } from '@mui/material';
 import { sliderStyles } from './slider-styles';
+import { SliderDetailProps } from '../../types/slider';
 import Slider from 'react-slick';
-
-interface ImageItem {
-  url: string;
-}
-
-interface SliderDetailProps {
-  id: string;
-  name: {
-    en?: string;
-    ru?: string;
-  };
-  images: ImageItem[];
-}
 
 export const SliderDetail = ({ id, name, images }: SliderDetailProps) => {
   const [nav1, setNav1] = useState<Slider | null>(null);
