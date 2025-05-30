@@ -86,6 +86,10 @@ export interface ProductData {
 }
 
 export interface Product {
+  name: {
+    en: string;
+    [key: string]: string;
+  };
   id: string;
   version: number;
   productType: {

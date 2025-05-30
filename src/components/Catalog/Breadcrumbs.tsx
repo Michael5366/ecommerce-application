@@ -18,29 +18,31 @@ export const Breadcrumbs: FC<BreadcrumbsProps> = ({
 }) => {
   const buildBreadcrumbs = () => {
     const breadcrumbs = [];
-    let currentCategory = categories.find((c) => c.id === selectedCategory);
-
     breadcrumbs.push({
       id: '',
       name: 'All products',
+      path: '/catalog',
       isCurrent: !selectedCategory,
     });
 
-    if (!selectedCategory) return breadcrumbs;
+    if (selectedCategory) {
+      let currentCategory = categories.find((c) => c.id === selectedCategory);
+      const categoryChain = [];
 
-    const categoryChain = [];
-    while (currentCategory) {
-      categoryChain.unshift(currentCategory);
-      currentCategory = categories.find((c) => c.id === currentCategory?.parent?.id);
-    }
+      while (currentCategory) {
+        categoryChain.unshift(currentCategory);
+        currentCategory = categories.find((c) => c.id === currentCategory?.parent?.id);
+      }
 
-    categoryChain.forEach((category, index) => {
-      breadcrumbs.push({
-        id: category.id,
-        name: category.name?.en || category.id,
-        isCurrent: index === categoryChain.length - 1,
+      categoryChain.forEach((category, index) => {
+        breadcrumbs.push({
+          id: category.id,
+          name: category.name?.en || category.id,
+          path: `/catalog/${category.name?.en?.toLowerCase().replace(/\s+/g, '-') || ''}`,
+          isCurrent: index === categoryChain.length - 1,
+        });
       });
-    });
+    }
 
     return breadcrumbs;
   };
@@ -57,16 +59,20 @@ export const Breadcrumbs: FC<BreadcrumbsProps> = ({
               <span className={styles.currentCrumb} aria-current="page">
                 {crumb.name}
               </span>
+            ) : index === 0 ? (
+              <span className={styles.homeIconContainer} onClick={() => onCategorySelect('')}>
+                <HomeIcon className={styles.homeIcon} />
+              </span>
             ) : (
               <Link
-                to={`?category=${crumb.id}`}
+                to={crumb.path}
                 className={styles.breadcrumbLink}
                 onClick={(e) => {
                   e.preventDefault();
                   onCategorySelect(crumb.id);
                 }}
               >
-                {index === 0 ? <HomeIcon className={styles.homeIcon} /> : crumb.name}
+                {crumb.name}
               </Link>
             )}
           </li>

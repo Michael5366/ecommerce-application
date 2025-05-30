@@ -1,20 +1,51 @@
 import { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Product, ProductPriceInfo } from '../../types/productTypes';
+import { Product, ProductPriceInfo, Category } from '../../types/productTypes';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import styles from './ProductCard.module.css';
 
 interface ProductCardProps {
   product: Product;
+  categories: Category[];
   searchQuery: string;
   onAddToCart?: (productId: string) => void;
 }
 
-export const ProductCard: FC<ProductCardProps> = ({ product, searchQuery, onAddToCart }) => {
+export const ProductCard: FC<ProductCardProps> = ({
+  product,
+  categories,
+  searchQuery,
+  onAddToCart,
+}) => {
   const navigate = useNavigate();
   const productName = product.masterData?.current?.name?.en || product.id;
   const productDescription = product.masterData?.current?.description?.en;
   const mainImage = product.masterData?.current?.masterVariant?.images?.[0]?.url;
+
+  const generateSlug = (text: string) =>
+    text
+      .toLowerCase()
+      .replace(/\s+/g, '-')
+      .replace(/[^\w-]+/g, '');
+
+  const getCategorySlug = () => {
+    const categoryId = product.masterData?.current?.categories?.[0]?.id;
+    if (!categoryId) return null;
+
+    const category = categories.find((c) => c.id === categoryId);
+    return category ? generateSlug(category.name?.en || category.id) : null;
+  };
+
+  const handleProductClick = () => {
+    const productSlug = generateSlug(productName);
+    const categorySlug = getCategorySlug();
+
+    if (categorySlug) {
+      navigate(`/catalog/${categorySlug}/product/${productSlug}`);
+    } else {
+      navigate(`/catalog/product/${productSlug}`);
+    }
+  };
 
   const highlightText = (text: string, highlight: string) => {
     if (!highlight.trim()) {
@@ -64,8 +95,9 @@ export const ProductCard: FC<ProductCardProps> = ({ product, searchQuery, onAddT
   };
 
   return (
-    <div className={styles.productCard} onClick={() => navigate(`/catalog/${product.id}`)}>
+    <div className={styles.productCard} onClick={handleProductClick}>
       {hasDiscount && <div className={styles.discountBadge}>Sale</div>}
+
       <div className={styles.imageContainer}>
         <img
           src={mainImage || '/placeholder-product.jpg'}
@@ -74,13 +106,16 @@ export const ProductCard: FC<ProductCardProps> = ({ product, searchQuery, onAddT
           loading="lazy"
         />
       </div>
+
       <div className={styles.productInfo}>
         <h3 className={styles.productName}>{highlightText(productName, searchQuery)}</h3>
+
         {productDescription && (
           <p className={styles.productDescription}>
             {highlightText(productDescription, searchQuery)}
           </p>
         )}
+
         <div className={styles.priceContainer}>
           {priceInfo ? (
             <>
@@ -100,7 +135,13 @@ export const ProductCard: FC<ProductCardProps> = ({ product, searchQuery, onAddT
           )}
         </div>
       </div>
-      <div className={styles.cartIcon} onClick={handleAddToCart} title="Добавить в корзину">
+
+      <div
+        className={styles.cartIcon}
+        onClick={handleAddToCart}
+        title="Add to cart"
+        aria-label="Add to cart"
+      >
         <ShoppingCartIcon fontSize="small" />
       </div>
     </div>

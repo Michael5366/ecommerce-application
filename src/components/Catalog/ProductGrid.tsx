@@ -1,14 +1,15 @@
 import { FC } from 'react';
-import { Product } from '../../types/productTypes';
+import { Category, Product } from '../../types/productTypes';
 import { ProductCard } from './ProductCard';
 import styles from './ProductGrid.module.css';
 
 interface ProductGridProps {
   products: Product[];
   searchQuery: string;
+  categories: Category[];
 }
 
-export const ProductGrid: FC<ProductGridProps> = ({ products, searchQuery }) => {
+export const ProductGrid: FC<ProductGridProps> = ({ products, searchQuery, categories }) => {
   if (products.length === 0) {
     return (
       <div className={styles.noResults}>
@@ -21,7 +22,12 @@ export const ProductGrid: FC<ProductGridProps> = ({ products, searchQuery }) => 
   return (
     <div className={styles.productGrid}>
       {products.map((product) => (
-        <ProductCard key={product.id} product={product} searchQuery={searchQuery} />
+        <ProductCard
+          key={product.id}
+          product={product}
+          searchQuery={searchQuery}
+          categories={categories}
+        />
       ))}
     </div>
   );

@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useApi } from '../services/Catalog/catalogAPI';
 import {
   Product,
@@ -18,29 +18,12 @@ import styles from './CatalogPage.module.css';
 import { Pagination } from '../components/Catalog/Pagination';
 import { Breadcrumbs } from '../components/Catalog/Breadcrumbs';
 
-function useDebounce<T>(value: T, delay: number): T {
-  const [debouncedValue, setDebouncedValue] = useState(value);
-
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedValue(value);
-    }, delay);
-
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [value, delay]);
-
-  return debouncedValue;
-}
-
 const CatalogPage = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
   const [searchInput, setSearchInput] = useState<string>('');
-  const debouncedSearchInput = useDebounce(searchInput, 500);
   const [appliedSearch, setAppliedSearch] = useState<string>('');
   const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [sortOption, setSortOption] = useState<string>('name asc');
@@ -61,6 +44,7 @@ const CatalogPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(9);
 
+  const { categoryName } = useParams();
   const navigate = useNavigate();
   const { makeApiRequest } = useApi();
 
@@ -218,7 +202,6 @@ const CatalogPage = () => {
 
       setProducts(results);
 
-      // Extract available filters from the unfiltered results
       const colors = new Set<string>();
       const sizes = new Set<string>();
       const occasions = new Set<string>();
@@ -283,6 +266,7 @@ const CatalogPage = () => {
 
   const handleSearch = useCallback((): void => {
     setAppliedSearch(searchInput);
+    setCurrentPage(1);
   }, [searchInput]);
 
   const handleResetSearch = useCallback(() => {
@@ -303,10 +287,31 @@ const CatalogPage = () => {
     []
   );
 
-  const handleCategorySelect = useCallback((categoryId: string) => {
-    setSelectedCategory(categoryId);
-    setCurrentPage(1);
-  }, []);
+  useEffect(() => {
+    if (categoryName) {
+      const category = categories.find(
+        (c) => c.name?.en?.toLowerCase().replace(/\s+/g, '-') === categoryName
+      );
+      if (category) {
+        setSelectedCategory(category.id);
+      }
+    }
+  }, [categoryName, categories]);
+
+  const handleCategorySelect = (categoryId: string) => {
+    if (categoryId === '') {
+      setSelectedCategory('');
+      navigate('/catalog');
+      return;
+    }
+
+    const category = categories.find((c) => c.id === categoryId);
+    if (category) {
+      const categorySlug = category.name?.en?.toLowerCase().replace(/\s+/g, '-') || '';
+      setSelectedCategory(categoryId);
+      navigate(`/catalog/${categorySlug}`);
+    }
+  };
 
   const getCurrentProducts = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
@@ -314,7 +319,6 @@ const CatalogPage = () => {
     return products.slice(startIndex, endIndex);
   }, [products, currentPage, itemsPerPage]);
 
-  // Initial data load
   useEffect(() => {
     const loadData = async (): Promise<void> => {
       try {
@@ -331,12 +335,6 @@ const CatalogPage = () => {
     loadData();
   }, [fetchCategories, fetchProducts, navigate]);
 
-  // Update applied search when debounced search input changes
-  useEffect(() => {
-    setAppliedSearch(debouncedSearchInput);
-  }, [debouncedSearchInput]);
-
-  // Fetch products when filters change
   useEffect(() => {
     const timer = setTimeout(() => {
       fetchProducts();
@@ -420,7 +418,11 @@ const CatalogPage = () => {
               <option value="price desc">Sorting: Price descending</option>
             </select>
           </div>
-          <ProductGrid products={getCurrentProducts} searchQuery={appliedSearch} />
+          <ProductGrid
+            products={getCurrentProducts}
+            searchQuery={appliedSearch}
+            categories={categories}
+          />
           <Pagination
             totalItems={products.length}
             itemsPerPage={itemsPerPage}
