@@ -1,10 +1,10 @@
 .catalogContainer {
-  --primary-color: #2a6496;
+  --primary-color: #4e2a81;
   --secondary-color: #f8f9fa;
   --text-color: #333;
   --border-color: #e0e0e0;
-  --hover-color: #f5f5f5;
-  --active-color: #e3f2fd;
+  --hover-color: #d8bbff;
+  --active-color: #f5f5f5;
   --error-color: #dc3545;
   --success-color: #28a745;
   --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);

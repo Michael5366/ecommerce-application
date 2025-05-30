@@ -42,6 +42,7 @@
   cursor: pointer;
   display: inline-flex;
   align-items: center;
+  color: #4e2a81;
 }
 
 .homeIcon {

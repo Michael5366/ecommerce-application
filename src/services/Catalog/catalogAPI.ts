@@ -77,7 +77,6 @@ export const useApi = () => {
           throw new Error('Authorization required');
         }
 
-        // Основной запрос
         const response = await fetch(url.toString(), {
           headers: {
             Authorization: `Bearer ${storedToken || ''}`,
