@@ -4,6 +4,8 @@ import { registrationSchema } from '../../utils/validateRegistration';
 import { addressSchema } from '../../utils/validateRegistration';
 import { getCustomerData } from '../../services/ClientInfApi/GetClientInf';
 import { updateCustomerAdd } from '../../services/ClientInfApi/UpdateCustomer';
+import Toastify from 'toastify-js';
+import 'toastify-js/src/toastify.css';
 
 export interface PropsAdress {
   isOpen: boolean;
@@ -175,7 +177,17 @@ export function EditAdressModal({
       }
 
       if (actions.length === 0) {
-        alert('Нет изменений для сохранения.');
+         Toastify({
+        text: 'There is no information to update',
+        duration: 3000,
+        close: true,
+        gravity: 'top',
+        position: 'right',
+        style: {
+          background: '#00a550',
+          color: '#fff',
+        },
+      }).showToast();
         return;
       }
       console.log('Actions:', actions);
@@ -232,11 +244,31 @@ export function EditAdressModal({
         await updateCustomerAdd({ version: updatedCustomer.version, actions: secondActions });
       }
 
-      alert('Данные обновлены!');
+      Toastify({
+        text: 'The information has been updated',
+        duration: 3000,
+        close: true,
+        gravity: 'top',
+        position: 'right',
+        style: {
+          background: '#42ff9e',
+          color: '#fff',
+        },
+      }).showToast();
       onClose();
     } catch (err) {
       console.error('Ошибка обновления:', err);
-      alert('Ошибка при обновлении данных');
+       Toastify({
+        text: 'The information has not been updated',
+        duration: 3000,
+        close: true,
+        gravity: 'top',
+        position: 'right',
+        style: {
+          background: '#FF6B6B',
+          color: '#fff',
+        },
+      }).showToast();
     }
   };
   const handleBillingChange = (id: string) => {
@@ -315,7 +347,7 @@ export function EditAdressModal({
                   checked={billingSelected.includes(address.id)}
                   onChange={() => handleBillingChange(address.id)}
                 />
-                Установить как дефолтный биллинг адрес
+                Set as the default billing address
               </label>
 
               <label>
@@ -324,7 +356,7 @@ export function EditAdressModal({
                   checked={shippingSelected.includes(address.id)}
                   onChange={() => handleShippingChange(address.id)}
                 />
-                Установить как дефолтный шиппинг адрес
+                Set as the default shipping address
               </label>
               <input
                 placeholder="Street"

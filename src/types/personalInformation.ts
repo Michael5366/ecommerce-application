@@ -46,12 +46,11 @@ export type UpdateCustomerAdressAddAcionFin = {
   actions: CustomerAdressAddAcion[];
 };
 
-
 type CustomerUpdatePersonalDataAction =
   | { action: 'setFirstName'; firstName: string }
   | { action: 'setLastName'; lastName: string }
   | { action: 'changeEmail'; email: string }
-  | { action: 'setDateOfBirth'; dateOfBirth: string }
+  | { action: 'setDateOfBirth'; dateOfBirth: string };
 
 export type UpdateCustomerDataPersonalBody = {
   version: number;

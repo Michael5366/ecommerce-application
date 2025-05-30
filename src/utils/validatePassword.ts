@@ -6,10 +6,10 @@ export const passwordSchema = z
       .string()
       .regex(
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/,
-        'Пароль должен быть не менее 8 символов и содержать заглавную букву, строчную и цифру'
+        'The password must be at least 8 characters long and contain an uppercase letter, a lowercase letter, and a number.'
       ),
   })
   .refine((data) => data.currentPassword !== data.newPassword, {
-    message: 'Новый пароль не должен совпадать с текущим',
+    message: 'The new password must not match the current one.',
     path: ['newPassword'],
   });

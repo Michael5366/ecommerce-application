@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { registrationSchema} from '../../utils/validateRegistration';
+import { registrationSchema } from '../../utils/validateRegistration';
 import { getCustomerData } from '../../services/ClientInfApi/GetClientInf';
 import { updateCustomerPersonalData } from '../../services/ClientInfApi/UpdateCustomer';
+import Toastify from 'toastify-js';
+import 'toastify-js/src/toastify.css';
 
 export interface PropsPersonalData {
   isOpen: boolean;
@@ -24,7 +26,8 @@ export function ModalPersonalData({
   email,
   dateOfBirth,
 }: PropsPersonalData) {
-    if (!isOpen) return null;
+  console.log(isOpen, id, version);
+  if (!isOpen) return null;
 
   const [formData, setFormData] = useState({
     firstName,
@@ -33,7 +36,7 @@ export function ModalPersonalData({
     dateOfBirth: dateOfBirth,
   });
 
-    useEffect(() => {
+  useEffect(() => {
     if (isOpen) {
       setFormData({
         firstName,
@@ -45,83 +48,109 @@ export function ModalPersonalData({
       setSubmitted(false);
     }
   }, [isOpen, firstName, lastName, email, dateOfBirth]);
-    const handleChange = (
-      e: React.ChangeEvent<HTMLInputElement>,
-    ) => {
-      const { name, value } = e.target;
-      console.log('Изменение поля:', name, value);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    console.log('Изменение поля:', name, value);
     setFormData({ ...formData, [name]: value });
-      
-    };
+  };
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      setSubmitted(true);
-  
-      const newErrors: Record<string, string> = {};
-  
-      const validationResult = registrationSchema
-        .omit({ password: true, shippingAddress: true, billingAddress: true })
-        .safeParse({
-          username: formData.firstName,
-          surname: formData.lastName,
-          email: formData.email,
-          birthday: formData.dateOfBirth,
-        });
-  
-      if (!validationResult.success) {
-        const issues = validationResult.error.flatten().fieldErrors;
-        if (issues.username) newErrors.username = issues.username[0];
-        if (issues.surname) newErrors.surname = issues.surname[0];
-        if (issues.email) newErrors.email = issues.email[0];
-        if (issues.birthday) newErrors.birthday = issues.birthday[0];
+    e.preventDefault();
+    setSubmitted(true);
+
+    const newErrors: Record<string, string> = {};
+
+    const validationResult = registrationSchema
+      .omit({ password: true, shippingAddress: true, billingAddress: true })
+      .safeParse({
+        username: formData.firstName,
+        surname: formData.lastName,
+        email: formData.email,
+        birthday: formData.dateOfBirth,
+      });
+
+    if (!validationResult.success) {
+      const issues = validationResult.error.flatten().fieldErrors;
+      if (issues.username) newErrors.username = issues.username[0];
+      if (issues.surname) newErrors.surname = issues.surname[0];
+      if (issues.email) newErrors.email = issues.email[0];
+      if (issues.birthday) newErrors.birthday = issues.birthday[0];
+    }
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) {
+      return;
+    }
+    try {
+      const current = await getCustomerData();
+
+      const actions = [];
+
+      if (current.firstName !== formData.firstName) {
+        actions.push({ action: 'setFirstName' as const, firstName: formData.firstName });
       }
-  
-  
-      setErrors(newErrors);
-  
-      if (Object.keys(newErrors).length > 0) {
+      if (current.lastName !== formData.lastName) {
+        actions.push({ action: 'setLastName' as const, lastName: formData.lastName });
+      }
+      if (current.email !== formData.email) {
+        actions.push({ action: 'changeEmail' as const, email: formData.email });
+      }
+      if (formData.dateOfBirth && current.dateOfBirth !== formData.dateOfBirth) {
+        actions.push({ action: 'setDateOfBirth' as const, dateOfBirth: formData.dateOfBirth });
+      }
+
+      if (actions.length === 0) {
+        Toastify({
+        text: 'There is no information to update',
+        duration: 3000,
+        close: true,
+        gravity: 'top',
+        position: 'right',
+        style: {
+          background: '#00a550',
+          color: '#fff',
+        },
+      }).showToast();
         return;
       }
-      try {
-        const current = await getCustomerData();
-  
-        const actions = [];
-  
-        if (current.firstName !== formData.firstName) {
-          actions.push({ action: 'setFirstName' as const, firstName: formData.firstName });
-        }
-        if (current.lastName !== formData.lastName) {
-          actions.push({ action: 'setLastName' as const, lastName: formData.lastName });
-        }
-        if (current.email !== formData.email) {
-          actions.push({ action: 'changeEmail' as const, email: formData.email });
-        }
-        if (formData.dateOfBirth && current.dateOfBirth !== formData.dateOfBirth) {
-          actions.push({ action: 'setDateOfBirth' as const, dateOfBirth: formData.dateOfBirth });
-        }
-  
-        if (actions.length === 0) {
-          alert('Нет изменений для сохранения.');
-          return;
-        }
-        const payload = { version: current.version, actions };
-        console.log('Payload для отправки:', JSON.stringify(payload, null, 2));
-        await updateCustomerPersonalData({ version: current.version, actions });
-  
-        alert('Данные обновлены!');
-        onClose();
-      } catch (err) {
-        console.error('Ошибка обновления:', err);
-        alert('Ошибка при обновлении данных');
-      }
-    };
+      const payload = { version: current.version, actions };
+      console.log('Payload для отправки:', JSON.stringify(payload, null, 2));
+      await updateCustomerPersonalData({ version: current.version, actions });
 
-    return(
-        <>
+            Toastify({
+        text: 'The information has been updated',
+        duration: 3000,
+        close: true,
+        gravity: 'top',
+        position: 'right',
+        style: {
+          background: '#42ff9e',
+          color: '#fff',
+        },
+      }).showToast();
+      onClose();
+    } catch (err) {
+      console.error('Ошибка обновления:', err);
+        Toastify({
+        text: 'The information has not been updated',
+        duration: 3000,
+        close: true,
+        gravity: 'top',
+        position: 'right',
+        style: {
+          background: '#FF6B6B',
+          color: '#fff',
+        },
+      }).showToast();
+    }
+  };
+
+  return (
+    <>
       <form onSubmit={handleSubmit} className="form-position">
         <h2>Change client information</h2>
         <input
@@ -139,7 +168,6 @@ export function ModalPersonalData({
         />
         {submitted && errors.surname && <p className="errors">{errors.surname}</p>}
 
-        
         <input name="email" placeholder="Email" value={formData.email} onChange={handleChange} />
 
         {submitted && errors.email && <p className="errors">{errors.email}</p>}
@@ -161,5 +189,5 @@ export function ModalPersonalData({
         </div>
       </form>
     </>
-    )
+  );
 }

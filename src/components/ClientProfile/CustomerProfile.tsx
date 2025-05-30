@@ -5,13 +5,15 @@ import EditPasswordModal from './EditPasswordModal';
 import EditDataChangedModal from './EditDataClient';
 import { EditAdressModal } from './EditAdressModal';
 import { ModalPersonalData } from './EditPersonalDataModal';
+import Toastify from 'toastify-js';
+import 'toastify-js/src/toastify.css';
 
 export default function ProfilePageCustomer() {
   const [customer, setCustomer] = useState<CustomerData | null>(null);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [showAdressModal, setShowAdressModal] = useState(false);
   const [showDataChangeModal, setShowDataChangeModal] = useState(false);
- const [showDataPersonalChangeModal, setDataPersonalChangeModal] = useState(false);
+  const [showDataPersonalChangeModal, setDataPersonalChangeModal] = useState(false);
   useEffect(() => {
     async function fetchData() {
       try {
@@ -32,6 +34,17 @@ export default function ProfilePageCustomer() {
       setCustomer(freshData);
     } catch (error) {
       console.error('Ошибка при обновлении данных после редактирования:', error);
+      Toastify({
+        text: 'The information has not been updated',
+        duration: 3000,
+        close: true,
+        gravity: 'top',
+        position: 'right',
+        style: {
+          background: '#FF6B6B',
+          color: '#fff',
+        },
+      }).showToast();
     }
   };
   const handleDataChangeAdressModalClose = async () => {
@@ -41,6 +54,17 @@ export default function ProfilePageCustomer() {
       setCustomer(freshData);
     } catch (error) {
       console.error('Ошибка при обновлении данных после редактирования:', error);
+      Toastify({
+        text: 'The information in the page has not been updated',
+        duration: 3000,
+        close: true,
+        gravity: 'top',
+        position: 'right',
+        style: {
+          background: '#FF6B6B',
+          color: '#fff',
+        },
+      }).showToast();
     }
   };
   const handleDataChangePersonalModalClose = async () => {
@@ -50,6 +74,17 @@ export default function ProfilePageCustomer() {
       setCustomer(freshData);
     } catch (error) {
       console.error('Ошибка при обновлении данных после редактирования:', error);
+      Toastify({
+        text: 'The information in the page has not been updated',
+        duration: 3000,
+        close: true,
+        gravity: 'top',
+        position: 'right',
+        style: {
+          background: '#FF6B6B',
+          color: '#fff',
+        },
+      }).showToast();
     }
   };
 
@@ -89,7 +124,7 @@ export default function ProfilePageCustomer() {
             <p>Day of birth</p>
             <p> {dateOfBirth} </p>
           </div>
-          <div className='personal-part'>
+          <div className="personal-part">
             <p>Email</p>
             <p> {email} </p>
           </div>
@@ -109,7 +144,7 @@ export default function ProfilePageCustomer() {
             style={{ border: '1px solid #ccc', marginBottom: '10px', padding: '10px' }}
           >
             <p>
-              <strong>Адрес:</strong> {address.streetName}, {address.city}, {address.postalCode},{' '}
+              <strong>Adress:</strong> {address.streetName}, {address.city}, {address.postalCode},{' '}
               {address.country}
             </p>
             <p>
@@ -118,7 +153,7 @@ export default function ProfilePageCustomer() {
               )}
               {address.isBilling && <span style={{ color: 'blue' }}> Billing</span>}
               {!address.isShipping && !address.isBilling && (
-                <span style={{ color: 'gray' }}>Без меток</span>
+                <span style={{ color: 'gray' }}>Only adress</span>
               )}
             </p>
           </div>

@@ -63,6 +63,17 @@ export async function changeUserPassword({
     }).showToast();
   } catch (error) {
     console.error('Error changing password:', error);
+    Toastify({
+            text: 'The information has not been updated',
+            duration: 3000,
+            close: true,
+            gravity: 'top',
+            position: 'right',
+            style: {
+              background: '#FF6B6B',
+              color: '#fff',
+            },
+          }).showToast();
     throw error;
   }
 }

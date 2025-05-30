@@ -8,17 +8,19 @@ const postalCodeRegex = {
 
 export const addressSchema = z
   .object({
-    streetName: z.string().min(1, 'Введите улицу'),
+    streetName: z.string().trim().min(1, 'Enter the street'),
     city: z
       .string()
-      .min(1, 'Введите город')
-      .regex(/^[А-Яа-яЁёA-Za-z\s\-]+$/, 'Город не должен содержать цифры или спецсимволы'),
-    postalCode: z.string().min(1, 'Введите индекс'),
+      .trim()
+      .min(1, 'Enter the city')
+      .regex(/^[А-Яа-яЁёA-Za-z\s\-]+$/, 'The city must not contain numbers or special characters.'),
+    postalCode: z.string().trim().min(1, 'Enter the index'),
     country: z
       .string()
-      .min(1, 'Выберите страну')
+      .trim()
+      .min(1, 'Select a country')
       .refine((val) => ['US', 'FR', 'ES'].includes(val), {
-        message: 'Недопустимая страна',
+        message: 'An unacceptable country',
       }),
     defaultShippingAddress: z.boolean().optional(),
     defaultBillingAddress: z.boolean().optional(),
@@ -32,8 +34,8 @@ export const addressSchema = z
         path: ['postalCode'],
         message:
           data.country === 'US'
-            ? 'Индекс должен быть в формате 12345 или 12345-6789'
-            : 'Индекс должен состоять из 5 цифр',
+            ? 'The index should be in the format 12345 or 12345-6789.'
+            : 'The index must consist of 5 digits.',
       });
     }
   });
@@ -41,21 +43,24 @@ export const addressSchema = z
 export const registrationSchema = z.object({
   username: z
     .string()
-    .min(1, 'Введите имя пользователя')
-    .regex(/^[А-Яа-яЁёA-Za-z]+$/, 'Имя должно содержать только буквы'),
+    .trim()
+    .min(1, 'Enter the first name')
+    .regex(/^[А-Яа-яЁёA-Za-z]+$/, 'The name must contain only letters.'),
 
   surname: z
     .string()
-    .min(1, 'Введите фамилию')
-    .regex(/^[А-Яа-яЁёA-Za-z]+$/, 'Фамилия должна содержать только буквы'),
+    .trim()
+    .min(1, 'Enter the last name')
+    .regex(/^[А-Яа-яЁёA-Za-z]+$/, 'The last name must contain only letters.'),
 
-  email: z.string().email('Введите корректный email'),
+  email: z.string().trim().email('Enter the correct email address'),
 
   password: z
     .string()
+    .trim()
     .regex(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/,
-      'Пароль должен быть не менее 8 символов и содержать заглавную букву, строчную и цифру'
+      'The password must be at least 8 characters long and contain an uppercase letter, a lowercase letter, and a number.'
     ),
 
   birthday: z.string().refine(
@@ -67,7 +72,7 @@ export const registrationSchema = z.object({
       return age > 14 || (age === 14 && month >= 0);
     },
     {
-      message: 'Пользователю должно быть больше 14 лет',
+      message: 'The user must be over 14 years old',
     }
   ),
 
