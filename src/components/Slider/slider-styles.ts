@@ -2,7 +2,7 @@ import { makeStyles } from '@mui/styles';
 
 export const sliderStyles = makeStyles({
   slider: {
-    width: '1200px',
+    width: '600px',
     maxWidth: '100%',
     height: 'auto',
     maxheight: '58.5vh',
@@ -28,7 +28,7 @@ export const sliderStyles = makeStyles({
     width: '100%',
     height: '100%',
     maxHeight: '60vh',
-    objectFit: 'cover',
+    objectFit: 'contain',
     cursor: 'pointer',
     display: 'block',
 
