@@ -24,8 +24,15 @@ const ProductPage = () => {
   const { id, name, description, masterVariant } = product;
   const images: { url: string }[] = masterVariant.images || [];
   const price: Price | undefined = masterVariant.prices?.[0];
-  const regularPrice = price?.value;
-  const discountedPrice = price?.discounted?.value;
+
+  let regularPrice;
+  let discountedPrice;
+
+  if (price) {
+    discountedPrice = price.discounted?.value;
+
+    regularPrice = price?.value;
+  }
 
   return (
     <Container>
