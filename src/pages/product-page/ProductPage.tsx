@@ -30,7 +30,8 @@ const ProductPage = () => {
   return (
     <Container>
       <Box className={css.product} component={'div'}>
-        <SliderDetail id={id} name={name} images={images} />
+        {id && <SliderDetail id={id} name={name} images={images} />}
+
         <Box className={css.product__info} component="div">
           <Typography variant="h4" fontWeight="bold" gutterBottom>
             {name.ru || name.en}
@@ -42,10 +43,10 @@ const ProductPage = () => {
 
           <Typography variant="h6">
             Price:{' '}
-            {discountedPrice ? (
+            {discountedPrice && regularPrice ? (
               <>
                 <Box className={css.price__regular} component="span">
-                  {(regularPrice?.centAmount / 100).toFixed(2)} {regularPrice?.currencyCode}
+                  {(regularPrice.centAmount / 100).toFixed(2)} {regularPrice?.currencyCode}
                 </Box>
                 <Box className={css.price__discount} component="span">
                   {(discountedPrice.centAmount / 100).toFixed(2)} {discountedPrice.currencyCode}
@@ -53,7 +54,8 @@ const ProductPage = () => {
               </>
             ) : (
               <Box component="span">
-                {(regularPrice?.centAmount / 100).toFixed(2)} {regularPrice?.currencyCode}
+                {regularPrice && (regularPrice.centAmount / 100).toFixed(2)}{' '}
+                {regularPrice && regularPrice.currencyCode}
               </Box>
             )}
           </Typography>
