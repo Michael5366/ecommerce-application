@@ -5,7 +5,7 @@ import { useStyles } from './product-page-style';
 import Container from '@mui/material/Container';
 import { Box, Typography } from '@mui/material';
 import { useParams, useLoaderData } from 'react-router-dom';
-import { Product } from '../../types/product';
+import { Price, Product } from '../../types/product';
 import { SliderDetail } from '../../components/Slider/Slider';
 
 const ProductPage = () => {
@@ -14,7 +14,7 @@ const ProductPage = () => {
   const products = useLoaderData();
 
   const product: Product = products.find(
-    (product: Product) => product.name.en.toLowerCase() === productName?.toLowerCase()
+    (product: Product): boolean => product.name.en.toLowerCase() === productName?.toLowerCase()
   );
 
   if (!product) {
@@ -22,8 +22,8 @@ const ProductPage = () => {
   }
 
   const { id, name, description, masterVariant } = product;
-  const images = masterVariant.images || [];
-  const price = masterVariant.prices?.[0];
+  const images: { url: string }[] = masterVariant.images || [];
+  const price: Price | undefined = masterVariant.prices?.[0];
   const regularPrice = price?.value;
   const discountedPrice = price?.discounted?.value;
 
