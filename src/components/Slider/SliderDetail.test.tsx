@@ -50,7 +50,7 @@ describe('SliderDetail', () => {
     render(<SliderDetail {...props} />);
 
     const image = screen.getByAltText('Image');
-    await fireEvent.click(image);
+    fireEvent.click(image);
 
     const modalWrapper = await screen.findByTestId('modal-wrapper');
 
