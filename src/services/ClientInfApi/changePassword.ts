@@ -51,7 +51,7 @@ export async function changeUserPassword({
     }
 
     Toastify({
-      text: 'Password changed successfully',
+      text: 'Password changed successfully.Please log in again with your new password',
       duration: 3000,
       close: true,
       gravity: 'top',

@@ -5,24 +5,24 @@
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
   max-width: 500px;
   margin: 2rem auto;
- display: flex;
+  display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1vw;
   background-image: url('../../../public/tropical-leaves-background-with-copy-space.jpg');
   background-size: cover;
 }
-.generalBlockClient{
-    background-image: url('../../../public/tropical-leaves-background-with-copy-space.jpg');
-  background-size: cover;
-    width: 100%;
-    height: 100vw;
+.generalBlockClient {
+  background-image: url('../../../public/tropical-leaves-background-with-copy-space.jpg');
+  background-size: contain;
+  width: 100%;
   display: flex;
-      flex-direction: column;
-          gap: 2vw;
+  flex-direction: column;
+  gap: 2vw;
+  padding-top: 2vw;
 }
 .modalOverlay {
-    padding: 2rem;
+  padding: 2rem;
   position: fixed;
   overflow: auto;
   top: 0;
@@ -37,7 +37,7 @@
   z-index: 999;
 }
 .modalOverlayDataClientModal {
- position: fixed;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
@@ -53,7 +53,7 @@
 }
 .modalContentDataClientModal {
   background-image: url('../../../public/tropical-leaves-background-with-copy-space.jpg');
-   max-height: 90vh;
+  max-height: 90vh;
   overflow-y: auto;
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.3);
@@ -80,7 +80,6 @@
   background-image: url('../../../public/tropical-leaves-background-with-copy-space.jpg');
 }
 
-
 .modalWrapper {
   background: rgba(255 255 255 / 0.15);
   backdrop-filter: blur(10px);
@@ -91,7 +90,7 @@
   max-width: 500px;
   margin: 20px auto;
   box-sizing: border-box;
-background-image: url('../../../public/tropical-leaves-background-with-copy-space.jpg');
+  background-image: url('../../../public/tropical-leaves-background-with-copy-space.jpg');
 }
 
 .modalContentAdd {
@@ -99,11 +98,10 @@ background-image: url('../../../public/tropical-leaves-background-with-copy-spac
   display: flex;
   flex-direction: column;
   gap: 15px;
-
 }
 
-.formPosition{
-    display: flex;
+.formPosition {
+  display: flex;
   flex-direction: column;
   align-items: center;
 }
@@ -137,7 +135,9 @@ background-image: url('../../../public/tropical-leaves-background-with-copy-spac
   font-size: 1rem;
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
-  transition: border-color 0.3s ease, background-color 0.3s ease;
+  transition:
+    border-color 0.3s ease,
+    background-color 0.3s ease;
 }
 
 .input::placeholder {
@@ -198,19 +198,18 @@ background-image: url('../../../public/tropical-leaves-background-with-copy-spac
   backdrop-filter: blur(10px);
   transition: all 0.3s ease;
 }
-.adressBlock{
-    position: relative;
-    border: 1px solid #ccc;
-    margin-bottom: 10px;
-    padding: 10px;
-    border-radius: 0.5rem;
-    display: flex
-;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    gap: 2vw;
-    flex-wrap: wrap;
+.adressBlock {
+  position: relative;
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 0.5rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 2vw;
+  flex-wrap: wrap;
 }
 
 .addAddressButton:hover {
@@ -237,12 +236,12 @@ background-image: url('../../../public/tropical-leaves-background-with-copy-spac
   font-size: 0.9rem;
 }
 
-.personalPart{
-display: flex;
-    flex-direction: row;
-    width: 70%;
-    justify-content: flex-start;
-    gap: 4vw;
+.personalPart {
+  display: flex;
+  flex-direction: row;
+  width: 70%;
+  justify-content: flex-start;
+  gap: 4vw;
 }
 .frostedContainer {
   background: rgba(255, 255, 255, 0.07);
@@ -256,16 +255,16 @@ display: flex;
   transition: all 0.2s ease-in-out;
   margin-bottom: 2vw;
 }
-.titleStage{
-    margin: 0;
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: rgb(92, 85, 85);
-    align-self: center;
-    color: white;
-    font-size: 2rem;
+.titleStage {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: rgb(92, 85, 85);
+  align-self: center;
+  color: white;
+  font-size: 2rem;
 }
-.inputCheckBox{
+.inputCheckBox {
   padding: 0.75rem 1rem;
   margin-bottom: 1rem;
   border: 1px solid rgba(255, 255, 255, 0.5);
@@ -275,5 +274,7 @@ display: flex;
   font-size: 1rem;
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
-  transition: border-color 0.3s ease, background-color 0.3s ease;
+  transition:
+    border-color 0.3s ease,
+    background-color 0.3s ease;
 }

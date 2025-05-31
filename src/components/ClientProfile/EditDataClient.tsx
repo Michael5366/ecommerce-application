@@ -67,32 +67,32 @@ export default function EditDataChangedModal({
       const updatedAddresses = [...formData.addresses];
       updatedAddresses[index][field] = value;
       setFormData({ ...formData, addresses: updatedAddresses });
-       setAddressErrors((prevErrors) => {
-      const updatedErrors = { ...prevErrors };
-      if (updatedErrors[index]) {
-        const newErrorEntry = { ...updatedErrors[index] };
-        delete newErrorEntry[field];
-        if (Object.keys(newErrorEntry).length === 0) {
-          delete updatedErrors[index];
-        } else {
-          updatedErrors[index] = newErrorEntry;
+      setAddressErrors((prevErrors) => {
+        const updatedErrors = { ...prevErrors };
+        if (updatedErrors[index]) {
+          const newErrorEntry = { ...updatedErrors[index] };
+          delete newErrorEntry[field];
+          if (Object.keys(newErrorEntry).length === 0) {
+            delete updatedErrors[index];
+          } else {
+            updatedErrors[index] = newErrorEntry;
+          }
         }
-      }
-      return updatedErrors;
-    });
+        return updatedErrors;
+      });
     } else {
       setFormData({ ...formData, [name]: value });
       setErrors((prev) => {
-      const updated = { ...prev };
-  
-      if (name === 'firstName' && updated.username) delete updated.username;
-      if (name === 'lastName' && updated.surname) delete updated.surname;
-      if (name === 'email' && updated.email) delete updated.email;
-      if (name === 'dateOfBirth' && updated.birthday) delete updated.birthday;
-      return updated;
-    });
-  }
-};
+        const updated = { ...prev };
+
+        if (name === 'firstName' && updated.username) delete updated.username;
+        if (name === 'lastName' && updated.surname) delete updated.surname;
+        if (name === 'email' && updated.email) delete updated.email;
+        if (name === 'dateOfBirth' && updated.birthday) delete updated.birthday;
+        return updated;
+      });
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -283,116 +283,124 @@ export default function EditDataChangedModal({
   return (
     <div className={styles.modalOverlayDataClientModal}>
       <div className={styles.modalContentDataClientModal}>
-      <form onSubmit={handleSubmit} className={styles.formPosition}>
-        <h2 className={styles.title}>Change client information</h2>
-        <input
-          name="firstName"
-          className={styles.input}
-          placeholder="First name"
-          value={formData.firstName}
-          onChange={handleChange}
-        />
-        {submitted && errors.username && <p className="errors">{errors.username}</p>}
-        <input
-          name="lastName"
-          className={styles.input}
-          placeholder="Last Name"
-          value={formData.lastName}
-          onChange={handleChange}
-        />
-        {submitted && errors.surname && <p className="errors">{errors.surname}</p>}
-        <input name="email" className={styles.input} placeholder="Email" value={formData.email} onChange={handleChange} />
+        <form onSubmit={handleSubmit} className={styles.formPosition}>
+          <h2 className={styles.title}>Change client information</h2>
+          <input
+            name="firstName"
+            className={styles.input}
+            placeholder="First name"
+            value={formData.firstName}
+            onChange={handleChange}
+          />
+          {submitted && errors.username && <p className="errors">{errors.username}</p>}
+          <input
+            name="lastName"
+            className={styles.input}
+            placeholder="Last Name"
+            value={formData.lastName}
+            onChange={handleChange}
+          />
+          {submitted && errors.surname && <p className="errors">{errors.surname}</p>}
+          <input
+            name="email"
+            className={styles.input}
+            placeholder="Email"
+            value={formData.email}
+            onChange={handleChange}
+          />
 
-        {submitted && errors.email && <p className="errors">{errors.email}</p>}
+          {submitted && errors.email && <p className="errors">{errors.email}</p>}
 
-        <input
-          className={styles.input}
-          name="dateOfBirth"
-          type="date"
-          value={formData.dateOfBirth}
-          onChange={handleChange}
-        />
+          <input
+            className={styles.input}
+            name="dateOfBirth"
+            type="date"
+            value={formData.dateOfBirth}
+            onChange={handleChange}
+          />
 
-        {submitted && errors.birthday && <p className="errors">{errors.birthday}</p>}
+          {submitted && errors.birthday && <p className="errors">{errors.birthday}</p>}
 
-        <div className="adress-block">
-          {formData.addresses.map((address, index) => (
-            <div
-              key={address.id || index}
-              style={{ border: '1px solid #ccc', marginBottom: '10px', padding: '10px' }}
-            >
-              <div>
-              <label>
+          <div className="adress-block">
+            {formData.addresses.map((address, index) => (
+              <div
+                key={address.id || index}
+                style={{ border: '1px solid #ccc', marginBottom: '10px', padding: '10px' }}
+              >
+                <div>
+                  <label>
+                    <input
+                      type="checkbox"
+                      className={styles.inputCheckBox}
+                      checked={billingSelected.includes(address.id)}
+                      onChange={() => handleBillingChange(address.id)}
+                    />
+                    Set as the default billing address
+                  </label>
+                </div>
+                <div>
+                  <label>
+                    <input
+                      type="checkbox"
+                      className={styles.inputCheckBox}
+                      checked={shippingSelected.includes(address.id)}
+                      onChange={() => handleShippingChange(address.id)}
+                    />
+                    Set as the default shipping address
+                  </label>
+                </div>
                 <input
-                  type="checkbox"
-                  className={styles.inputCheckBox}
-                  checked={billingSelected.includes(address.id)}
-                  onChange={() => handleBillingChange(address.id)}
+                  placeholder="Street"
+                  className={styles.input}
+                  value={address.streetName}
+                  onChange={(e) => handleChange(e, index, 'streetName')}
                 />
-                Set as the default billing address
-              </label>
-</div>
-<div>
-              <label>
+                {submitted && addressErrors[index]?.streetName && (
+                  <p className="errors">{addressErrors[index].streetName}</p>
+                )}
+
                 <input
-                  type="checkbox"
-                  className={styles.inputCheckBox}
-                  checked={shippingSelected.includes(address.id)}
-                  onChange={() => handleShippingChange(address.id)}
+                  placeholder="City"
+                  className={styles.input}
+                  value={address.city}
+                  onChange={(e) => handleChange(e, index, 'city')}
                 />
-                Set as the default shipping address
-              </label>
-</div>              
-              <input
-                placeholder="Street"
-                className={styles.input}
-                value={address.streetName}
-                onChange={(e) => handleChange(e, index, 'streetName')}
-              />
-              {submitted && addressErrors[index]?.streetName && (
-                <p className="errors">{addressErrors[index].streetName}</p>
-              )}
+                {submitted && addressErrors[index]?.city && (
+                  <p className="errors">{addressErrors[index].city}</p>
+                )}
 
-              <input
-                placeholder="City"
-                className={styles.input}
-                value={address.city}
-                onChange={(e) => handleChange(e, index, 'city')}
-              />
-              {submitted && addressErrors[index]?.city && (
-                <p className="errors">{addressErrors[index].city}</p>
-              )}
+                <input
+                  placeholder="Postal Code"
+                  className={styles.input}
+                  value={address.postalCode}
+                  onChange={(e) => handleChange(e, index, 'postalCode')}
+                />
+                {submitted && addressErrors[index]?.postalCode && (
+                  <p className="errors">{addressErrors[index].postalCode}</p>
+                )}
 
-              <input
-                placeholder="Postal Code"
-                className={styles.input}
-                value={address.postalCode}
-                onChange={(e) => handleChange(e, index, 'postalCode')}
-              />
-              {submitted && addressErrors[index]?.postalCode && (
-                <p className="errors">{addressErrors[index].postalCode}</p>
-              )}
-
-              <input
-                placeholder="Country (US, FR, ES)"
-                className={styles.input}
-                value={address.country}
-                onChange={(e) => handleChange(e, index, 'country')}
-              />
-              {submitted && addressErrors[index]?.country && (
-                <p className="errors">{addressErrors[index].country}</p>
-              )}
-            </div>
-          ))}
-        </div>
-        <div className="button-group">
-          <button type="button" className={styles.button} onClick={onClose}>
-            Cancel
-          </button>
-          <button type="submit" className={styles.button}>Submit</button>
-        </div>
-      </form>
-    </div>
+                <input
+                  placeholder="Country (US, FR, ES)"
+                  className={styles.input}
+                  value={address.country}
+                  onChange={(e) => handleChange(e, index, 'country')}
+                />
+                {submitted && addressErrors[index]?.country && (
+                  <p className="errors">{addressErrors[index].country}</p>
+                )}
+              </div>
+            ))}
+          </div>
+          <div className="button-group">
+            <button type="button" className={styles.button} onClick={onClose}>
+              Cancel
+            </button>
+            <button type="submit" className={styles.button}>
+              Submit
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

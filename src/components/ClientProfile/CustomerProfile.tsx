@@ -8,6 +8,8 @@ import { ModalPersonalData } from './EditPersonalDataModal';
 import Toastify from 'toastify-js';
 import 'toastify-js/src/toastify.css';
 import styles from './ModalPersonalData.module.css';
+import { useAuth } from '../../context/context';
+
 
 export default function ProfilePageCustomer() {
   const [customer, setCustomer] = useState<CustomerData | null>(null);
@@ -15,6 +17,7 @@ export default function ProfilePageCustomer() {
   const [showAdressModal, setShowAdressModal] = useState(false);
   const [showDataChangeModal, setShowDataChangeModal] = useState(false);
   const [showDataPersonalChangeModal, setDataPersonalChangeModal] = useState(false);
+  const { logout } = useAuth();
   useEffect(() => {
     async function fetchData() {
       try {
@@ -89,9 +92,7 @@ export default function ProfilePageCustomer() {
     }
   };
 
-  if (!customer) return (
-<div>You are not logged in! Please log in!</div>
-  )
+  if (!customer) return <div>You are not logged in! Please log in!</div>;
   const {
     id,
     version,
@@ -137,7 +138,11 @@ export default function ProfilePageCustomer() {
         <button type="button" className={styles.button} onClick={() => setShowPasswordModal(true)}>
           Edit password
         </button>
-        <button type="button" className={styles.button} onClick={() => setDataPersonalChangeModal(true)}>
+        <button
+          type="button"
+          className={styles.button}
+          onClick={() => setDataPersonalChangeModal(true)}
+        >
           Edit only personal data
         </button>
       </div>
@@ -174,6 +179,7 @@ export default function ProfilePageCustomer() {
         onClose={() => setShowPasswordModal(false)}
         id={id}
         version={version}
+        logout={logout}
       />
       <EditDataChangedModal
         isOpen={showDataChangeModal}

@@ -53,8 +53,6 @@ export function EditAdressModal({
       const updatedAddresses = [...formData.addresses];
       updatedAddresses[index][field] = value;
       setFormData({ ...formData, addresses: updatedAddresses });
-
-      
     } else {
       setFormData({ ...formData, [name]: value });
     }
@@ -338,95 +336,100 @@ export function EditAdressModal({
   return (
     <div className={styles.modalOverlayDataClientModal}>
       <div className={styles.modalContentDataClientModal}>
-      <form onSubmit={handleSubmit}>
-        <div className={styles.adressBlock}>
-          {formData.addresses.map((address, index) => (
-            <div
-              key={address.id || index}
-              style={{ border: '1px solid #ccc', marginBottom: '10px', padding: '10px' }}
-            >
-              <div>
-              <label>
+        <form onSubmit={handleSubmit}>
+          <div className={styles.adressBlock}>
+            {formData.addresses.map((address, index) => (
+              <div
+                key={address.id || index}
+                style={{ border: '1px solid #ccc', marginBottom: '10px', padding: '10px' }}
+              >
+                <div>
+                  <label>
+                    <input
+                      className={styles.inputCheckBox}
+                      type="checkbox"
+                      checked={billingSelected.includes(address.id)}
+                      onChange={() => handleBillingChange(address.id)}
+                    />
+                    Set as the default billing address
+                  </label>
+                </div>
+                <div>
+                  <label>
+                    <input
+                      className={styles.inputCheckBox}
+                      type="checkbox"
+                      checked={shippingSelected.includes(address.id)}
+                      onChange={() => handleShippingChange(address.id)}
+                    />
+                    Set as the default shipping address
+                  </label>
+                </div>
                 <input
-                 className={styles.inputCheckBox}
-                  type="checkbox"
-                  checked={billingSelected.includes(address.id)}
-                  onChange={() => handleBillingChange(address.id)}
+                  className={styles.input}
+                  placeholder="Street"
+                  value={address.streetName}
+                  onChange={(e) => handleChange(e, index, 'streetName')}
                 />
-                Set as the default billing address
-              </label>
-              </div>
-              <div>
-              <label>
+                {submitted && addressErrors[index]?.streetName && (
+                  <p className="errors">{addressErrors[index].streetName}</p>
+                )}
+
                 <input
-                className={styles.inputCheckBox}
-                  type="checkbox"
-                  checked={shippingSelected.includes(address.id)}
-                  onChange={() => handleShippingChange(address.id)}
+                  className={styles.input}
+                  placeholder="City"
+                  value={address.city}
+                  onChange={(e) => handleChange(e, index, 'city')}
                 />
-                Set as the default shipping address
-              </label>
+                {submitted && addressErrors[index]?.city && (
+                  <p className="errors">{addressErrors[index].city}</p>
+                )}
+
+                <input
+                  className={styles.input}
+                  placeholder="Postal Code"
+                  value={address.postalCode}
+                  onChange={(e) => handleChange(e, index, 'postalCode')}
+                />
+                {submitted && addressErrors[index]?.postalCode && (
+                  <p className="errors">{addressErrors[index].postalCode}</p>
+                )}
+
+                <input
+                  className={styles.input}
+                  placeholder="Country (US, FR, ES)"
+                  value={address.country}
+                  onChange={(e) => handleChange(e, index, 'country')}
+                />
+                {submitted && addressErrors[index]?.country && (
+                  <p className="errors">{addressErrors[index].country}</p>
+                )}
+
+                <div>
+                  <button
+                    type="button"
+                    className={styles.closeButton}
+                    onClick={() => handleRemoveAddress(index)}
+                  >
+                    X
+                  </button>
+                </div>
               </div>
-              <input
-              className={styles.input}
-                placeholder="Street"
-                value={address.streetName}
-                onChange={(e) => handleChange(e, index, 'streetName')}
-              />
-              {submitted && addressErrors[index]?.streetName && (
-                <p className="errors">{addressErrors[index].streetName}</p>
-              )}
-
-              <input
-              className={styles.input}
-                placeholder="City"
-                value={address.city}
-                onChange={(e) => handleChange(e, index, 'city')}
-              />
-              {submitted && addressErrors[index]?.city && (
-                <p className="errors">{addressErrors[index].city}</p>
-              )}
-
-              <input
-              className={styles.input}
-                placeholder="Postal Code"
-                value={address.postalCode}
-                onChange={(e) => handleChange(e, index, 'postalCode')}
-              />
-              {submitted && addressErrors[index]?.postalCode && (
-                <p className="errors">{addressErrors[index].postalCode}</p>
-              )}
-
-              <input
-              className={styles.input}
-                placeholder="Country (US, FR, ES)"
-                value={address.country}
-                onChange={(e) => handleChange(e, index, 'country')}
-              />
-              {submitted && addressErrors[index]?.country && (
-                <p className="errors">{addressErrors[index].country}</p>
-              )}
-
-              <div>
-              <button type="button" className={styles.closeButton} onClick={() => handleRemoveAddress(index)}>
-                X
-              </button>
-              </div>
-
-            </div>
-          ))}
-        </div>
-        <button type="button" className={styles.button} onClick={handleAddAddress}>
-          ➕ Add adress
-        </button>
-        <div className="button-group">
-          <button type="button"className={styles.button} onClick={onClose}>
-            Cancel
+            ))}
+          </div>
+          <button type="button" className={styles.button} onClick={handleAddAddress}>
+            ➕ Add adress
           </button>
-          <button type="submit" className={styles.button}>Submit</button>
-        </div>
-      </form>
-    </div>
+          <div className="button-group">
+            <button type="button" className={styles.button} onClick={onClose}>
+              Cancel
+            </button>
+            <button type="submit" className={styles.button}>
+              Submit
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
