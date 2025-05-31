@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { passwordSchema } from '../../utils/validatePassword';
 import { changeUserPassword } from '../../services/ClientInfApi/changePassword';
+import styles from './ModalPersonalData.module.css';
 
 interface Props {
   isOpen: boolean;
@@ -40,17 +41,19 @@ export default function EditPasswordModal({ isOpen, onClose, id, version }: Prop
   };
 
   return (
-    <div className="modal">
-      <div className="modal-content">
-        <h2>Change Password</h2>
+    <div className={styles.modalOverlay}>
+      <div className={styles.modalContent}>
+        <h2 className={styles.title} >Change Password</h2>
         <form onSubmit={handleSubmitPassword}>
           <input
+            className={styles.input}
             type="password"
             placeholder="Current Password"
             value={currentPassword}
             onChange={handlecurrentPasswordChange}
           />
           <input
+            className={styles.input}
             type="password"
             placeholder="New Password"
             value={newPassword}
@@ -58,10 +61,10 @@ export default function EditPasswordModal({ isOpen, onClose, id, version }: Prop
           />
           {error && <p style={{ color: 'red' }}>{error}</p>}
 
-          <button type="button" onClick={onClose}>
+          <button type="button" className={styles.button} onClick={onClose}>
             Cancel
           </button>
-          <button type="submit">Submit</button>
+          <button type="submit" className={styles.button}>Submit</button>
         </form>
       </div>
     </div>

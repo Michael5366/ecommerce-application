@@ -4,6 +4,7 @@ import { getCustomerData } from '../../services/ClientInfApi/GetClientInf';
 import { updateCustomerPersonalData } from '../../services/ClientInfApi/UpdateCustomer';
 import Toastify from 'toastify-js';
 import 'toastify-js/src/toastify.css';
+import styles from './ModalPersonalData.module.css';
 
 export interface PropsPersonalData {
   isOpen: boolean;
@@ -52,6 +53,24 @@ export function ModalPersonalData({
     const { name, value } = e.target;
     console.log('Изменение поля:', name, value);
     setFormData({ ...formData, [name]: value });
+    setErrors((prevErrors) => {
+
+    const updatedErrors = { ...prevErrors };
+ 
+    if (name === 'firstName' && updatedErrors.username) {
+      delete updatedErrors.username;
+    }
+    if (name === 'lastName' && updatedErrors.surname) {
+      delete updatedErrors.surname;
+    }
+    if (name === 'email' && updatedErrors.email) {
+      delete updatedErrors.email;
+    }
+    if (name === 'dateOfBirth' && updatedErrors.birthday) {
+      delete updatedErrors.birthday;
+    }
+    return updatedErrors;
+  });
   };
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -105,23 +124,23 @@ export function ModalPersonalData({
 
       if (actions.length === 0) {
         Toastify({
-        text: 'There is no information to update',
-        duration: 3000,
-        close: true,
-        gravity: 'top',
-        position: 'right',
-        style: {
-          background: '#00a550',
-          color: '#fff',
-        },
-      }).showToast();
+          text: 'There is no information to update',
+          duration: 3000,
+          close: true,
+          gravity: 'top',
+          position: 'right',
+          style: {
+            background: '#00a550',
+            color: '#fff',
+          },
+        }).showToast();
         return;
       }
       const payload = { version: current.version, actions };
       console.log('Payload для отправки:', JSON.stringify(payload, null, 2));
       await updateCustomerPersonalData({ version: current.version, actions });
 
-            Toastify({
+      Toastify({
         text: 'The information has been updated',
         duration: 3000,
         close: true,
@@ -135,7 +154,7 @@ export function ModalPersonalData({
       onClose();
     } catch (err) {
       console.error('Ошибка обновления:', err);
-        Toastify({
+      Toastify({
         text: 'The information has not been updated',
         duration: 3000,
         close: true,
@@ -150,10 +169,12 @@ export function ModalPersonalData({
   };
 
   return (
-    <>
-      <form onSubmit={handleSubmit} className="form-position">
-        <h2>Change client information</h2>
+    <div className={styles.modalOverlay}>
+    <div className={styles.modalContent}>
+      <form onSubmit={handleSubmit} className={styles.formPosition}>
+        <h2 className={styles.title}>Change client information</h2>
         <input
+          className={styles.input}
           name="firstName"
           placeholder="Имя"
           value={formData.firstName}
@@ -161,6 +182,7 @@ export function ModalPersonalData({
         />
         {submitted && errors.username && <p className="errors">{errors.username}</p>}
         <input
+          className={styles.input}
           name="lastName"
           placeholder="Фамилия"
           value={formData.lastName}
@@ -168,11 +190,12 @@ export function ModalPersonalData({
         />
         {submitted && errors.surname && <p className="errors">{errors.surname}</p>}
 
-        <input name="email" placeholder="Email" value={formData.email} onChange={handleChange} />
+        <input name="email" className={styles.input} placeholder="Email" value={formData.email} onChange={handleChange} />
 
         {submitted && errors.email && <p className="errors">{errors.email}</p>}
 
         <input
+          className={styles.input}
           name="dateOfBirth"
           type="date"
           value={formData.dateOfBirth}
@@ -181,13 +204,14 @@ export function ModalPersonalData({
 
         {submitted && errors.birthday && <p className="errors">{errors.birthday}</p>}
 
-        <div className="button-group">
-          <button type="button" onClick={onClose}>
+        <div className={styles.buttonGroup}>
+          <button type="button" className={styles.button} onClick={onClose}>
             Cancel
           </button>
-          <button type="submit">Submit</button>
+          <button type="submit" className={styles.button} >Submit</button>
         </div>
       </form>
-    </>
+    </div>
+    </div>
   );
 }

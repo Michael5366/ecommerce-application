@@ -7,6 +7,7 @@ import { EditAdressModal } from './EditAdressModal';
 import { ModalPersonalData } from './EditPersonalDataModal';
 import Toastify from 'toastify-js';
 import 'toastify-js/src/toastify.css';
+import styles from './ModalPersonalData.module.css';
 
 export default function ProfilePageCustomer() {
   const [customer, setCustomer] = useState<CustomerData | null>(null);
@@ -88,7 +89,9 @@ export default function ProfilePageCustomer() {
     }
   };
 
-  if (!customer) return <div>Загрузка...</div>;
+  if (!customer) return (
+<div>You are not logged in! Please log in!</div>
+  )
   const {
     id,
     version,
@@ -109,35 +112,36 @@ export default function ProfilePageCustomer() {
   console.log(enrichedAddresses);
 
   return (
-    <div>
+    <div className={styles.generalBlockClient}>
+      <h2 className={styles.titleStage}>Profil page</h2>
       <div className="client-block">
-        <div className="personal-information-block">
-          <div className="personal-part">
+        <div className={styles.frostedContainer}>
+          <div className={styles.personalPart}>
             <p>Name</p>
             <p> {firstName} </p>
           </div>
-          <div className="personal-part">
+          <div className={styles.personalPart}>
             <p>Second Name</p>
             <p> {lastName} </p>
           </div>
-          <div className="personal-part">
+          <div className={styles.personalPart}>
             <p>Day of birth</p>
             <p> {dateOfBirth} </p>
           </div>
-          <div className="personal-part">
+          <div className={styles.personalPart}>
             <p>Email</p>
             <p> {email} </p>
           </div>
         </div>
 
-        <button type="button" onClick={() => setShowPasswordModal(true)}>
+        <button type="button" className={styles.button} onClick={() => setShowPasswordModal(true)}>
           Edit password
         </button>
-        <button type="button" onClick={() => setDataPersonalChangeModal(true)}>
+        <button type="button" className={styles.button} onClick={() => setDataPersonalChangeModal(true)}>
           Edit only personal data
         </button>
       </div>
-      <div className="adress-block">
+      <div className={styles.frostedContainer}>
         {enrichedAddresses.map((address) => (
           <div
             key={address.id}
@@ -151,18 +155,18 @@ export default function ProfilePageCustomer() {
               {address.isShipping && (
                 <span style={{ color: 'green', marginRight: 10 }}>Shipping</span>
               )}
-              {address.isBilling && <span style={{ color: 'blue' }}> Billing</span>}
+              {address.isBilling && <span style={{ color: 'green' }}> Billing</span>}
               {!address.isShipping && !address.isBilling && (
                 <span style={{ color: 'gray' }}>Only adress</span>
               )}
             </p>
           </div>
         ))}
-        <button type="button" onClick={() => setShowAdressModal(true)}>
+        <button type="button" className={styles.button} onClick={() => setShowAdressModal(true)}>
           Edit adresses
         </button>
       </div>
-      <button type="button" onClick={() => setShowDataChangeModal(true)}>
+      <button type="button" className={styles.button} onClick={() => setShowDataChangeModal(true)}>
         Edit profile
       </button>
       <EditPasswordModal

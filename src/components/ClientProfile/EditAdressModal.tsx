@@ -6,6 +6,7 @@ import { getCustomerData } from '../../services/ClientInfApi/GetClientInf';
 import { updateCustomerAdd } from '../../services/ClientInfApi/UpdateCustomer';
 import Toastify from 'toastify-js';
 import 'toastify-js/src/toastify.css';
+import styles from './ModalPersonalData.module.css';
 
 export interface PropsAdress {
   isOpen: boolean;
@@ -52,6 +53,8 @@ export function EditAdressModal({
       const updatedAddresses = [...formData.addresses];
       updatedAddresses[index][field] = value;
       setFormData({ ...formData, addresses: updatedAddresses });
+
+      
     } else {
       setFormData({ ...formData, [name]: value });
     }
@@ -177,17 +180,17 @@ export function EditAdressModal({
       }
 
       if (actions.length === 0) {
-         Toastify({
-        text: 'There is no information to update',
-        duration: 3000,
-        close: true,
-        gravity: 'top',
-        position: 'right',
-        style: {
-          background: '#00a550',
-          color: '#fff',
-        },
-      }).showToast();
+        Toastify({
+          text: 'There is no information to update',
+          duration: 3000,
+          close: true,
+          gravity: 'top',
+          position: 'right',
+          style: {
+            background: '#00a550',
+            color: '#fff',
+          },
+        }).showToast();
         return;
       }
       console.log('Actions:', actions);
@@ -258,7 +261,7 @@ export function EditAdressModal({
       onClose();
     } catch (err) {
       console.error('Ошибка обновления:', err);
-       Toastify({
+      Toastify({
         text: 'The information has not been updated',
         duration: 3000,
         close: true,
@@ -333,32 +336,39 @@ export function EditAdressModal({
     });
   };
   return (
-    <>
+    <div className={styles.modalOverlayDataClientModal}>
+      <div className={styles.modalContentDataClientModal}>
       <form onSubmit={handleSubmit}>
-        <div className="adress-block">
+        <div className={styles.adressBlock}>
           {formData.addresses.map((address, index) => (
             <div
               key={address.id || index}
               style={{ border: '1px solid #ccc', marginBottom: '10px', padding: '10px' }}
             >
+              <div>
               <label>
                 <input
+                 className={styles.inputCheckBox}
                   type="checkbox"
                   checked={billingSelected.includes(address.id)}
                   onChange={() => handleBillingChange(address.id)}
                 />
                 Set as the default billing address
               </label>
-
+              </div>
+              <div>
               <label>
                 <input
+                className={styles.inputCheckBox}
                   type="checkbox"
                   checked={shippingSelected.includes(address.id)}
                   onChange={() => handleShippingChange(address.id)}
                 />
                 Set as the default shipping address
               </label>
+              </div>
               <input
+              className={styles.input}
                 placeholder="Street"
                 value={address.streetName}
                 onChange={(e) => handleChange(e, index, 'streetName')}
@@ -368,6 +378,7 @@ export function EditAdressModal({
               )}
 
               <input
+              className={styles.input}
                 placeholder="City"
                 value={address.city}
                 onChange={(e) => handleChange(e, index, 'city')}
@@ -377,6 +388,7 @@ export function EditAdressModal({
               )}
 
               <input
+              className={styles.input}
                 placeholder="Postal Code"
                 value={address.postalCode}
                 onChange={(e) => handleChange(e, index, 'postalCode')}
@@ -386,6 +398,7 @@ export function EditAdressModal({
               )}
 
               <input
+              className={styles.input}
                 placeholder="Country (US, FR, ES)"
                 value={address.country}
                 onChange={(e) => handleChange(e, index, 'country')}
@@ -393,22 +406,27 @@ export function EditAdressModal({
               {submitted && addressErrors[index]?.country && (
                 <p className="errors">{addressErrors[index].country}</p>
               )}
-              <button type="button" onClick={() => handleRemoveAddress(index)}>
-                ❌
+
+              <div>
+              <button type="button" className={styles.closeButton} onClick={() => handleRemoveAddress(index)}>
+                X
               </button>
+              </div>
+
             </div>
           ))}
         </div>
-        <button type="button" onClick={handleAddAddress}>
+        <button type="button" className={styles.button} onClick={handleAddAddress}>
           ➕ Add adress
         </button>
         <div className="button-group">
-          <button type="button" onClick={onClose}>
+          <button type="button"className={styles.button} onClick={onClose}>
             Cancel
           </button>
-          <button type="submit">Submit</button>
+          <button type="submit" className={styles.button}>Submit</button>
         </div>
       </form>
-    </>
+    </div>
+    </div>
   );
 }

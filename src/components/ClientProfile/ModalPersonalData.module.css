@@ -1,0 +1,279 @@
+.modal {
+  padding: 1.5rem;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  margin: 2rem auto;
+ display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1vw;
+  background-image: url('../../../public/tropical-leaves-background-with-copy-space.jpg');
+  background-size: cover;
+}
+.generalBlockClient{
+    background-image: url('../../../public/tropical-leaves-background-with-copy-space.jpg');
+  background-size: cover;
+    width: 100%;
+    height: 100vw;
+  display: flex;
+      flex-direction: column;
+          gap: 2vw;
+}
+.modalOverlay {
+    padding: 2rem;
+  position: fixed;
+  overflow: auto;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+.modalOverlayDataClientModal {
+ position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 2rem;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  overflow: auto;
+}
+.modalContentDataClientModal {
+  background-image: url('../../../public/tropical-leaves-background-with-copy-space.jpg');
+   max-height: 90vh;
+  overflow-y: auto;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+  color: white;
+  width: 100%;
+  max-width: 500px;
+}
+
+.modalContent {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+  color: white;
+  max-width: 500px;
+  width: 90%;
+  overflow-y: auto;
+  background-image: url('../../../public/tropical-leaves-background-with-copy-space.jpg');
+}
+
+
+.modalWrapper {
+  background: rgba(255 255 255 / 0.15);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255 255 255 / 0.7);
+  border-radius: 12px;
+  padding: 20px;
+  color: white;
+  max-width: 500px;
+  margin: 20px auto;
+  box-sizing: border-box;
+background-image: url('../../../public/tropical-leaves-background-with-copy-space.jpg');
+}
+
+.modalContentAdd {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
+}
+
+.formPosition{
+    display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.title {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: aliceblue;
+}
+
+.buttonGroup {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+  gap: 10vw;
+}
+
+.error {
+  color: red;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.input {
+  width: 50%;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 1rem;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.input:focus {
+  outline: none;
+  border-color: white;
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.button {
+  padding: 0.75rem 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: all 0.3s ease;
+}
+
+.button:hover {
+  background-color: rgba(255, 255, 255, 0.25);
+  border-color: white;
+  color: white;
+}
+
+.closeButton {
+  background: transparent;
+  border: 1px solid white;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  color: white;
+  font-size: 20px;
+  line-height: 24px;
+  cursor: pointer;
+  backdrop-filter: blur(5px);
+  transition: background-color 0.2s ease;
+}
+
+.closeButton:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+.addAddressButton {
+  margin-top: 1rem;
+  padding: 0.6rem 1.2rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+.adressBlock{
+    position: relative;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 0.5rem;
+    display: flex
+;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 2vw;
+    flex-wrap: wrap;
+}
+
+.addAddressButton:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+.checkboxContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.checkboxInput {
+  width: 1rem;
+  height: 1rem;
+  accent-color: white; /* делает чекбокс белым */
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+}
+
+.checkboxLabel {
+  color: white;
+  font-size: 0.9rem;
+}
+
+.personalPart{
+display: flex;
+    flex-direction: row;
+    width: 70%;
+    justify-content: flex-start;
+    gap: 4vw;
+}
+.frostedContainer {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 20px;
+  color: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease-in-out;
+  margin-bottom: 2vw;
+}
+.titleStage{
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: rgb(92, 85, 85);
+    align-self: center;
+    color: white;
+    font-size: 2rem;
+}
+.inputCheckBox{
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 1rem;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
