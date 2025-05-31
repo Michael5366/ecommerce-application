@@ -107,12 +107,7 @@ export function EditAdressModal({
         actions.push({ action: 'changeEmail' as const, email: formData.email });
       }
 
-      current.addresses.forEach((addr) => {
-        const stillExists = formData.addresses.find((a) => a.id === addr.id);
-        if (!stillExists) {
-          actions.push({ action: 'removeAddress', addressId: addr.id });
-        }
-      });
+
 
       formData.addresses.forEach((address) => {
         const existing = current.addresses.find((a) => a.id === address.id);
@@ -155,6 +150,12 @@ export function EditAdressModal({
       current.shippingAddressIds.forEach((id) => {
         if (!shippingSelected.includes(id)) {
           actions.push({ action: 'removeShippingAddressId', addressId: id });
+        }
+      });
+      current.addresses.forEach((addr) => {
+        const stillExists = formData.addresses.find((a) => a.id === addr.id);
+        if (!stillExists) {
+          actions.push({ action: 'removeAddress', addressId: addr.id });
         }
       });
 

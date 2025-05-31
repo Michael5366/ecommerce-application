@@ -5,16 +5,14 @@ import styles from './ModalPersonalData.module.css';
 import { loginUser } from '../../services/Auth/authAPI';
 import { useAuth } from '../../context/context';
 
-
 interface Props {
   isOpen: boolean;
   onClose: () => void;
   id: string;
   version: number;
-  
 }
 
-export default function EditPasswordModal({ isOpen, onClose, id, version}: Props) {
+export default function EditPasswordModal({ isOpen, onClose, id, version }: Props) {
   const [newPassword, setPassword] = useState('');
   const [currentPassword, setCurrentPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -23,7 +21,7 @@ export default function EditPasswordModal({ isOpen, onClose, id, version}: Props
 
   const { setToken } = useAuth();
 
-    useEffect(() => {
+  useEffect(() => {
     if (isOpen) {
       setPasswordChanged(false);
       setCurrentPassword('');
@@ -38,7 +36,6 @@ export default function EditPasswordModal({ isOpen, onClose, id, version}: Props
   const handleSubmitPassword = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSubmitted(true);
-    
 
     const result = passwordSchema.safeParse({ currentPassword, newPassword });
 
@@ -47,15 +44,15 @@ export default function EditPasswordModal({ isOpen, onClose, id, version}: Props
     } else {
       setError(null);
       try {
-         const response = await changeUserPassword({ currentPassword, newPassword, id, version });
-         console.log('Ответ от сервера:', response);
-         localStorage.setItem('newPassword', newPassword);
-         const email = sessionStorage.getItem('ct_customer_email');
+        const response = await changeUserPassword({ currentPassword, newPassword, id, version });
+        console.log('Ответ от сервера:', response);
+        localStorage.setItem('newPassword', newPassword);
+        const email = sessionStorage.getItem('ct_customer_email');
         if (email) {
-       const { auth } = await loginUser(email, newPassword);
-       sessionStorage.setItem('auth_token', auth.access_token);
-       setToken(auth.access_token);
-       localStorage.removeItem('newPassword');
+          const { auth } = await loginUser(email, newPassword);
+          sessionStorage.setItem('auth_token', auth.access_token);
+          setToken(auth.access_token);
+          localStorage.removeItem('newPassword');
         }
 
         setPasswordChanged(true);

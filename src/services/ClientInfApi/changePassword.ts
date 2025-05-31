@@ -21,7 +21,6 @@ export async function changeUserPassword({
     throw new Error('Auth token was not found in sessionStorage');
   }
 
-
   const body = {
     id,
     version,

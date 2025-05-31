@@ -9,7 +9,6 @@ import Toastify from 'toastify-js';
 import 'toastify-js/src/toastify.css';
 import styles from './ModalPersonalData.module.css';
 
-
 export default function ProfilePageCustomer() {
   const [customer, setCustomer] = useState<CustomerData | null>(null);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
@@ -102,7 +101,7 @@ export default function ProfilePageCustomer() {
     billingAddressIds,
     addresses,
   } = customer;
-  sessionStorage.setItem('ct_customer_email', email)
+  sessionStorage.setItem('ct_customer_email', email);
   const enrichedAddresses = addresses.map((address) => ({
     ...address,
     isShipping: shippingAddressIds.includes(address.id),
