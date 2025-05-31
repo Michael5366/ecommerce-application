@@ -8,7 +8,6 @@ import { ModalPersonalData } from './EditPersonalDataModal';
 import Toastify from 'toastify-js';
 import 'toastify-js/src/toastify.css';
 import styles from './ModalPersonalData.module.css';
-import { useAuth } from '../../context/context';
 
 
 export default function ProfilePageCustomer() {
@@ -17,7 +16,6 @@ export default function ProfilePageCustomer() {
   const [showAdressModal, setShowAdressModal] = useState(false);
   const [showDataChangeModal, setShowDataChangeModal] = useState(false);
   const [showDataPersonalChangeModal, setDataPersonalChangeModal] = useState(false);
-  const { logout } = useAuth();
   useEffect(() => {
     async function fetchData() {
       try {
@@ -104,6 +102,7 @@ export default function ProfilePageCustomer() {
     billingAddressIds,
     addresses,
   } = customer;
+  sessionStorage.setItem('ct_customer_email', email)
   const enrichedAddresses = addresses.map((address) => ({
     ...address,
     isShipping: shippingAddressIds.includes(address.id),
@@ -179,7 +178,6 @@ export default function ProfilePageCustomer() {
         onClose={() => setShowPasswordModal(false)}
         id={id}
         version={version}
-        logout={logout}
       />
       <EditDataChangedModal
         isOpen={showDataChangeModal}

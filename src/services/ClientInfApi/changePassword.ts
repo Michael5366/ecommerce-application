@@ -1,4 +1,5 @@
 import Toastify from 'toastify-js';
+import { CustomerData } from './GetClientInf';
 
 interface ChangePasswordInput {
   currentPassword: string;
@@ -12,13 +13,15 @@ export async function changeUserPassword({
   newPassword,
   id,
   version,
-}: ChangePasswordInput): Promise<void> {
+}: ChangePasswordInput): Promise<CustomerData> {
   const token = sessionStorage.getItem('auth_token');
   const projectKey = import.meta.env.VITE_CTP_PROJECT_KEY;
 
   if (!token) {
     throw new Error('Auth token was not found in sessionStorage');
   }
+
+
   const body = {
     id,
     version,
@@ -49,9 +52,10 @@ export async function changeUserPassword({
       console.error('Change password failed:', errorData);
       throw new Error(`Failed to change password: ${response.status}`);
     }
-
+    const data = await response.json();
+    console.log('Server response after password change:', data);
     Toastify({
-      text: 'Password changed successfully.Please log in again with your new password',
+      text: 'You are automatically logged in with a new password.',
       duration: 3000,
       close: true,
       gravity: 'top',
@@ -61,6 +65,7 @@ export async function changeUserPassword({
         color: '#fff',
       },
     }).showToast();
+    return data;
   } catch (error) {
     console.error('Error changing password:', error);
     Toastify({

@@ -1,32 +1,44 @@
-import { useState } from 'react';
-import {useNavigate} from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import { passwordSchema } from '../../utils/validatePassword';
 import { changeUserPassword } from '../../services/ClientInfApi/changePassword';
 import styles from './ModalPersonalData.module.css';
-import { Path } from '../../types/paths';
+import { loginUser } from '../../services/Auth/authAPI';
+import { useAuth } from '../../context/context';
+
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
   id: string;
   version: number;
-  logout: () => void
+  
 }
 
-export default function EditPasswordModal({ isOpen, onClose, id, version, logout }: Props) {
+export default function EditPasswordModal({ isOpen, onClose, id, version}: Props) {
   const [newPassword, setPassword] = useState('');
   const [currentPassword, setCurrentPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const [passwordChanged, setPasswordChanged] = useState(false);
 
-  const navigate = useNavigate();
+  const { setToken } = useAuth();
+
+    useEffect(() => {
+    if (isOpen) {
+      setPasswordChanged(false);
+      setCurrentPassword('');
+      setPassword('');
+      setSubmitted(false);
+      setError(null);
+    }
+  }, [isOpen]);
 
   if (!isOpen) return null;
-  
+
   const handleSubmitPassword = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSubmitted(true);
+    
 
     const result = passwordSchema.safeParse({ currentPassword, newPassword });
 
@@ -35,17 +47,26 @@ export default function EditPasswordModal({ isOpen, onClose, id, version, logout
     } else {
       setError(null);
       try {
-      await changeUserPassword({ currentPassword, newPassword, id, version });
-      setPasswordChanged(true);
-      setCurrentPassword('');
-      setPassword('');
-      logout();
-      navigate(Path.MAIN, { state: { message: 'Password changed. Please log in again.' } });
-    } catch (err) {
-      setError('Failed to change password. Please try again.');
+         const response = await changeUserPassword({ currentPassword, newPassword, id, version });
+         console.log('Ответ от сервера:', response);
+         localStorage.setItem('newPassword', newPassword);
+         const email = sessionStorage.getItem('ct_customer_email');
+        if (email) {
+       const { auth } = await loginUser(email, newPassword);
+       sessionStorage.setItem('auth_token', auth.access_token);
+       setToken(auth.access_token);
+       localStorage.removeItem('newPassword');
+        }
+
+        setPasswordChanged(true);
+        setCurrentPassword('');
+        setPassword('');
+      } catch (err) {
+        console.error(err);
+        setError('Failed to change password. Please try again.');
+      }
     }
-  }
-};
+  };
   const handlecurrentPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCurrentPassword(e.target.value);
     if (submitted) setError(null);
@@ -58,41 +79,43 @@ export default function EditPasswordModal({ isOpen, onClose, id, version, logout
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modalContent}>
- {!passwordChanged ? (
-        <>
-          <h2 className={styles.title}>Change Password</h2>
-          <form onSubmit={handleSubmitPassword}>
-            <input
-              className={styles.input}
-              type="password"
-              placeholder="Current Password"
-              value={currentPassword}
-              onChange={handlecurrentPasswordChange}
-            />
-            <input
-              className={styles.input}
-              type="password"
-              placeholder="New Password"
-              value={newPassword}
-              onChange={handleNewPasswordChange}
-            />
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+        {!passwordChanged ? (
+          <>
+            <h2 className={styles.title}>Change Password</h2>
+            <form onSubmit={handleSubmitPassword}>
+              <input
+                className={styles.input}
+                type="password"
+                placeholder="Current Password"
+                value={currentPassword}
+                onChange={handlecurrentPasswordChange}
+              />
+              <input
+                className={styles.input}
+                type="password"
+                placeholder="New Password"
+                value={newPassword}
+                onChange={handleNewPasswordChange}
+              />
+              {error && <p style={{ color: 'red' }}>{error}</p>}
 
-            <button type="button" className={styles.button} onClick={onClose}>
-              Cancel
+              <button type="button" className={styles.button} onClick={onClose}>
+                Cancel
+              </button>
+              <button type="submit" className={styles.button}>
+                Submit
+              </button>
+            </form>
+          </>
+        ) : (
+          <>
+            <h2 className={styles.title}>Password changed</h2>
+            <p>You can continue...</p>
+            <button className={styles.button} onClick={onClose}>
+              Close
             </button>
-            <button type="submit" className={styles.button}>Submit</button>
-          </form>
-        </>
-      ) : (
-        <>
-          <h2 className={styles.title}>Password changed</h2>
-          <p>Please log in again with your new password.</p>
-          <button className={styles.button} onClick={onClose}>
-            Close
-          </button>
-        </>
-      )}
+          </>
+        )}
       </div>
     </div>
   );
