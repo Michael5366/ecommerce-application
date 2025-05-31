@@ -27,11 +27,11 @@ describe('SliderDetail', () => {
 
     render(<SliderDetail {...props} />);
 
-    const allImages = screen.getAllByRole('img', { hidden: true });
+    const allImages: HTMLElement[] = screen.getAllByRole('img', { hidden: true });
 
-    const expectedSources = props.images.map((img) => img.url);
-    const matchedImages = allImages.filter((img) => {
-      const src = img.getAttribute('src') || '';
+    const expectedSources: string[] = props.images.map((img) => img.url);
+    const matchedImages: HTMLElement[] = allImages.filter((img) => {
+      const src: string = img.getAttribute('src') || '';
       return expectedSources.includes(src);
     });
 
@@ -49,12 +49,12 @@ describe('SliderDetail', () => {
 
     render(<SliderDetail {...props} />);
 
-    const image = screen.getByAltText('Image');
+    const image: HTMLElement = screen.getByAltText('Image');
     fireEvent.click(image);
 
-    const modalWrapper = await screen.findByTestId('modal-wrapper');
+    const modalWrapper: HTMLElement = await screen.findByTestId('modal-wrapper');
 
-    const modalImages = within(modalWrapper).getAllByRole('img');
+    const modalImages: HTMLElement[] = within(modalWrapper).getAllByRole('img');
     expect(modalImages).toHaveLength(1);
 
     expect(within(modalWrapper).queryByRole('button', { name: /next/i })).not.toBeInTheDocument();
@@ -75,13 +75,13 @@ describe('SliderDetail', () => {
 
     render(<SliderDetail {...props} />);
 
-    const images = screen.getAllByAltText(/Image \d+/);
+    const images: HTMLElement[] = screen.getAllByAltText(/Image \d+/);
     await fireEvent.click(images[0]);
 
     const modalWrapper = await screen.findByTestId('modal-wrapper');
 
     await waitFor(() => {
-      const modalImages = within(modalWrapper).getAllByRole('img', { hidden: true });
+      const modalImages: HTMLElement[] = within(modalWrapper).getAllByRole('img', { hidden: true });
       expect(modalImages.length).toBeGreaterThan(1);
     });
   });
