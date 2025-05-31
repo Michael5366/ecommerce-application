@@ -50,6 +50,7 @@ export const SliderDetail = ({ id, name, images }: SliderDetailProps) => {
     <>
       <Slider
         className={css.slider}
+        data-testid="slider"
         {...settings}
         asNavFor={nav2 ?? undefined}
         ref={(slider1) => setNav1(slider1)}
@@ -74,6 +75,7 @@ export const SliderDetail = ({ id, name, images }: SliderDetailProps) => {
             </button>
             <Slider
               key={activeSlide}
+              data-testid="slider"
               {...settings}
               asNavFor={nav1 ?? undefined}
               ref={(slider2): void => setNav2(slider2)}
