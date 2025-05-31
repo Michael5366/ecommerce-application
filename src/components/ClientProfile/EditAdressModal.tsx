@@ -107,8 +107,6 @@ export function EditAdressModal({
         actions.push({ action: 'changeEmail' as const, email: formData.email });
       }
 
-
-
       formData.addresses.forEach((address) => {
         const existing = current.addresses.find((a) => a.id === address.id);
 
