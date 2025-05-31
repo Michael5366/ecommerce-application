@@ -34,7 +34,7 @@ export const SliderDetail = ({ id, name, images }: SliderDetailProps) => {
 
         <Modal open={open} onClose={handleCloseModal} closeAfterTransition>
           <Fade in={open}>
-            <Box className={css.modal__wrapper} component="div">
+            <Box className={css.modal__wrapper} data-testid="modal-wrapper" component="div">
               <button className={css['slider__close-btn']} onClick={handleCloseModal}>
                 &times;
               </button>
@@ -61,7 +61,7 @@ export const SliderDetail = ({ id, name, images }: SliderDetailProps) => {
               onClick={() => handleOpenModal(index)}
               className={css.slider__img}
               src={img.url}
-              alt={name.en || name.ru}
+              alt={`${name.en || name.ru} ${index + 1}`}
             />
           </Box>
         ))}
@@ -69,7 +69,7 @@ export const SliderDetail = ({ id, name, images }: SliderDetailProps) => {
 
       <Modal open={open} onClose={handleCloseModal} closeAfterTransition>
         <Fade in={open}>
-          <Box className={css.modal__wrapper} component={'div'}>
+          <Box className={css.modal__wrapper} data-testid="modal-wrapper" component={'div'}>
             <button className={css['slider__close-btn']} onClick={handleCloseModal}>
               &times;
             </button>
@@ -88,7 +88,7 @@ export const SliderDetail = ({ id, name, images }: SliderDetailProps) => {
                   <img
                     className={css.slider__img}
                     src={img.url}
-                    alt={name.en || name.ru || 'Image'}
+                    alt={`${name.en || name.ru} ${index + 1}`}
                   />
                 </Box>
               ))}
