@@ -13,7 +13,7 @@ const ProductPage = () => {
   const { productName } = useParams();
   const products = useLoaderData();
 
-  const product = products.find(
+  const product: Product = products.find(
     (product: Product) => product.name.en.toLowerCase() === productName?.toLowerCase()
   );
 
