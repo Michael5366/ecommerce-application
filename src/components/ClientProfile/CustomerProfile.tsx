@@ -103,7 +103,7 @@ export default function ProfilePageCustomer() {
 
   return (
     <div className={styles.generalBlockClient}>
-      <h2 className={styles.titleStage}>Profil page</h2>
+      <h2 className={styles.titleStage}>Profile page</h2>
       <div className="client-block">
         <div className={styles.frostedContainer}>
           <div className={styles.personalPart}>
@@ -172,8 +172,6 @@ export default function ProfilePageCustomer() {
       <EditDataChangedModal
         isOpen={showDataChangeModal}
         onClose={handleDataChangeModalClose}
-        id={id}
-        version={version}
         addresses={addresses}
         email={email}
         firstName={firstName}
@@ -184,8 +182,6 @@ export default function ProfilePageCustomer() {
       />
       <EditAdressModal
         isOpen={showAdressModal}
-        id={id}
-        version={version}
         addresses={addresses}
         onClose={handleDataChangeAdressModalClose}
         email={email}
@@ -194,8 +190,6 @@ export default function ProfilePageCustomer() {
       />
       <ModalPersonalData
         isOpen={showDataPersonalChangeModal}
-        id={id}
-        version={version}
         onClose={handleDataChangePersonalModalClose}
         firstName={firstName}
         lastName={lastName}

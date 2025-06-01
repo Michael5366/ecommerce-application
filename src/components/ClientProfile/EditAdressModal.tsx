@@ -11,8 +11,6 @@ import styles from './ModalPersonalData.module.css';
 export interface PropsAdress {
   isOpen: boolean;
   onClose: () => void;
-  id: string;
-  version: number;
   email: string;
   addresses: Address[];
   billingAddressIds: string[];

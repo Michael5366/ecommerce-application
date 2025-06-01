@@ -9,8 +9,6 @@ import styles from './ModalPersonalData.module.css';
 export interface PropsPersonalData {
   isOpen: boolean;
   onClose: () => void;
-  id: string;
-  version: number;
   email: string;
   firstName: string;
   lastName: string;
@@ -25,7 +23,6 @@ export function ModalPersonalData({
   email,
   dateOfBirth,
 }: PropsPersonalData) {
-  if (!isOpen) return null;
 
   const [formData, setFormData] = useState({
     firstName,
@@ -46,6 +43,7 @@ export function ModalPersonalData({
       setSubmitted(false);
     }
   }, [isOpen, firstName, lastName, email, dateOfBirth]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -162,6 +160,8 @@ export function ModalPersonalData({
   };
 
   return (
+    <>
+    {isOpen && (
     <div className={styles.modalOverlay}>
       <div className={styles.modalContent}>
         <form onSubmit={handleSubmit} className={styles.formPosition}>
@@ -214,5 +214,7 @@ export function ModalPersonalData({
         </form>
       </div>
     </div>
+    )}
+    </>
   );
 }
