@@ -32,7 +32,7 @@ export const ProductCard: FC<ProductCardProps> = ({
     const categoryId = product.masterData?.current?.categories?.[0]?.id;
     if (!categoryId) return null;
 
-    const category = categories.find((c) => c.id === categoryId);
+    const category = categories.find((category) => category.id === categoryId);
     return category ? generateSlug(category.name?.en || category.id) : null;
   };
 
@@ -55,9 +55,9 @@ export const ProductCard: FC<ProductCardProps> = ({
     const parts = text.split(new RegExp(`(${highlight})`, 'gi'));
     return (
       <>
-        {parts.map((part, i) =>
+        {parts.map((part, index) =>
           part.toLowerCase() === highlight.toLowerCase() ? (
-            <span key={i} className={styles.highlightedText}>
+            <span key={index} className={styles.highlightedText}>
               {part}
             </span>
           ) : (

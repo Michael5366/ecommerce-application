@@ -28,7 +28,7 @@ export const Pagination: FC<PaginationProps> = ({
         &laquo;
       </button>
 
-      {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+      {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
         <button
           key={page}
           onClick={() => onPageChange(page)}

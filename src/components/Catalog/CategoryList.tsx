@@ -22,7 +22,7 @@ export const CategoryList: FC<CategoryListProps> = ({
   };
 
   const handleCategoryClick = (categoryId: string) => {
-    const category = categories.find((c) => c.id === categoryId);
+    const category = categories.find((category) => category.id === categoryId);
     if (category) {
       const categorySlug = category.name?.en?.toLowerCase().replace(/\s+/g, '-') || '';
       setSelectedCategory(categoryId);
