@@ -10,12 +10,12 @@ import {
 } from '@mui/material';
 import { theme } from '../styles/theme';
 import Footer from '../pages/Footer';
-import { layout } from './Layout';
+import layoutStyles from './Layout-styles';
 
 const Layout = () => {
   const navigation = useNavigation();
   const isLoading = navigation.state === 'loading';
-  const css = layout();
+  const css = layoutStyles();
 
   return (
     <>

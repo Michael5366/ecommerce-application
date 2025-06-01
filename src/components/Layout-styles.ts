@@ -1,6 +1,6 @@
 import { makeStyles } from '@mui/styles';
 
-export const layout = makeStyles({
+const layoutStyles = makeStyles({
   layout__loader: {
     position: 'fixed',
     top: 0,
@@ -14,3 +14,5 @@ export const layout = makeStyles({
     zIndex: 9999,
   },
 });
+
+export default layoutStyles;

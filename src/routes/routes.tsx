@@ -11,6 +11,7 @@ import ProfilePage from '../pages/ProfilePage';
 import ProductPage from '../pages/product-page/ProductPage';
 import fetchProductsData from '../loaders/catalogLoader';
 import CatalogPageTest from '../pages/CatalogPageTest';
+import CatalogPage from '../pages/CatalogPage';
 
 export const routesArray: Routes = [
   {
