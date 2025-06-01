@@ -1,11 +1,4 @@
-import { ReactElement } from 'react';
+// import { ReactElement } from 'react';
+import { RouteObject } from 'react-router-dom';
 
-export type Routes = {
-  path: string;
-  element: ReactElement;
-  children: {
-    index?: boolean;
-    path?: string;
-    element: ReactElement;
-  }[];
-}[];
+export type Routes = RouteObject[];
