@@ -12,7 +12,6 @@ interface FiltersModalProps {
   priceRange: [number, number];
   handlePriceChange: (index: number) => (e: React.ChangeEvent<HTMLInputElement>) => void;
   availableColors: string[];
-  availableSizes: string[];
   availableOccasions: string[];
   availableFlowerTypes: string[];
   filters: ProductFilters;

@@ -53,6 +53,10 @@
   flex: 1;
 }
 
+.modalBody h3 {
+  display: none;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;

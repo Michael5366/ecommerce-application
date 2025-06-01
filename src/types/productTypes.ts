@@ -125,14 +125,12 @@ export interface ProductPriceInfo {
 
 export interface ProductFilters {
   color: string;
-  size: string;
   occasion: string;
   flowerType: string;
 }
 
 export interface AvailableFilters {
   colors: string[];
-  sizes: string[];
   occasions: string[];
   flowerTypes: string[];
 }

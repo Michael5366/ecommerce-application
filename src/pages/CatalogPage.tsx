@@ -29,12 +29,10 @@ const CatalogPage = () => {
   const [sortOption, setSortOption] = useState<string>('name asc');
   const [filters, setFilters] = useState<ProductFilters>({
     color: '',
-    size: '',
     occasion: '',
     flowerType: '',
   });
   const [availableColors, setAvailableColors] = useState<string[]>([]);
-  const [availableSizes, setAvailableSizes] = useState<string[]>([]);
   const [availableOccasions, setAvailableOccasions] = useState<string[]>([]);
   const [availableFlowerTypes, setAvailableFlowerTypes] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 100]);
@@ -141,16 +139,6 @@ const CatalogPage = () => {
         );
       }
 
-      if (filters.size) {
-        results = results.filter((product) =>
-          product.masterData.current.masterVariant?.attributes?.some((attr) => {
-            if (attr.name.toLowerCase() !== 'size') return false;
-            const values = extractStringValues(attr.value);
-            return values.includes(filters.size);
-          })
-        );
-      }
-
       if (filters.occasion) {
         results = results.filter((product) =>
           product.masterData.current.masterVariant?.attributes?.some((attr) => {
@@ -203,7 +191,6 @@ const CatalogPage = () => {
       setProducts(results);
 
       const colors = new Set<string>();
-      const sizes = new Set<string>();
       const occasions = new Set<string>();
       const flowerTypes = new Set<string>();
 
@@ -218,8 +205,6 @@ const CatalogPage = () => {
 
           if (attrName.includes('color')) {
             values.forEach((v) => colors.add(v));
-          } else if (attrName.includes('size')) {
-            values.forEach((v) => sizes.add(v));
           } else if (attrName.includes('occasion')) {
             values.forEach((v) => occasions.add(v));
           } else if (attrName.includes('flower')) {
@@ -229,7 +214,6 @@ const CatalogPage = () => {
       });
 
       setAvailableColors(Array.from(colors).filter(Boolean));
-      setAvailableSizes(Array.from(sizes).filter(Boolean));
       setAvailableOccasions(Array.from(occasions).filter(Boolean));
       setAvailableFlowerTypes(Array.from(flowerTypes).filter(Boolean));
     } catch (error) {
@@ -253,7 +237,6 @@ const CatalogPage = () => {
   const resetFilters = useCallback((): void => {
     setFilters({
       color: '',
-      size: '',
       occasion: '',
       flowerType: '',
     });
@@ -394,7 +377,6 @@ const CatalogPage = () => {
           priceRange={priceRange}
           handlePriceChange={handlePriceChange}
           availableColors={availableColors}
-          availableSizes={availableSizes}
           availableOccasions={availableOccasions}
           availableFlowerTypes={availableFlowerTypes}
           filters={filters}
@@ -440,7 +422,6 @@ const CatalogPage = () => {
         priceRange={priceRange}
         handlePriceChange={handlePriceChange}
         availableColors={availableColors}
-        availableSizes={availableSizes}
         availableOccasions={availableOccasions}
         availableFlowerTypes={availableFlowerTypes}
         filters={filters}
