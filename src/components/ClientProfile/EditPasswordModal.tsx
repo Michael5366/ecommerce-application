@@ -44,8 +44,8 @@ export default function EditPasswordModal({ isOpen, onClose, id, version }: Prop
     } else {
       setError(null);
       try {
-        const response = await changeUserPassword({ currentPassword, newPassword, id, version });
-        console.log('Ответ от сервера:', response);
+        await changeUserPassword({ currentPassword, newPassword, id, version });
+
         localStorage.setItem('newPassword', newPassword);
         const email = sessionStorage.getItem('ct_customer_email');
         if (email) {
@@ -58,8 +58,7 @@ export default function EditPasswordModal({ isOpen, onClose, id, version }: Prop
         setPasswordChanged(true);
         setCurrentPassword('');
         setPassword('');
-      } catch (err) {
-        console.error(err);
+      } catch {
         setError('Failed to change password. Please try again.');
       }
     }

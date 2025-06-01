@@ -21,13 +21,6 @@ export async function changeUserPassword({
     throw new Error('Auth token was not found in sessionStorage');
   }
 
-  const body = {
-    id,
-    version,
-    currentPassword,
-    newPassword,
-  };
-  console.log('Request body to server:', JSON.stringify(body, null, 2));
   try {
     const response = await fetch(
       `https://api.europe-west1.gcp.commercetools.com/${projectKey}/me/password`,
@@ -47,12 +40,10 @@ export async function changeUserPassword({
     );
 
     if (!response.ok) {
-      const errorData = await response.json();
-      console.error('Change password failed:', errorData);
+      await response.json();
       throw new Error(`Failed to change password: ${response.status}`);
     }
     const data = await response.json();
-    console.log('Server response after password change:', data);
     Toastify({
       text: 'You are automatically logged in with a new password.',
       duration: 3000,
@@ -66,7 +57,6 @@ export async function changeUserPassword({
     }).showToast();
     return data;
   } catch (error) {
-    console.error('Error changing password:', error);
     Toastify({
       text: 'The information has not been updated',
       duration: 3000,

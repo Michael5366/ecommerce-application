@@ -20,14 +20,12 @@ export interface PropsPersonalData {
 export function ModalPersonalData({
   isOpen,
   onClose,
-  id,
-  version,
   firstName,
   lastName,
   email,
   dateOfBirth,
 }: PropsPersonalData) {
-  console.log(isOpen, id, version);
+
   if (!isOpen) return null;
 
   const [formData, setFormData] = useState({
@@ -51,7 +49,6 @@ export function ModalPersonalData({
   }, [isOpen, firstName, lastName, email, dateOfBirth]);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    console.log('Изменение поля:', name, value);
     setFormData({ ...formData, [name]: value });
     setErrors((prevErrors) => {
       const updatedErrors = { ...prevErrors };
@@ -135,8 +132,7 @@ export function ModalPersonalData({
         }).showToast();
         return;
       }
-      const payload = { version: current.version, actions };
-      console.log('Payload для отправки:', JSON.stringify(payload, null, 2));
+
       await updateCustomerPersonalData({ version: current.version, actions });
 
       Toastify({
@@ -152,7 +148,6 @@ export function ModalPersonalData({
       }).showToast();
       onClose();
     } catch (err) {
-      console.error('Ошибка обновления:', err);
       Toastify({
         text: 'The information has not been updated',
         duration: 3000,

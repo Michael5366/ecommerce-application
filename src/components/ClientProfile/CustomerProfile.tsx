@@ -20,10 +20,7 @@ export default function ProfilePageCustomer() {
       try {
         const data = await getCustomerData();
         setCustomer(data);
-        console.log(data);
-        console.log('ProfileFunction is acting');
-      } catch (error) {
-        console.error('Error with getting data:', error);
+      } catch {
       }
     }
     fetchData();
@@ -34,7 +31,6 @@ export default function ProfilePageCustomer() {
       const freshData = await getCustomerData();
       setCustomer(freshData);
     } catch (error) {
-      console.error('Ошибка при обновлении данных после редактирования:', error);
       Toastify({
         text: 'The information has not been updated',
         duration: 3000,
@@ -54,7 +50,6 @@ export default function ProfilePageCustomer() {
       const freshData = await getCustomerData();
       setCustomer(freshData);
     } catch (error) {
-      console.error('Ошибка при обновлении данных после редактирования:', error);
       Toastify({
         text: 'The information in the page has not been updated',
         duration: 3000,
@@ -74,7 +69,6 @@ export default function ProfilePageCustomer() {
       const freshData = await getCustomerData();
       setCustomer(freshData);
     } catch (error) {
-      console.error('Ошибка при обновлении данных после редактирования:', error);
       Toastify({
         text: 'The information in the page has not been updated',
         duration: 3000,
@@ -107,8 +101,6 @@ export default function ProfilePageCustomer() {
     isShipping: shippingAddressIds.includes(address.id),
     isBilling: billingAddressIds.includes(address.id),
   }));
-
-  console.log(enrichedAddresses);
 
   return (
     <div className={styles.generalBlockClient}>

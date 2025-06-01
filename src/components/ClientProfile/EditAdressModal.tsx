@@ -36,12 +36,11 @@ export function EditAdressModal({
   const [addressErrors, setAddressErrors] = useState<
     Record<number, Partial<Record<keyof Address, string>>>
   >({});
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [, setErrors] = useState<Record<string, string>>({});
   const [billingSelected, setBillingSelected] = useState<string[]>(billingAddressIds);
   const [shippingSelected, setShippingSelected] = useState<string[]>(shippingAddressIds);
   const [submitted, setSubmitted] = useState(false);
 
-  console.log(errors);
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     index?: number,
@@ -61,7 +60,6 @@ export function EditAdressModal({
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSubmitted(true);
-    console.log('handle submit is acting', formData);
     const newErrors: Record<string, string> = {};
 
     const validationResult = registrationSchema
@@ -93,9 +91,6 @@ export function EditAdressModal({
     setAddressErrors(addrErrors);
 
     if (Object.keys(newErrors).length > 0 || Object.keys(addrErrors).length > 0) {
-      console.log('NEW FORM ERRORS:', newErrors);
-      console.log('ADDRESS ERRORS:', addrErrors);
-
       return;
     }
     try {
@@ -190,9 +185,6 @@ export function EditAdressModal({
         }).showToast();
         return;
       }
-      console.log('Actions:', actions);
-      const payload = { version: current.version, actions };
-      console.log('Payload для отправки:', JSON.stringify(payload, null, 2));
 
       const firstActions = actions.filter(
         (action) =>
@@ -257,7 +249,6 @@ export function EditAdressModal({
       }).showToast();
       onClose();
     } catch (err) {
-      console.error('Ошибка обновления:', err);
       Toastify({
         text: 'The information has not been updated',
         duration: 3000,

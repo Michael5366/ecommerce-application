@@ -26,8 +26,6 @@ export interface Props {
 export default function EditDataChangedModal({
   isOpen,
   onClose,
-  id,
-  version,
   firstName,
   lastName,
   email,
@@ -36,7 +34,6 @@ export default function EditDataChangedModal({
   billingAddressIds,
   shippingAddressIds,
 }: Props) {
-  console.log(isOpen, id, version);
 
   if (!isOpen) return null;
 
@@ -61,7 +58,6 @@ export default function EditDataChangedModal({
     field?: keyof Address
   ) => {
     const { name, value } = e.target;
-    console.log('Изменение поля:', name, value);
 
     if (typeof index === 'number' && field) {
       const updatedAddresses = [...formData.addresses];
@@ -228,8 +224,7 @@ export default function EditDataChangedModal({
         }).showToast();
         return;
       }
-      const payload = { version: current.version, actions };
-      console.log('Payload для отправки:', JSON.stringify(payload, null, 2));
+
       await updateCustomer({ version: current.version, actions });
 
       Toastify({
@@ -244,8 +239,7 @@ export default function EditDataChangedModal({
         },
       }).showToast();
       onClose();
-    } catch (err) {
-      console.error('Ошибка обновления:', err);
+    } catch {
       Toastify({
         text: 'The information has not been updated',
         duration: 3000,
