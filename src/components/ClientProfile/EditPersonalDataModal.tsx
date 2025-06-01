@@ -23,7 +23,6 @@ export function ModalPersonalData({
   email,
   dateOfBirth,
 }: PropsPersonalData) {
-
   const [formData, setFormData] = useState({
     firstName,
     lastName,
@@ -161,60 +160,60 @@ export function ModalPersonalData({
 
   return (
     <>
-    {isOpen && (
-    <div className={styles.modalOverlay}>
-      <div className={styles.modalContent}>
-        <form onSubmit={handleSubmit} className={styles.formPosition}>
-          <h2 className={styles.title}>Change client information</h2>
-          <input
-            className={styles.input}
-            name="firstName"
-            placeholder="Имя"
-            value={formData.firstName}
-            onChange={handleChange}
-          />
-          {submitted && errors.username && <p className="errors">{errors.username}</p>}
-          <input
-            className={styles.input}
-            name="lastName"
-            placeholder="Фамилия"
-            value={formData.lastName}
-            onChange={handleChange}
-          />
-          {submitted && errors.surname && <p className="errors">{errors.surname}</p>}
+      {isOpen && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modalContent}>
+            <form onSubmit={handleSubmit} className={styles.formPosition}>
+              <h2 className={styles.title}>Change client information</h2>
+              <input
+                className={styles.input}
+                name="firstName"
+                placeholder="Имя"
+                value={formData.firstName}
+                onChange={handleChange}
+              />
+              {submitted && errors.username && <p className="errors">{errors.username}</p>}
+              <input
+                className={styles.input}
+                name="lastName"
+                placeholder="Фамилия"
+                value={formData.lastName}
+                onChange={handleChange}
+              />
+              {submitted && errors.surname && <p className="errors">{errors.surname}</p>}
 
-          <input
-            name="email"
-            className={styles.input}
-            placeholder="Email"
-            value={formData.email}
-            onChange={handleChange}
-          />
+              <input
+                name="email"
+                className={styles.input}
+                placeholder="Email"
+                value={formData.email}
+                onChange={handleChange}
+              />
 
-          {submitted && errors.email && <p className="errors">{errors.email}</p>}
+              {submitted && errors.email && <p className="errors">{errors.email}</p>}
 
-          <input
-            className={styles.input}
-            name="dateOfBirth"
-            type="date"
-            value={formData.dateOfBirth}
-            onChange={handleChange}
-          />
+              <input
+                className={styles.input}
+                name="dateOfBirth"
+                type="date"
+                value={formData.dateOfBirth}
+                onChange={handleChange}
+              />
 
-          {submitted && errors.birthday && <p className="errors">{errors.birthday}</p>}
+              {submitted && errors.birthday && <p className="errors">{errors.birthday}</p>}
 
-          <div className={styles.buttonGroup}>
-            <button type="button" className={styles.button} onClick={onClose}>
-              Cancel
-            </button>
-            <button type="submit" className={styles.button}>
-              Submit
-            </button>
+              <div className={styles.buttonGroup}>
+                <button type="button" className={styles.button} onClick={onClose}>
+                  Cancel
+                </button>
+                <button type="submit" className={styles.button}>
+                  Submit
+                </button>
+              </div>
+            </form>
           </div>
-        </form>
-      </div>
-    </div>
-    )}
+        </div>
+      )}
     </>
   );
 }
