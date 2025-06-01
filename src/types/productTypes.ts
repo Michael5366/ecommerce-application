@@ -45,7 +45,6 @@ export interface Attribute {
   value: AttributeValue;
 }
 
-// Type Guards
 export function isEnumValue(value: unknown): value is EnumValue {
   return typeof value === 'object' && value !== null && 'key' in value;
 }

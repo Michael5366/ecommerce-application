@@ -26,12 +26,14 @@ export const Breadcrumbs: FC<BreadcrumbsProps> = ({
     });
 
     if (selectedCategory) {
-      let currentCategory = categories.find((c) => c.id === selectedCategory);
+      let currentCategory = categories.find((category) => category.id === selectedCategory);
       const categoryChain = [];
 
       while (currentCategory) {
         categoryChain.unshift(currentCategory);
-        currentCategory = categories.find((c) => c.id === currentCategory?.parent?.id);
+        currentCategory = categories.find(
+          (category) => category.id === currentCategory?.parent?.id
+        );
       }
 
       categoryChain.forEach((category, index) => {
