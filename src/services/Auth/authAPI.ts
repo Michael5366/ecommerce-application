@@ -47,6 +47,8 @@ const fetchAuthTokens = async (email: string, password: string): Promise<AuthRes
     `manage_customers:${PROJECT_KEY}`,
     `manage_my_profile:${PROJECT_KEY}`,
     `view_published_products:${PROJECT_KEY}`,
+    `view_products:${PROJECT_KEY}`,
+    `view_categories:${PROJECT_KEY}`,
   ].join(' ');
 
   const response = await fetch(`${AUTH_URL}/oauth/${PROJECT_KEY}/customers/token`, {

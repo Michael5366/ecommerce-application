@@ -1,0 +1,144 @@
+.catalogContainer {
+  --primary-color: #4e2a81;
+  --secondary-color: #f8f9fa;
+  --text-color: #333;
+  --border-color: #e0e0e0;
+  --hover-color: #d8bbff;
+  --active-color: #f5f5f5;
+  --error-color: #dc3545;
+  --success-color: #28a745;
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  color: var(--text-color);
+  font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+.mainLayout {
+  display: flex;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 1rem;
+  gap: 1.5rem;
+}
+
+.mainContent {
+  flex: 1;
+}
+
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+  grid-column: 1 / -1;
+}
+
+.errorContainer {
+  text-align: center;
+  padding: 2rem;
+  grid-column: 1 / -1;
+}
+
+.retryButton {
+  padding: 0.75rem 1.5rem;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: background 0.2s;
+}
+
+.retryButton:hover {
+  background: #1d4f7c;
+}
+
+.spinner {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 768px) {
+  .mainLayout {
+    padding: 0.75rem;
+    flex-direction: column;
+  }
+}
+
+.sortSelect {
+  padding: 0.5rem 0.8rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  background: white;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+.desktopToolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0.5rem;
+  margin-bottom: 0.6rem;
+}
+
+@media (max-width: 768px) {
+  .desktopToolbar {
+    padding: 0rem 0.5rem;
+  }
+
+  .sortSelect {
+    display: none;
+  }
+}
+
+.activeFilters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  align-items: center;
+}
+
+.activeFilter {
+  background: var(--secondary-color);
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.removeFilter {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-size: 1rem;
+  color: #666;
+}
+
+.resetAllFilters {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--primary-color);
+  font-weight: 500;
+  margin-left: 0.5rem;
+}

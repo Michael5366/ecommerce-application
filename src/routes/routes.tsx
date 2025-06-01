@@ -20,6 +20,10 @@ export const routesArray: Routes = [
       { index: true, element: <MainPage /> },
       { path: 'login', element: <LoginPage /> },
       { path: 'registration', element: <RegisterPage /> },
+      { path: 'catalog', element: <CatalogPage /> },
+      { path: 'catalog/:categoryId', element: <CatalogPage /> },
+      { path: 'catalog/:categoryId/product/:productSlug', element: <CartPage /> },
+      { path: 'catalog/product/:productSlug', element: <CartPage /> },
       // { path: 'catalog', element: <CatalogPage />, loader: fetchProductsData },
       {
         path: 'catalog',

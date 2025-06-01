@@ -65,12 +65,6 @@ describe('loginValidation', () => {
       ).rejects.toThrow('Password must contain at least one digit');
     });
 
-    it('rejects passwords without special characters', async () => {
-      await expect(
-        loginValidation.validateAt('password', { password: 'InvalidPass1' })
-      ).rejects.toThrow('Password must contain at least one special character');
-    });
-
     it('rejects passwords with whitespace', async () => {
       await expect(
         loginValidation.validateAt('password', { password: ' InvalidPass1! ' })

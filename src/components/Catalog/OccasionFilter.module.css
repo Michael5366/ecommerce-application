@@ -1,0 +1,33 @@
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.occasionFilter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.occasionOption {
+  padding: 0.5rem 0.75rem;
+  background: white;
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.9rem;
+}
+
+.occasionOption:hover {
+  background: var(--hover-color);
+}
+
+.occasionOption.selected {
+  background: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+}
