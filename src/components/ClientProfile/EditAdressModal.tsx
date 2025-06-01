@@ -248,7 +248,7 @@ export function EditAdressModal({
         },
       }).showToast();
       onClose();
-    } catch (err) {
+    } catch {
       Toastify({
         text: 'The information has not been updated',
         duration: 3000,

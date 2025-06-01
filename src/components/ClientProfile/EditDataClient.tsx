@@ -34,7 +34,6 @@ export default function EditDataChangedModal({
   billingAddressIds,
   shippingAddressIds,
 }: Props) {
-
   if (!isOpen) return null;
 
   const [formData, setFormData] = useState({

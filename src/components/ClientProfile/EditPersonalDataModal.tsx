@@ -25,7 +25,6 @@ export function ModalPersonalData({
   email,
   dateOfBirth,
 }: PropsPersonalData) {
-
   if (!isOpen) return null;
 
   const [formData, setFormData] = useState({
@@ -147,7 +146,7 @@ export function ModalPersonalData({
         },
       }).showToast();
       onClose();
-    } catch (err) {
+    } catch {
       Toastify({
         text: 'The information has not been updated',
         duration: 3000,

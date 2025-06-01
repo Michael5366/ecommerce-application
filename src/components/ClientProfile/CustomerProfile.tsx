@@ -20,8 +20,7 @@ export default function ProfilePageCustomer() {
       try {
         const data = await getCustomerData();
         setCustomer(data);
-      } catch {
-      }
+      } catch {}
     }
     fetchData();
   }, []);
@@ -30,7 +29,7 @@ export default function ProfilePageCustomer() {
     try {
       const freshData = await getCustomerData();
       setCustomer(freshData);
-    } catch (error) {
+    } catch {
       Toastify({
         text: 'The information has not been updated',
         duration: 3000,
@@ -49,7 +48,7 @@ export default function ProfilePageCustomer() {
     try {
       const freshData = await getCustomerData();
       setCustomer(freshData);
-    } catch (error) {
+    } catch {
       Toastify({
         text: 'The information in the page has not been updated',
         duration: 3000,
@@ -68,7 +67,7 @@ export default function ProfilePageCustomer() {
     try {
       const freshData = await getCustomerData();
       setCustomer(freshData);
-    } catch (error) {
+    } catch {
       Toastify({
         text: 'The information in the page has not been updated',
         duration: 3000,
