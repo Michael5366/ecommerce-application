@@ -58,6 +58,7 @@ export type SignUpPayload = {
   firstName: string;
   lastName: string;
   addresses: Address[];
+  dateOfBirth: string;
   defaultShippingAddress?: number;
   defaultBillingAddress?: number;
 };
@@ -71,6 +72,7 @@ export const signUpUser = async (token: string, payload: SignUpPayload) => {
     firstName,
     lastName,
     addresses,
+    dateOfBirth,
     defaultShippingAddress,
     defaultBillingAddress,
   } = payload;
@@ -81,6 +83,7 @@ export const signUpUser = async (token: string, payload: SignUpPayload) => {
     firstName,
     lastName,
     addresses,
+    dateOfBirth,
   };
 
   if (typeof defaultShippingAddress === 'number') {
