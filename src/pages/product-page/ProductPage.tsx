@@ -16,11 +16,13 @@ const ProductPage = () => {
   console.log('ProductPage products:', products);
   console.log('ProductPage productSlug:', productSlug);
 
-  const product = products.find(
-    (product: Product) =>
-      product.name.en.toLowerCase() === productSlug?.toLowerCase() ||
-      product.name.ru?.toLowerCase() === productSlug?.toLowerCase()
-  );
+  const product = products.find((product: Product) => {
+    const enName = product.name.en.toLowerCase().replace(/\s+/g, '-');
+    const ruName = product.name.ru?.toLowerCase().replace(/\s+/g, '-') || '';
+    const slug = productSlug?.toLowerCase();
+
+    return enName === slug || ruName === slug;
+  });
 
   console.log('ProductPage product:', product);
 
