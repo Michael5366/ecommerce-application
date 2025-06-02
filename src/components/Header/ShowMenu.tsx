@@ -13,7 +13,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Path } from '../../types/paths';
 import { useAuth } from '../../context/context.tsx';
 
-export const showMenu = () => {
+const ShowMenu = () => {
   // const theme = useTheme();
   // const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const isMobile = useMediaQuery('(max-width:860px)');
@@ -120,3 +120,5 @@ export const showMenu = () => {
     </>
   );
 };
+
+export default ShowMenu;

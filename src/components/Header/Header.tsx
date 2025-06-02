@@ -1,7 +1,7 @@
 import { AppBar, Container, Stack, Toolbar, Typography, useTheme } from '@mui/material';
 
 import { Link } from 'react-router-dom';
-import { showMenu } from './ShowMenu';
+import ShowMenu from './ShowMenu';
 
 const Header = () => {
   const theme = useTheme();
@@ -19,7 +19,7 @@ const Header = () => {
           </Typography>
 
           <Stack direction="row" spacing={2}>
-            {showMenu()}
+            <ShowMenu />
           </Stack>
         </Toolbar>
       </Container>
