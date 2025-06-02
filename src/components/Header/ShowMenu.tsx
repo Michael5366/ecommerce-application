@@ -49,33 +49,31 @@ export const showMenu = () => {
           <MenuItem onClick={handleMenuClose} component={Link} to={'/catalog'}>
             Catalog
           </MenuItem>
-          <MenuItem onClick={handleMenuClose} component={Link} to="/cart">
-            Cart
-          </MenuItem>
-          <MenuItem onClick={handleMenuClose} component={Link} to="/profile">
-            Profile
-          </MenuItem>
 
-          {auth ? (
-            <MenuItem
-              onClick={() => {
-                handleMenuClose();
-                logout();
-                navigate(Path.LOGIN);
-              }}
-            >
-              Logout
-            </MenuItem>
-          ) : (
-            [
-              <MenuItem key="login" onClick={handleMenuClose} component={Link} to={Path.LOGIN}>
-                Login
-              </MenuItem>,
-              <MenuItem key="register" onClick={goToRegister}>
-                Registration
-              </MenuItem>,
-            ]
-          )}
+          {auth
+            ? [
+                <MenuItem key="profile" onClick={handleMenuClose} component={Link} to="/profile">
+                  Profile
+                </MenuItem>,
+                <MenuItem
+                  key="logout"
+                  onClick={() => {
+                    handleMenuClose();
+                    logout();
+                    navigate(Path.LOGIN);
+                  }}
+                >
+                  Logout
+                </MenuItem>,
+              ]
+            : [
+                <MenuItem key="login" onClick={handleMenuClose} component={Link} to={Path.LOGIN}>
+                  Login
+                </MenuItem>,
+                <MenuItem key="register" onClick={goToRegister}>
+                  Registration
+                </MenuItem>,
+              ]}
         </Menu>
       </>
     );
@@ -87,24 +85,23 @@ export const showMenu = () => {
       <Button component={Link} to={'/catalog'} color="inherit" variant="outlined">
         Catalog
       </Button>
-      <Button component={Link} to="/cart" color="inherit" variant="outlined">
-        Cart
-      </Button>
-      <Button component={Link} to="/profile" color="inherit" variant="outlined">
-        Profile
-      </Button>
 
       {auth ? (
-        <Button
-          variant="outlined"
-          color="inherit"
-          onClick={() => {
-            logout();
-            navigate(Path.LOGIN);
-          }}
-        >
-          Logout
-        </Button>
+        <>
+          <Button component={Link} to="/profile" color="inherit" variant="outlined">
+            Profile
+          </Button>
+          <Button
+            variant="outlined"
+            color="inherit"
+            onClick={() => {
+              logout();
+              navigate(Path.LOGIN);
+            }}
+          >
+            Logout
+          </Button>
+        </>
       ) : (
         <>
           <Tooltip title="Log in to your account" arrow placement="bottom-start" enterDelay={500}>
