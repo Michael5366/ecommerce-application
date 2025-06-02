@@ -10,12 +10,19 @@ import { SliderDetail } from '../../components/Slider/Slider';
 
 const ProductPage = () => {
   const css = useStyles();
-  const { productName } = useParams();
+  const { productSlug } = useParams();
   const products = useLoaderData();
 
-  const product: Product = products.find(
-    (product: Product): boolean => product.name.en.toLowerCase() === productName?.toLowerCase()
+  console.log('ProductPage products:', products);
+  console.log('ProductPage productSlug:', productSlug);
+
+  const product = products.find(
+    (product: Product) =>
+      product.name.en.toLowerCase() === productSlug?.toLowerCase() ||
+      product.name.ru?.toLowerCase() === productSlug?.toLowerCase()
   );
+
+  console.log('ProductPage product:', product);
 
   if (!product) {
     return <div>Product not found</div>;
