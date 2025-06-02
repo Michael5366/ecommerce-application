@@ -8,6 +8,8 @@ import { ModalPersonalData } from './EditPersonalDataModal';
 import Toastify from 'toastify-js';
 import 'toastify-js/src/toastify.css';
 import styles from './ModalPersonalData.module.css';
+import { useNavigate } from 'react-router-dom';
+import { Path } from '../../types/paths';
 
 export default function ProfilePageCustomer() {
   const [customer, setCustomer] = useState<CustomerData | null>(null);
@@ -15,15 +17,19 @@ export default function ProfilePageCustomer() {
   const [showAdressModal, setShowAdressModal] = useState(false);
   const [showDataChangeModal, setShowDataChangeModal] = useState(false);
   const [showDataPersonalChangeModal, setDataPersonalChangeModal] = useState(false);
+  const navigate = useNavigate();
+
   useEffect(() => {
     async function fetchData() {
       try {
         const data = await getCustomerData();
         setCustomer(data);
-      } catch {}
+      } catch {
+        navigate(Path.LOGIN);
+      }
     }
     fetchData();
-  }, []);
+  }, [navigate]);
   const handleDataChangeModalClose = async () => {
     setShowDataChangeModal(false);
     try {
