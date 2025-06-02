@@ -5,7 +5,6 @@ import RegisterPage from '../pages/registration';
 import NotFoundTest from '../pages/NotFoundTest';
 import { Routes } from '../types/routes';
 import MainPage from '../pages/MainPage';
-import CartPage from '../pages/CartPage';
 import ProfilePage from '../pages/ProfilePage';
 import ProductPage from '../pages/product-page/ProductPage';
 import fetchProductsData from '../loaders/catalogLoader';
@@ -41,7 +40,6 @@ export const routesArray: Routes = [
       //   ],
       // },
       // { path: 'catalog/product/:productName', element: <ProductPage /> },
-      { path: 'cart', element: <CartPage /> },
       { path: 'profile', element: <ProfilePage /> },
       { path: '*', element: <NotFoundTest /> },
     ],
