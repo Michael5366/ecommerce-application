@@ -4,7 +4,7 @@ const fetchProductsData = async () => {
   const projectKey = import.meta.env.VITE_CTP_PROJECT_KEY;
 
   const authUrl = 'https://auth.europe-west1.gcp.commercetools.com/oauth/token';
-  const apiUrl = `https://api.europe-west1.gcp.commercetools.com/${projectKey}/product-projections`;
+  const apiUrl = `https://api.europe-west1.gcp.commercetools.com/${projectKey}/product-projections?limit=100`;
 
   try {
     const authResponse = await fetch(authUrl, {
