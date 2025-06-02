@@ -13,9 +13,6 @@ const ProductPage = () => {
   const { productSlug } = useParams();
   const products = useLoaderData();
 
-  console.log('ProductPage products:', products);
-  console.log('ProductPage productSlug:', productSlug);
-
   const product = products.find((product: Product) => {
     const enName = product.name.en.toLowerCase().replace(/\s+/g, '-');
     const ruName = product.name.ru?.toLowerCase().replace(/\s+/g, '-') || '';
@@ -23,8 +20,6 @@ const ProductPage = () => {
 
     return enName === slug || ruName === slug;
   });
-
-  console.log('ProductPage product:', product);
 
   if (!product) {
     return <div>Product not found</div>;
