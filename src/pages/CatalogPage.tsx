@@ -19,7 +19,6 @@ import { Pagination } from '../components/Catalog/Pagination';
 import { Breadcrumbs } from '../components/Catalog/Breadcrumbs';
 
 const CatalogPage = () => {
-  console.log('CatalogPage rendered');
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
