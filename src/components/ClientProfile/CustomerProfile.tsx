@@ -88,7 +88,7 @@ export default function ProfilePageCustomer() {
     }
   };
 
-  if (!customer) return <div>You are not logged in! Please log in!</div>;
+  if (!customer) return <div>Loading...</div>;
   const {
     id,
     version,
