@@ -1,29 +1,17 @@
 import { Outlet, useNavigation } from 'react-router-dom';
 import Header from '../Header/Header';
-import {
-  Box,
-  CircularProgress,
-  Container,
-  GlobalStyles,
-  Stack,
-  ThemeProvider,
-} from '@mui/material';
+import { Box, Container, GlobalStyles, Stack, ThemeProvider } from '@mui/material';
 import { theme } from '../../styles/theme';
 import Footer from '../../pages/Footer';
-import layoutStyles from './Layout-styles';
+import LoadingIndicator from '../LoadingIndicator/LoadingIndicator';
 
 const Layout = () => {
   const navigation = useNavigation();
   const isLoading = navigation.state === 'loading';
-  const css = layoutStyles();
 
   return (
     <>
-      {isLoading && (
-        <Box className={css.layout__loader}>
-          <CircularProgress size={30} color="primary" thickness={5} />
-        </Box>
-      )}
+      {isLoading && <LoadingIndicator />}
 
       <ThemeProvider theme={theme}>
         <GlobalStyles styles={{ body: { margin: 0 } }} />
