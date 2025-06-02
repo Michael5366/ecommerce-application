@@ -1,5 +1,5 @@
 import { Outlet, useNavigation } from 'react-router-dom';
-import Header from './Header/Header';
+import Header from '../Header/Header';
 import {
   Box,
   CircularProgress,
@@ -8,8 +8,8 @@ import {
   Stack,
   ThemeProvider,
 } from '@mui/material';
-import { theme } from '../styles/theme';
-import Footer from '../pages/Footer';
+import { theme } from '../../styles/theme';
+import Footer from '../../pages/Footer';
 import layoutStyles from './Layout-styles';
 
 const Layout = () => {
