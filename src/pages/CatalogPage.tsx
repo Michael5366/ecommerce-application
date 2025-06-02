@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useMemo } from 'react';
+import { useEffect, useState, useCallback, useMemo, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useApi } from '../services/Catalog/catalogAPI';
 import {
@@ -41,6 +41,7 @@ const CatalogPage = () => {
   const [isCategoriesModalOpen, setIsCategoriesModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(9);
+  const isFirstRender = useRef(true);
 
   const { categoryName } = useParams();
   const navigate = useNavigate();
@@ -303,22 +304,30 @@ const CatalogPage = () => {
   }, [products, currentPage, itemsPerPage]);
 
   useEffect(() => {
-    const loadData = async (): Promise<void> => {
-      setLoading(true);
+    const loadCategories = async () => {
       try {
-        await Promise.all([fetchCategories(), fetchProducts()]);
+        setLoading(true);
+        await fetchCategories();
       } catch (error) {
-        console.error('Error loading data:', error);
-        const errorMessage = error instanceof Error ? error.message : String(error);
-        if (!errorMessage.includes('Session expired')) {
-          setError('Failed to load data. Please try again later.');
-        }
-      } finally {
-        setLoading(false);
+        console.error('Failed to load categories:', error);
       }
     };
-    loadData();
-  }, [fetchCategories, fetchProducts]);
+    loadCategories();
+  }, [fetchCategories]);
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      fetchProducts();
+      setCurrentPage(1);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [appliedSearch, selectedCategory, sortOption, filters, priceRange, fetchProducts]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
