@@ -2,7 +2,7 @@ import { JSX } from '@emotion/react/jsx-runtime';
 import { Box, Typography, Button } from '@mui/material';
 import { Link } from 'react-router-dom';
 
-const NotFound = (): JSX.Element => {
+const NotFoundPage = (): JSX.Element => {
   return (
     <Box
       display="flex"
@@ -29,4 +29,4 @@ const NotFound = (): JSX.Element => {
   );
 };
 
-export default NotFound;
+export default NotFoundPage;
