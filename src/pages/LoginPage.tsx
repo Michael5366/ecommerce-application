@@ -19,9 +19,7 @@ const LoginPage = () => {
   const location = useLocation();
 
   useEffect(() => {
-    console.log('token:', token);
     if (token) {
-      console.log('Already logged in, redirecting...');
       navigate('/', { replace: true });
     } else {
       setIsCheckingAuth(false);
