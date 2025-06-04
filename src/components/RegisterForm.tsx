@@ -46,7 +46,7 @@ export default function RegisterForm() {
 
   const handleLoginRedirect = () => {
     navigate(Path.LOGIN);
-    // console.log('Редирект на /login');
+    // console.log('Redirecting to /login');
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -108,8 +108,8 @@ export default function RegisterForm() {
         ...(defaultBillingAddress !== undefined ? { defaultBillingAddress } : {}),
       };
 
-      // console.log('Данные для регистрации:', payload);
-      // console.log('Отправляем payload:', {
+      // console.log('Registration data:', payload);
+      // console.log('Sending payload:', {
       //   addresses: sanitizedAddresses,
       //   defaultShippingAddress,
       //   defaultBillingAddress,
@@ -119,7 +119,7 @@ export default function RegisterForm() {
       const customerToken = await getCustomerToken(formData.email, formData.password);
       setToken(customerToken);
       navigate(from, { replace: true });
-      // console.log('Успешно авторизован:', customerToken);
+      // console.log('Successfully authenticated:', customerToken);
     } catch (err) {
       if (err instanceof ZodError) {
         const fieldErrors: FormErrors = {};
@@ -143,16 +143,17 @@ export default function RegisterForm() {
       } else if (err instanceof Error && err.message === 'DuplicateEmail') {
         setShowDuplicateEmailModal(true);
       } else {
-        // console.error('Ошибка при регистрации:', err);
+        // console.error('Registration error:', err);
       }
     }
   };
+
   const handleAnonymousLogin = async () => {
     try {
       // const token = await getAnonymousToken();
-      // console.log('Переходим на глуавную', token);
+      // console.log('Redirecting to main page', token);
       Toastify({
-        text: 'Успещно! Выполняется анонимный вход',
+        text: 'Success! Anonymous login in progress',
         duration: 3000,
         close: true,
         gravity: 'top',
@@ -166,9 +167,9 @@ export default function RegisterForm() {
         navigate(Path.MAIN);
       }
     } catch (error) {
-      console.error('Ошибка при анонимном входе:', error);
+      console.error('Anonymous login error:', error);
       Toastify({
-        text: 'Ошибка при анонимном входе, попробуйте в другой раз',
+        text: 'Anonymous login failed, please try again later',
         duration: 3000,
         close: true,
         gravity: 'top',
@@ -185,17 +186,17 @@ export default function RegisterForm() {
     <>
       <form onSubmit={handleSubmit} className="form-position">
         <h1>To Good Shop</h1>
-        <h2>Регистрация</h2>
+        <h2>Sign Up</h2>
         <input
           name="username"
-          placeholder="Имя"
+          placeholder="First Name"
           value={formData.username}
           onChange={handleChange}
         />
         {submitted && errors.username && <p className="errors">{errors.username}</p>}
         <input
           name="surname"
-          placeholder="Фамилия"
+          placeholder="Last Name"
           value={formData.surname}
           onChange={handleChange}
         />
@@ -205,7 +206,7 @@ export default function RegisterForm() {
         <input
           name="password"
           type="password"
-          placeholder="Пароль"
+          placeholder="Password"
           value={formData.password}
           onChange={handleChange}
         />
@@ -215,14 +216,14 @@ export default function RegisterForm() {
         <div className="address-section">
           <AddressForm
             type="shippingAddress"
-            title="Адрес доставки"
+            title="Shipping Address"
             address={formData.shippingAddress}
             errors={errors.shippingAddress || {}}
             onChange={handleAddressChange}
           />
           <label>
             <input type="checkbox" checked={useSameAddress} onChange={handleCheckboxChange} />
-            Использовать тот же адрес для выставления счетов
+            Use the same address for billing
           </label>
           <label>
             <input
@@ -230,36 +231,35 @@ export default function RegisterForm() {
               checked={formData.shippingAddress.defaultShippingAddress}
               onChange={handleDefaultShippingChange}
             />
-            Сделать дефолтным адресом доставки
+            Set as default shipping address
           </label>
         </div>
         <div className="address-section">
           <AddressForm
             type="billingAddress"
-            title="Адрес для выставления счетов"
+            title="Billing Address"
             address={formData.billingAddress}
             errors={errors.billingAddress || {}}
             onChange={handleAddressChange}
           />
-
           <label>
             <input
               type="checkbox"
               checked={formData.billingAddress.defaultBillingAddress}
               onChange={handleDefaultBillingChange}
             />
-            Сделать дефолтным адресом для платежей
+            Set as default billing address
           </label>
         </div>
         <div className="buttons-block">
           <button className="button-reg" type="submit">
-            Зарегистрироваться
+            Register
           </button>
           <button className="button-reg" type="button" onClick={handleAnonymousLogin}>
-            Войти без регистрации
+            Continue as Guest
           </button>
           <button className="button-reg" type="button" onClick={handleLoginRedirect}>
-            Уже есть учетная запись?
+            Already have an account?
           </button>
         </div>
       </form>
