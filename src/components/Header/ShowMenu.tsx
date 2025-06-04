@@ -11,7 +11,8 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Path } from '../../types/paths';
-import { useAuth } from '../../context/context.tsx';
+import { useAuth } from '../../context/context';
+import { useTranslation } from 'react-i18next';
 
 const ShowMenu = () => {
   // const theme = useTheme();
@@ -24,6 +25,8 @@ const ShowMenu = () => {
   const location = useLocation();
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+  const { t } = useTranslation();
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -47,13 +50,13 @@ const ShowMenu = () => {
 
         <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
           <MenuItem onClick={handleMenuClose} component={Link} to={'/catalog'}>
-            Catalog
+            {t('Catalog')}
           </MenuItem>
 
           {auth
             ? [
                 <MenuItem key="profile" onClick={handleMenuClose} component={Link} to="/profile">
-                  Profile
+                  {t('Profile')}
                 </MenuItem>,
                 <MenuItem
                   key="logout"
@@ -63,15 +66,15 @@ const ShowMenu = () => {
                     navigate(Path.LOGIN);
                   }}
                 >
-                  Logout
+                  {t('Logout')}
                 </MenuItem>,
               ]
             : [
                 <MenuItem key="login" onClick={handleMenuClose} component={Link} to={Path.LOGIN}>
-                  Login
+                  {t('Login')}
                 </MenuItem>,
                 <MenuItem key="register" onClick={goToRegister}>
-                  Registration
+                  {t('Registration')}
                 </MenuItem>,
               ]}
         </Menu>
@@ -83,13 +86,13 @@ const ShowMenu = () => {
   return (
     <>
       <Button component={Link} to={'/catalog'} color="inherit" variant="outlined">
-        Catalog
+        {t('Catalog')}
       </Button>
 
       {auth ? (
         <>
           <Button component={Link} to="/profile" color="inherit" variant="outlined">
-            Profile
+            {t('Profile')}
           </Button>
           <Button
             variant="outlined"
@@ -99,20 +102,30 @@ const ShowMenu = () => {
               navigate(Path.LOGIN);
             }}
           >
-            Logout
+            {t('Logout')}
           </Button>
         </>
       ) : (
         <>
-          <Tooltip title="Log in to your account" arrow placement="bottom-start" enterDelay={500}>
+          <Tooltip
+            title={t('Log in to your account')}
+            arrow
+            placement="bottom-start"
+            enterDelay={500}
+          >
             <Button variant="outlined" color="inherit" component={Link} to={Path.LOGIN}>
-              Login
+              {t('Login')}
             </Button>
           </Tooltip>
 
-          <Tooltip title="Create a new account" arrow placement="bottom-start" enterDelay={500}>
+          <Tooltip
+            title={t('Create a new account')}
+            arrow
+            placement="bottom-start"
+            enterDelay={500}
+          >
             <Button variant="outlined" color="inherit" onClick={goToRegister}>
-              Registration
+              {t('Registration')}
             </Button>
           </Tooltip>
         </>
