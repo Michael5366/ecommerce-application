@@ -2,5 +2,27 @@
   "login": "Login",
   "register": "Register",
   "productDetails": "Product Details",
-  "addToCart": "Add to Cart"
+  "addToCart": "Add to Cart",
+
+  "title": "To Good Shop",
+  "registration": "Registration",
+  "firstName": "First Name",
+  "lastName": "Last Name",
+  "email": "Email",
+  "password": "Password",
+  "dateOfBirth": "Date of Birth",
+  "shippingAddress": "Shipping Address",
+  "billingAddress": "Billing Address",
+  "useSameAddress": "Use the same address for billing",
+  "defaultShipping": "Set as default shipping address",
+  "defaultBilling": "Set as default billing address",
+  "anonymousLogin": "Continue without registration",
+  "haveAccount": "Already have an account?",
+  "successAnonymous": "Success! Logging in anonymously...",
+  "errorAnonymous": "Error during anonymous login, please try again later",
+  "selectPlaceholder": "-- Select --",
+  "country_US": "USA",
+  "country_ES": "Spain",
+  "country_FR": "France",
+  "postalCode": "Postal Code"
 }
