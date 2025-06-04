@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Product, ProductPriceInfo, Category } from '../../types/productTypes';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import styles from './ProductCard.module.css';
+import { useTranslation } from 'react-i18next';
 
 interface ProductCardProps {
   product: Product;
@@ -17,6 +18,7 @@ export const ProductCard: FC<ProductCardProps> = ({
   searchQuery,
   onAddToCart,
 }) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const productName = product.masterData?.current?.name?.en || product.id;
   const productDescription = product.masterData?.current?.description?.en;
@@ -95,8 +97,8 @@ export const ProductCard: FC<ProductCardProps> = ({
   };
 
   return (
-    <div className={styles.productCard} onClick={handleProductClick}>
-      {hasDiscount && <div className={styles.discountBadge}>Sale</div>}
+    <div className={styles.productCard} onClick={handleProductClick} role="button" tabIndex={0}>
+      {hasDiscount && <div className={styles.discountBadge}>{t('Sale')}</div>}
 
       <div className={styles.imageContainer}>
         <img
@@ -131,7 +133,7 @@ export const ProductCard: FC<ProductCardProps> = ({
               )}
             </>
           ) : (
-            <span className={styles.currentPrice}>Price not specified</span>
+            <span className={styles.currentPrice}>{t('Price not specified')}</span>
           )}
         </div>
       </div>
@@ -139,8 +141,8 @@ export const ProductCard: FC<ProductCardProps> = ({
       <div
         className={styles.cartIcon}
         onClick={handleAddToCart}
-        title="Add to cart"
-        aria-label="Add to cart"
+        title={t('Add to cart')}
+        aria-label={t('Add to cart')}
       >
         <ShoppingCartIcon fontSize="small" />
       </div>

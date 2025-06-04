@@ -1,4 +1,5 @@
 import { FC, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import styles from './SearchBar.module.css';
 
 interface SearchBarProps {
@@ -18,6 +19,7 @@ export const SearchBar: FC<SearchBarProps> = ({
   isSearching,
   className = '',
 }) => {
+  const { t } = useTranslation();
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   return (
@@ -27,7 +29,7 @@ export const SearchBar: FC<SearchBarProps> = ({
         <input
           ref={searchInputRef}
           type="text"
-          placeholder="Search for products..."
+          placeholder={t('Search for products...')}
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
           className={styles.searchInput}
@@ -41,13 +43,14 @@ export const SearchBar: FC<SearchBarProps> = ({
               handleResetSearch();
               searchInputRef.current?.focus();
             }}
+            aria-label={t('Clear search')}
           >
             ×
           </button>
         )}
       </div>
       <button onClick={handleSearch} disabled={isSearching} className={styles.searchButton}>
-        {isSearching ? <span className={styles.spinner}></span> : 'Search'}
+        {isSearching ? <span className={styles.spinner}></span> : t('Search')}
       </button>
     </div>
   );

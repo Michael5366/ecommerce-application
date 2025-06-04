@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Category, Product } from '../../types/productTypes';
 import { ProductCard } from './ProductCard';
 import styles from './ProductGrid.module.css';
@@ -10,11 +11,13 @@ interface ProductGridProps {
 }
 
 export const ProductGrid: FC<ProductGridProps> = ({ products, searchQuery, categories }) => {
+  const { t } = useTranslation();
+
   if (products.length === 0) {
     return (
       <div className={styles.noResults}>
-        <h3>No products found</h3>
-        <p>Try changing your search parameters or filters.</p>
+        <h3>{t('No products found')}</h3>
+        <p>{t('Try changing your search parameters or filters.')}</p>
       </div>
     );
   }

@@ -17,6 +17,7 @@ import { CategoriesModal } from '../components/Catalog/CategoriesModal';
 import styles from './CatalogPage.module.css';
 import { Pagination } from '../components/Catalog/Pagination';
 import { Breadcrumbs } from '../components/Catalog/Breadcrumbs';
+import { useTranslation } from 'react-i18next';
 
 const CatalogPage = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -46,6 +47,8 @@ const CatalogPage = () => {
   const { categoryName } = useParams();
   const navigate = useNavigate();
   const { makeApiRequest } = useApi();
+
+  const { t } = useTranslation();
 
   const fetchCategories = useCallback(async (): Promise<void> => {
     try {
@@ -342,7 +345,7 @@ const CatalogPage = () => {
     return (
       <div className={styles.loadingContainer}>
         <div className={styles.spinner}></div>
-        <p>Loading goods...</p>
+        <p>{t('loading_goods')}</p> {/* Переведено */}
       </div>
     );
   }
@@ -350,10 +353,10 @@ const CatalogPage = () => {
   if (error) {
     return (
       <div className={styles.errorContainer}>
-        <h2>Error loading products</h2>
+        <h2>{t('error_loading_products')}</h2> {/* Переведено */}
         <p>{error}</p>
         <button onClick={() => window.location.reload()} className={styles.retryButton}>
-          Try again
+          {t('try_again')} {/* Переведено */}
         </button>
       </div>
     );
@@ -405,10 +408,10 @@ const CatalogPage = () => {
               onChange={(e) => setSortOption(e.target.value)}
               className={styles.sortSelect}
             >
-              <option value="name asc">Sorting: A-Z</option>
-              <option value="name desc">Sorting: Z-A</option>
-              <option value="price asc">Sorting: Price ascending</option>
-              <option value="price desc">Sorting: Price descending</option>
+              <option value="name asc">{t('sorting_a_z')}</option>
+              <option value="name desc">{t('sorting_z_a')}</option>
+              <option value="price asc">{t('sorting_price_asc')}</option>
+              <option value="price desc">{t('sorting_price_desc')}</option>
             </select>
           </div>
           <ProductGrid

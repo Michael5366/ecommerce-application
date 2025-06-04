@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { Category } from '../../types/productTypes';
 import { CategoryList } from './CategoryList';
 import styles from './CategoriesModal.module.css';
+import { useTranslation } from 'react-i18next';
 
 interface CategoriesModalProps {
   isOpen: boolean;
@@ -18,14 +19,16 @@ export const CategoriesModal: FC<CategoriesModalProps> = ({
   selectedCategory,
   setSelectedCategory,
 }) => {
+  const { t } = useTranslation();
+
   if (!isOpen) return null;
 
   return (
     <div className={styles.modalOverlay} onClick={onClose}>
       <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
         <div className={styles.modalHeader}>
-          <h2>Categories</h2>
-          <button className={styles.modalCloseButton} onClick={onClose}>
+          <h2>{t('Categories')}</h2>
+          <button className={styles.modalCloseButton} onClick={onClose} aria-label={t('Close')}>
             &times;
           </button>
         </div>

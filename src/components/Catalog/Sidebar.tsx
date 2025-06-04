@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Category, ProductFilters } from '../../types/productTypes';
 import { CategoryList } from './CategoryList';
 import { PriceFilter } from './PriceFilter';
@@ -45,6 +46,8 @@ export const Sidebar: FC<SidebarProps> = ({
   setFilters,
   resetFilters,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <aside className={styles.sidebar}>
       <div className={styles.desktopSearch}>
@@ -64,7 +67,7 @@ export const Sidebar: FC<SidebarProps> = ({
       />
 
       <div className={styles.filterSection}>
-        <h3 className={styles.sectionTitle}>Filters</h3>
+        <h3 className={styles.sectionTitle}>{t('Filters')}</h3>
 
         <PriceFilter priceRange={priceRange} handlePriceChange={handlePriceChange} />
 
@@ -93,7 +96,7 @@ export const Sidebar: FC<SidebarProps> = ({
         )}
 
         <button onClick={resetFilters} className={styles.resetButton}>
-          Reset filters
+          {t('Reset filters')}
         </button>
       </div>
     </aside>

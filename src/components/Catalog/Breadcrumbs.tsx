@@ -4,6 +4,7 @@ import styles from './Breadcrumbs.module.css';
 import { Category } from '../../types/productTypes';
 import HomeIcon from '@mui/icons-material/Home';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import { useTranslation } from 'react-i18next';
 
 interface BreadcrumbsProps {
   categories: Category[];
@@ -16,11 +17,13 @@ export const Breadcrumbs: FC<BreadcrumbsProps> = ({
   selectedCategory,
   onCategorySelect,
 }) => {
+  const { t } = useTranslation();
+
   const buildBreadcrumbs = () => {
     const breadcrumbs = [];
     breadcrumbs.push({
       id: '',
-      name: 'All products',
+      name: t('All products'),
       path: '/catalog',
       isCurrent: !selectedCategory,
     });
@@ -39,6 +42,7 @@ export const Breadcrumbs: FC<BreadcrumbsProps> = ({
       categoryChain.forEach((category, index) => {
         breadcrumbs.push({
           id: category.id,
+          // Название категории — оставим как есть, или при желании переводить, если есть ключи
           name: category.name?.en || category.id,
           path: `/catalog/${category.name?.en?.toLowerCase().replace(/\s+/g, '-') || ''}`,
           isCurrent: index === categoryChain.length - 1,
