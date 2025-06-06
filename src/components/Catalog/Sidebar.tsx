@@ -1,4 +1,3 @@
-import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Category, ProductFilters } from '../../types/productTypes';
 import { CategoryList } from './CategoryList';
@@ -28,7 +27,7 @@ interface SidebarProps {
   resetFilters: () => void;
 }
 
-export const Sidebar: FC<SidebarProps> = ({
+export const Sidebar = ({
   searchInput,
   setSearchInput,
   handleSearch,
@@ -45,7 +44,7 @@ export const Sidebar: FC<SidebarProps> = ({
   filters,
   setFilters,
   resetFilters,
-}) => {
+}: SidebarProps) => {
   const { t } = useTranslation();
 
   return (
