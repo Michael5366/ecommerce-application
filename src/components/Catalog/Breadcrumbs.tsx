@@ -42,7 +42,6 @@ export const Breadcrumbs: FC<BreadcrumbsProps> = ({
       categoryChain.forEach((category, index) => {
         breadcrumbs.push({
           id: category.id,
-          // Название категории — оставим как есть, или при желании переводить, если есть ключи
           name: category.name?.en || category.id,
           path: `/catalog/${category.name?.en?.toLowerCase().replace(/\s+/g, '-') || ''}`,
           isCurrent: index === categoryChain.length - 1,
