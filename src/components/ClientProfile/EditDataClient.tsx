@@ -188,7 +188,6 @@ export default function EditDataChangedModal({
         });
       }
 
-      // Shipping
       const removedShippingIds = current.shippingAddressIds.filter(
         (id) => !shippingSelected.includes(id)
       );
