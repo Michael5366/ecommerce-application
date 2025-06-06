@@ -1,4 +1,3 @@
-import { FC } from 'react';
 import { Category } from '../../types/productTypes';
 import { CategoryList } from './CategoryList';
 import styles from './CategoriesModal.module.css';
@@ -12,13 +11,13 @@ interface CategoriesModalProps {
   setSelectedCategory: (id: string) => void;
 }
 
-export const CategoriesModal: FC<CategoriesModalProps> = ({
+export const CategoriesModal = ({
   isOpen,
   onClose,
   categories,
   selectedCategory,
   setSelectedCategory,
-}) => {
+}: CategoriesModalProps) => {
   const { t } = useTranslation();
 
   if (!isOpen) return null;
