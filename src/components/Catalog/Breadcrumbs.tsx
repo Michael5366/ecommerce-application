@@ -5,6 +5,8 @@ import { Category } from '../../types/productTypes';
 import HomeIcon from '@mui/icons-material/Home';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { useTranslation } from 'react-i18next';
+import { Path } from '../../types/paths';
+import { Catalog, DEFAULT_BREADCRUMB_ID } from '../../types/catalog';
 
 interface BreadcrumbsProps {
   categories: Category[];
@@ -22,9 +24,9 @@ export const Breadcrumbs: FC<BreadcrumbsProps> = ({
   const buildBreadcrumbs = () => {
     const breadcrumbs = [];
     breadcrumbs.push({
-      id: '',
-      name: t('All products'),
-      path: '/catalog',
+      id: DEFAULT_BREADCRUMB_ID,
+      name: t(Catalog.ALL_PRODUCTS),
+      path: Path.CATALOG,
       isCurrent: !selectedCategory,
     });
 
