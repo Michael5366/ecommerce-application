@@ -1,0 +1,72 @@
+.mobileHeader {
+  display: none;
+  padding: 0.75rem;
+  background: white;
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.mobileToolbar {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.options {
+  display: flex;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.filterButton {
+  flex: 1;
+  padding: 0.6rem;
+  background: white;
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.filterButton:hover {
+  background: var(--hover-color);
+}
+
+.filterIcon {
+  font-size: 1.1rem;
+}
+
+.sortSelectMobile {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  background: white;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 400px) {
+  .mobileToolbar {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .sortSelectMobile {
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .mobileHeader {
+    display: block;
+  }
+
+  .sidebar {
+    display: none;
+  }
+}

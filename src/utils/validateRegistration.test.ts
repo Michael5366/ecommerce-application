@@ -30,17 +30,17 @@ describe('registrationSchema', () => {
       if (e instanceof ZodError) {
         const messages = e.errors.map((err) => err.message);
 
-        expect(messages).toContain('Введите имя пользователя');
-        expect(messages).toContain('Введите фамилию');
-        expect(messages).toContain('Введите корректный email');
+        expect(messages).toContain('Enter the first name');
+        expect(messages).toContain('Enter the last name');
+        expect(messages).toContain('Enter the correct email address');
         expect(messages).toContain(
-          'Пароль должен быть не менее 8 символов и содержать заглавную букву, строчную и цифру'
+          'The password must be at least 8 characters long and contain an uppercase letter, a lowercase letter, and a number.'
         );
-        expect(messages).toContain('Пользователю должно быть больше 14 лет');
-        expect(messages).toContain('Введите улицу');
-        expect(messages).toContain('Город не должен содержать цифры или спецсимволы');
-        expect(messages).toContain('Недопустимая страна');
-        expect(messages).toContain('Выберите страну');
+        expect(messages).toContain('The user must be over 14 years old');
+        expect(messages).toContain('Enter the street');
+        expect(messages).toContain('The city must not contain numbers or special characters.');
+        expect(messages).toContain('An unacceptable country');
+        expect(messages).toContain('Select a country');
       } else {
         throw e;
       }

@@ -11,9 +11,10 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Path } from '../../types/paths';
-import { useAuth } from '../../context/context.tsx';
+import { useAuth } from '../../context/context';
+import { useTranslation } from 'react-i18next';
 
-export const showMenu = () => {
+const ShowMenu = () => {
   // const theme = useTheme();
   // const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const isMobile = useMediaQuery('(max-width:860px)');
@@ -24,6 +25,8 @@ export const showMenu = () => {
   const location = useLocation();
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+  const { t } = useTranslation();
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -47,33 +50,33 @@ export const showMenu = () => {
 
         <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
           <MenuItem onClick={handleMenuClose} component={Link} to={'/catalog'}>
-            Catalog
-          </MenuItem>
-          <MenuItem onClick={handleMenuClose} component={Link} to="/cart">
-            Cart
-          </MenuItem>
-          <MenuItem onClick={handleMenuClose} component={Link} to="/profile">
-            Profile
+            {t('Catalog')}
           </MenuItem>
 
-          {auth ? (
-            <MenuItem
-              onClick={() => {
-                handleMenuClose();
-                logout();
-                navigate(Path.MAIN);
-              }}
-            >
-              Logout
-            </MenuItem>
-          ) : (
-            <>
-              <MenuItem onClick={handleMenuClose} component={Link} to={Path.LOGIN}>
-                Login
-              </MenuItem>
-              <MenuItem onClick={goToRegister}>Registration</MenuItem>
-            </>
-          )}
+          {auth
+            ? [
+                <MenuItem key="profile" onClick={handleMenuClose} component={Link} to="/profile">
+                  {t('Profile')}
+                </MenuItem>,
+                <MenuItem
+                  key="logout"
+                  onClick={() => {
+                    handleMenuClose();
+                    logout();
+                    navigate(Path.LOGIN);
+                  }}
+                >
+                  {t('Logout')}
+                </MenuItem>,
+              ]
+            : [
+                <MenuItem key="login" onClick={handleMenuClose} component={Link} to={Path.LOGIN}>
+                  {t('Login')}
+                </MenuItem>,
+                <MenuItem key="register" onClick={goToRegister}>
+                  {t('Registration')}
+                </MenuItem>,
+              ]}
         </Menu>
       </>
     );
@@ -83,37 +86,46 @@ export const showMenu = () => {
   return (
     <>
       <Button component={Link} to={'/catalog'} color="inherit" variant="outlined">
-        Catalog
-      </Button>
-      <Button component={Link} to="/cart" color="inherit" variant="outlined">
-        Cart
-      </Button>
-      <Button component={Link} to="/profile" color="inherit" variant="outlined">
-        Profile
+        {t('Catalog')}
       </Button>
 
       {auth ? (
-        <Button
-          variant="outlined"
-          color="inherit"
-          onClick={() => {
-            logout();
-            navigate(Path.MAIN);
-          }}
-        >
-          Logout
-        </Button>
+        <>
+          <Button component={Link} to="/profile" color="inherit" variant="outlined">
+            {t('Profile')}
+          </Button>
+          <Button
+            variant="outlined"
+            color="inherit"
+            onClick={() => {
+              logout();
+              navigate(Path.LOGIN);
+            }}
+          >
+            {t('Logout')}
+          </Button>
+        </>
       ) : (
         <>
-          <Tooltip title="Log in to your account" arrow placement="bottom-start" enterDelay={500}>
+          <Tooltip
+            title={t('Log in to your account')}
+            arrow
+            placement="bottom-start"
+            enterDelay={500}
+          >
             <Button variant="outlined" color="inherit" component={Link} to={Path.LOGIN}>
-              Login
+              {t('Login')}
             </Button>
           </Tooltip>
 
-          <Tooltip title="Create a new account" arrow placement="bottom-start" enterDelay={500}>
+          <Tooltip
+            title={t('Create a new account')}
+            arrow
+            placement="bottom-start"
+            enterDelay={500}
+          >
             <Button variant="outlined" color="inherit" onClick={goToRegister}>
-              Registration
+              {t('Registration')}
             </Button>
           </Tooltip>
         </>
@@ -121,3 +133,5 @@ export const showMenu = () => {
     </>
   );
 };
+
+export default ShowMenu;

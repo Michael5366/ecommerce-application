@@ -1,25 +1,23 @@
-import { AppBar, Container, Stack, Toolbar, Typography, useTheme } from '@mui/material';
+import { AppBar, Container, Stack, Toolbar, Typography } from '@mui/material';
 
 import { Link } from 'react-router-dom';
-import { showMenu } from './ShowMenu';
+import ShowMenu from './ShowMenu';
+
+import HeaderStyles from './header-styles';
 
 const Header = () => {
-  const theme = useTheme();
+  const css = HeaderStyles();
+
   return (
     <AppBar position="static">
       <Container disableGutters>
         <Toolbar sx={{ justifyContent: 'space-between' }}>
-          <Typography
-            variant="h6"
-            component={Link}
-            to="/"
-            sx={{ textDecoration: 'none', color: theme.palette.text.primary }}
-          >
+          <Typography className={css.logo} variant="h6" component={Link} to="/">
             🌸 Flower Shop
           </Typography>
 
           <Stack direction="row" spacing={2}>
-            {showMenu()}
+            <ShowMenu />
           </Stack>
         </Toolbar>
       </Container>

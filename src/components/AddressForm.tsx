@@ -19,7 +19,7 @@ export default function AddressForm({ type, title, address, errors, onChange }: 
       <div className="adress-block">
         <input
           name="streetName"
-          placeholder="Улица"
+          placeholder="Street"
           value={address.streetName}
           onChange={(e) => onChange(e, type)}
         />
@@ -27,7 +27,7 @@ export default function AddressForm({ type, title, address, errors, onChange }: 
 
         <input
           name="city"
-          placeholder="Город"
+          placeholder="City"
           value={address.city}
           onChange={(e) => onChange(e, type)}
         />
@@ -35,17 +35,17 @@ export default function AddressForm({ type, title, address, errors, onChange }: 
 
         <input
           name="postalCode"
-          placeholder="Почтовый индекс"
+          placeholder="Postal Code"
           value={address.postalCode}
           onChange={(e) => onChange(e, type)}
         />
         {errors.postalCode && <p className="errors">{errors.postalCode}</p>}
 
         <select name="country" value={address.country} onChange={(e) => onChange(e, type)}>
-          <option value="">-- Выберите --</option>
-          <option value="US">США</option>
-          <option value="ES">Испания</option>
-          <option value="FR">Франция</option>
+          <option value="">-- Select --</option>
+          <option value="US">USA</option>
+          <option value="ES">Spain</option>
+          <option value="FR">France</option>
         </select>
         {errors.country && <p className="errors">{errors.country}</p>}
       </div>

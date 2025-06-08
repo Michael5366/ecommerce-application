@@ -1,5 +1,7 @@
+import ProfilePageCustomer from '../components/ClientProfile/CustomerProfile';
+
 const ProfilePage = () => {
-  return <h1>Profile — page under development</h1>;
+  return <ProfilePageCustomer />;
 };
 
 export default ProfilePage;

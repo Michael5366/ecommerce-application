@@ -1,0 +1,63 @@
+import { FC } from 'react';
+import { SearchBar } from './SearchBar';
+import styles from './MobileHeader.module.css';
+import { useTranslation } from 'react-i18next';
+
+interface MobileHeaderProps {
+  searchInput: string;
+  setSearchInput: (value: string) => void;
+  handleSearch: () => void;
+  handleResetSearch: () => void;
+  isSearching: boolean;
+  sortOption: string;
+  setSortOption: (value: string) => void;
+  setIsCategoriesModalOpen: (value: boolean) => void;
+  setIsFiltersModalOpen: (value: boolean) => void;
+}
+
+export const MobileHeader: FC<MobileHeaderProps> = ({
+  searchInput,
+  setSearchInput,
+  handleSearch,
+  handleResetSearch,
+  isSearching,
+  sortOption,
+  setSortOption,
+  setIsCategoriesModalOpen,
+  setIsFiltersModalOpen,
+}) => {
+  const { t } = useTranslation();
+
+  return (
+    <div className={styles.mobileHeader}>
+      <SearchBar
+        searchInput={searchInput}
+        setSearchInput={setSearchInput}
+        handleSearch={handleSearch}
+        handleResetSearch={handleResetSearch}
+        isSearching={isSearching}
+      />
+
+      <div className={styles.mobileToolbar}>
+        <button onClick={() => setIsCategoriesModalOpen(true)} className={styles.filterButton}>
+          <span className={styles.filterIcon}>📁</span> {t('Categories')}
+        </button>
+        <div className={styles.options}>
+          <button onClick={() => setIsFiltersModalOpen(true)} className={styles.filterButton}>
+            <span className={styles.filterIcon}>☰</span> {t('Filters')}
+          </button>
+          <select
+            value={sortOption}
+            onChange={(e) => setSortOption(e.target.value)}
+            className={styles.sortSelectMobile}
+          >
+            <option value="name asc">{t('A-Z')}</option>
+            <option value="name desc">{t('Z-A')}</option>
+            <option value="price asc">{t('Price ↑')}</option>
+            <option value="price desc">{t('Price ↓')}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  );
+};

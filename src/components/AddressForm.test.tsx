@@ -23,54 +23,54 @@ describe('AddressForm', () => {
     render(
       <AddressForm
         type="shippingAddress"
-        title="Адрес доставки"
+        title="Shipping Address"
         address={mockAddress}
         errors={mockErrors}
         onChange={mockOnChange}
       />
     );
 
-    expect(screen.getByPlaceholderText('Улица')).toHaveValue('Main St');
-    expect(screen.getByPlaceholderText('Город')).toHaveValue('Madrid');
-    expect(screen.getByPlaceholderText('Почтовый индекс')).toHaveValue('12345');
-    expect(screen.getByDisplayValue('Испания')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Street')).toHaveValue('Main St');
+    expect(screen.getByPlaceholderText('City')).toHaveValue('Madrid');
+    expect(screen.getByPlaceholderText('Postal Code')).toHaveValue('12345');
+    expect(screen.getByDisplayValue('Spain')).toBeInTheDocument();
   });
 
   it('calls onChange when inputs are changed', () => {
     render(
       <AddressForm
         type="billingAddress"
-        title="Адрес для счета"
+        title="Billing Address"
         address={mockAddress}
         errors={mockErrors}
         onChange={mockOnChange}
       />
     );
 
-    fireEvent.change(screen.getByPlaceholderText('Улица'), { target: { value: 'New St' } });
+    fireEvent.change(screen.getByPlaceholderText('Street'), { target: { value: 'New St' } });
     expect(mockOnChange).toHaveBeenCalled();
     expect(mockOnChange).toHaveBeenCalledWith(expect.any(Object), 'billingAddress');
   });
 
   it('displays error messages if present', () => {
     const errorMock = {
-      streetName: 'Улица обязательна',
+      streetName: 'Street is required',
       city: '',
-      postalCode: 'Неверный индекс',
+      postalCode: 'Invalid postal code',
       country: '',
     };
 
     render(
       <AddressForm
         type="shippingAddress"
-        title="Адрес"
+        title="Address"
         address={mockAddress}
         errors={errorMock}
         onChange={mockOnChange}
       />
     );
 
-    expect(screen.getByText('Улица обязательна')).toBeInTheDocument();
-    expect(screen.getByText('Неверный индекс')).toBeInTheDocument();
+    expect(screen.getByText('Street is required')).toBeInTheDocument();
+    expect(screen.getByText('Invalid postal code')).toBeInTheDocument();
   });
 });
