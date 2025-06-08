@@ -1,4 +1,3 @@
-import { FC } from 'react';
 import styles from './ColorFilter.module.css';
 
 interface ColorFilterProps {
@@ -7,11 +6,11 @@ interface ColorFilterProps {
   onSelectColor: (color: string) => void;
 }
 
-export const ColorFilter: FC<ColorFilterProps> = ({
+export const ColorFilter = ({
   availableColors,
   selectedColor,
   onSelectColor,
-}) => {
+}: ColorFilterProps) => {
   return (
     <div className={styles.filterGroup}>
       <label className={styles.filterLabel}>Color:</label>
