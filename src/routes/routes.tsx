@@ -9,6 +9,7 @@ import ProfilePage from '../pages/ProfilePage';
 import ProductPage from '../pages/product-page/ProductPage';
 import fetchProductsData from '../loaders/catalogLoader';
 import CatalogPage from '../pages/CatalogPage';
+import { BasketPage } from '../pages/BasketPage';
 
 export const routesArray: Routes = [
   {
@@ -42,6 +43,7 @@ export const routesArray: Routes = [
       // { path: 'catalog/product/:productName', element: <ProductPage /> },
       { path: 'profile', element: <ProfilePage /> },
       { path: '*', element: <NotFoundPage /> },
+      { path: 'basket', element: <BasketPage />}
     ],
   },
 ];

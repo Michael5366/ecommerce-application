@@ -2,6 +2,7 @@
 import { Address } from '../types/form';
 import Toastify from 'toastify-js';
 import 'toastify-js/src/toastify.css';
+import { createEmptyCart } from './CreateBasketApi';
 
 // const clientId = 'your_client_id';
 // const clientSecret = 'your_client_secret';
@@ -130,6 +131,7 @@ export const signUpUser = async (token: string, payload: SignUpPayload) => {
     throw new Error(error.message || 'Ошибка при регистрации пользователя');
   }
   const successData: ApiSuccessResponse = await response.json();
+  const customerToken = await getCustomerToken(payload.email, payload.password);
   Toastify({
     text: 'Регистрация успешно завершена! Переходим на главную страницу!',
     duration: 3000,
@@ -141,6 +143,7 @@ export const signUpUser = async (token: string, payload: SignUpPayload) => {
       color: '#fff',
     },
   }).showToast();
+  await createEmptyCart(customerToken);
   // router.push('/');
   // console.log(successData);
   return successData;
