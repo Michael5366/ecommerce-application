@@ -1,5 +1,5 @@
-import { BasketCompClient } from "../components/BasketPageConstr"
+import { BasketCompClient } from '../components/BasketPageConstr';
 
-export function BasketPage () {
-    return (< BasketCompClient/>)
+export function BasketPage() {
+  return <BasketCompClient />;
 }

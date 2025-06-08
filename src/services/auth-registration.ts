@@ -2,7 +2,7 @@
 import { Address } from '../types/form';
 import Toastify from 'toastify-js';
 import 'toastify-js/src/toastify.css';
-import { createEmptyCart } from './CreateBasketApi';
+import { createEmptyCart } from './Basket/CreateBasketApi';
 
 // const clientId = 'your_client_id';
 // const clientSecret = 'your_client_secret';
@@ -39,7 +39,7 @@ export const getAnonymousToken = async () => {
         Authorization: 'Basic ' + btoa(`${clientId}:${clientSecret}`),
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: `grant_type=client_credentials&scope=create_anonymous_token:${projectKey} manage_my_profile:${projectKey}`,
+      body: `grant_type=client_credentials&scope=create_anonymous_token:${projectKey} manage_my_profile:${projectKey} view_orders:${projectKey}`,
     }
   );
 
@@ -131,8 +131,10 @@ export const signUpUser = async (token: string, payload: SignUpPayload) => {
     throw new Error(error.message || 'Ошибка при регистрации пользователя');
   }
   const successData: ApiSuccessResponse = await response.json();
+  try {
   const customerToken = await getCustomerToken(payload.email, payload.password);
-  Toastify({
+  await createEmptyCart(customerToken);
+    Toastify({
     text: 'Регистрация успешно завершена! Переходим на главную страницу!',
     duration: 3000,
     close: true,
@@ -143,7 +145,12 @@ export const signUpUser = async (token: string, payload: SignUpPayload) => {
       color: '#fff',
     },
   }).showToast();
-  await createEmptyCart(customerToken);
+  } catch (error) {
+  console.error('Ошибка при получении токена или создании корзины:', error);
+}
+
+
+
   // router.push('/');
   // console.log(successData);
   return successData;
@@ -162,12 +169,12 @@ export const getCustomerToken = async (email: string, password: string) => {
         Authorization: 'Basic ' + btoa(`${clientId}:${clientSecret}`),
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: `grant_type=password&username=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}&scope=manage_my_profile:${projectKey} manage_my_orders:${projectKey}`,
+      body: `grant_type=password&username=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}&scope=manage_my_profile:${projectKey} manage_my_orders:${projectKey} view_orders:${projectKey}`,
     }
   );
 
   const data = await res.json();
-
+  console.log('🔥 Customer Token:', data.access_token);
   if (!res.ok) throw new Error(data.error_description || 'Login failed');
 
   return data.access_token;

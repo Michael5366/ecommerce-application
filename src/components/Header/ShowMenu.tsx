@@ -53,7 +53,7 @@ const ShowMenu = () => {
             {t('Catalog')}
           </MenuItem>
           <MenuItem onClick={handleMenuClose} component={Link} to={'/basket'}>
-          {t('Basket')}
+            {t('Basket')}
           </MenuItem>
 
           {auth
@@ -92,8 +92,8 @@ const ShowMenu = () => {
         {t('Catalog')}
       </Button>
       <Button component={Link} to={'/basket'} color="inherit" variant="outlined">
-      {t('Basket')}
-     </Button>
+        {t('Basket')}
+      </Button>
 
       {auth ? (
         <>
