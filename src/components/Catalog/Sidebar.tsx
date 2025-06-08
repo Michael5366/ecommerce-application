@@ -27,6 +27,8 @@ interface SidebarProps {
   resetFilters: () => void;
 }
 
+export type { SidebarProps };
+
 export const Sidebar = ({
   searchInput,
   setSearchInput,
