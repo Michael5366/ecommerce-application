@@ -132,24 +132,22 @@ export const signUpUser = async (token: string, payload: SignUpPayload) => {
   }
   const successData: ApiSuccessResponse = await response.json();
   try {
-  const customerToken = await getCustomerToken(payload.email, payload.password);
-  await createEmptyCart(customerToken);
+    const customerToken = await getCustomerToken(payload.email, payload.password);
+    await createEmptyCart(customerToken);
     Toastify({
-    text: 'Регистрация успешно завершена! Переходим на главную страницу!',
-    duration: 3000,
-    close: true,
-    gravity: 'top',
-    position: 'right',
-    style: {
-      background: '#42ff9e',
-      color: '#fff',
-    },
-  }).showToast();
+      text: 'Регистрация успешно завершена! Переходим на главную страницу!',
+      duration: 3000,
+      close: true,
+      gravity: 'top',
+      position: 'right',
+      style: {
+        background: '#42ff9e',
+        color: '#fff',
+      },
+    }).showToast();
   } catch (error) {
-  console.error('Ошибка при получении токена или создании корзины:', error);
-}
-
-
+    console.error('Ошибка при получении токена или создании корзины:', error);
+  }
 
   // router.push('/');
   // console.log(successData);

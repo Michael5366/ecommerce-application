@@ -1,8 +1,23 @@
 import { useEffect, useState } from 'react';
 import { getOrUpdateCustomerCart } from '../services/Basket/updateBasket';
 
+export interface CartResponse {
+  count: number;
+  limit: number;
+  offset: number;
+  results: Cart[];
+  total: number;
+}
+export interface Cart {
+  type: string;
+  id: string;
+  version: number;
+  versionModifiedAt: string;
+  lastMessageSequenceNumber: number;
+}
+
 export function BasketCompClient() {
-  const [cart, setCart] = useState<any | null>(null);
+  const [cart, setCart] = useState<CartResponse | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -27,13 +42,6 @@ export function BasketCompClient() {
   return (
     <div>
       <h2>Ваша корзина</h2>
-      <ul>
-        {cart.lineItems.map((item) => (
-          <li key={item.id}>
-            {item.name.en} — {item.quantity} шт.
-          </li>
-        ))}
-      </ul>
     </div>
   );
 }

@@ -1,3 +1,4 @@
+
 export async function createEmptyCart(token: string) {
   const projectKey = import.meta.env.VITE_CTP_PROJECT_KEY;
 
@@ -10,19 +11,20 @@ export async function createEmptyCart(token: string) {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        currency: 'EUR',
+        country: 'US',
+        currency: 'USD'
       }),
     }
   );
 
   if (!response.ok) {
     const errorData = await response.json();
-    console.error('Ошибка создания корзины:', errorData);
+    console.error('Error fo creating the basket:', errorData);
     return null;
   }
 
   const cartData = await response.json();
-  console.log('Пустая корзина создана:', cartData);
+  console.log('The empty basket was creating:', cartData);
 
   sessionStorage.setItem('cart_id', cartData.id);
   if (cartData.customerEmail) {
