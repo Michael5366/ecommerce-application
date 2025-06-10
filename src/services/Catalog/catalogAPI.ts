@@ -8,39 +8,39 @@ const CLIENT_ID: string = import.meta.env.VITE_CTP_CLIENT_ID;
 const CLIENT_SECRET: string = import.meta.env.VITE_CTP_CLIENT_SECRET;
 const ANONYMOUS_ID: string | undefined = import.meta.env.VITE_CTP_ANONYMOUS_ID;
 
+export const getAnonymousToken = async (): Promise<string> => {
+  try {
+    const authParams = new URLSearchParams({
+      grant_type: 'client_credentials',
+      scope: `view_products:${PROJECT_KEY} view_categories:${PROJECT_KEY} manage_my_orders:${PROJECT_KEY}`,
+    });
+
+    const authHeader = ANONYMOUS_ID
+      ? `Basic ${btoa(`${ANONYMOUS_ID}:${CLIENT_SECRET}`)}`
+      : `Basic ${btoa(`${CLIENT_ID}:${CLIENT_SECRET}`)}`;
+
+    const response = await fetch(`${AUTH_URL}/oauth/token`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Authorization: authHeader,
+      },
+      body: authParams,
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to get anonymous token');
+    }
+
+    return (await response.json()).access_token;
+  } catch (error) {
+    console.error('Error getting anonymous token:', error);
+    throw new Error('Failed to authenticate anonymously');
+  }
+};
+
 export const useApi = () => {
   const navigate = useNavigate();
-
-  const getAnonymousToken = useCallback(async (): Promise<string> => {
-    try {
-      const authParams = new URLSearchParams({
-        grant_type: 'client_credentials',
-        scope: `view_products:${PROJECT_KEY} view_categories:${PROJECT_KEY}`,
-      });
-
-      const authHeader = ANONYMOUS_ID
-        ? `Basic ${btoa(`${ANONYMOUS_ID}:${CLIENT_SECRET}`)}`
-        : `Basic ${btoa(`${CLIENT_ID}:${CLIENT_SECRET}`)}`;
-
-      const response = await fetch(`${AUTH_URL}/oauth/token`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          Authorization: authHeader,
-        },
-        body: authParams,
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to get anonymous token');
-      }
-
-      return (await response.json()).access_token;
-    } catch (error) {
-      console.error('Error getting anonymous token:', error);
-      throw new Error('Failed to authenticate anonymously');
-    }
-  }, [ANONYMOUS_ID, CLIENT_ID, CLIENT_SECRET, PROJECT_KEY]);
 
   const makeApiRequest = useCallback(
     async <T>(
@@ -118,7 +118,7 @@ export const useApi = () => {
         throw error;
       }
     },
-    [getAnonymousToken, navigate]
+    [navigate]
   );
 
   return { makeApiRequest };
