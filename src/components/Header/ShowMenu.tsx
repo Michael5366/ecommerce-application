@@ -68,6 +68,15 @@ const ShowMenu = () => {
                 >
                   {t('Logout')}
                 </MenuItem>,
+                <MenuItem
+                  key="logout"
+                  onClick={() => {
+                    handleMenuClose();
+                    navigate(Path.ABOUTUS);
+                  }}
+                >
+                  {t('About us')}
+                </MenuItem>,
               ]
             : [
                 <MenuItem key="login" onClick={handleMenuClose} component={Link} to={Path.LOGIN}>
@@ -75,6 +84,15 @@ const ShowMenu = () => {
                 </MenuItem>,
                 <MenuItem key="register" onClick={goToRegister}>
                   {t('Registration')}
+                </MenuItem>,
+                <MenuItem
+                  key="register"
+                  onClick={() => {
+                    handleMenuClose();
+                    navigate(Path.ABOUTUS);
+                  }}
+                >
+                  {t('About us')}
                 </MenuItem>,
               ]}
         </Menu>
@@ -104,6 +122,10 @@ const ShowMenu = () => {
           >
             {t('Logout')}
           </Button>
+
+          <Button component={Link} to={'/about-us'} color="inherit" variant="outlined">
+            {t('About us')}
+          </Button>
         </>
       ) : (
         <>
@@ -126,6 +148,12 @@ const ShowMenu = () => {
           >
             <Button variant="outlined" color="inherit" onClick={goToRegister}>
               {t('Registration')}
+            </Button>
+          </Tooltip>
+
+          <Tooltip title={t('About us')} arrow placement="bottom-start" enterDelay={500}>
+            <Button component={Link} to={'/about-us'} color="inherit" variant="outlined">
+              {t('About us')}
             </Button>
           </Tooltip>
         </>
