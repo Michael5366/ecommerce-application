@@ -1,4 +1,3 @@
-
 export async function createEmptyCart(token: string) {
   const projectKey = import.meta.env.VITE_CTP_PROJECT_KEY;
 
@@ -12,7 +11,7 @@ export async function createEmptyCart(token: string) {
       },
       body: JSON.stringify({
         country: 'US',
-        currency: 'USD'
+        currency: 'USD',
       }),
     }
   );

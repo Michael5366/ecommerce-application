@@ -66,9 +66,9 @@ export const useApi = () => {
             });
 
             if (anonymousResponse.ok) {
-                const data = await anonymousResponse.json();
-                console.log('Anonymous products response:', data);
-                return data as T;
+              const data = await anonymousResponse.json();
+              console.log('Anonymous products response:', data);
+              return data as T;
             }
           } catch {}
         }

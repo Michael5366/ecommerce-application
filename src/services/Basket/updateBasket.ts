@@ -11,16 +11,13 @@ export async function getOrUpdateCustomerCart() {
 
   // Exist basket loading
   if (cartId) {
-    const response = await fetch(
-      `${apiUrl}/${projectKey}/me/carts/${cartId}`,
-      {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      }
-    );
+    const response = await fetch(`${apiUrl}/${projectKey}/me/carts/${cartId}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
 
     if (response.ok) {
       cart = await response.json();
@@ -34,16 +31,13 @@ export async function getOrUpdateCustomerCart() {
 
   // find existing basket
   if (!cart) {
-    const response = await fetch(
-      `${apiUrl}/${projectKey}/me/carts`,
-      {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      }
-    );
+    const response = await fetch(`${apiUrl}/${projectKey}/me/carts`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
 
     if (response.ok) {
       const data = await response.json();
@@ -57,20 +51,16 @@ export async function getOrUpdateCustomerCart() {
 
   // creating new basket if there isn't existing basket
   if (!cart) {
-    const response = await fetch(
-      `${apiUrl}/${projectKey}/me/carts`,
-      {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          
-          currency: 'USD',
-        }),
-      }
-    );
+    const response = await fetch(`${apiUrl}/${projectKey}/me/carts`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        currency: 'USD',
+      }),
+    });
 
     if (response.ok) {
       cart = await response.json();
@@ -83,8 +73,9 @@ export async function getOrUpdateCustomerCart() {
     }
   }
 
-  // adding products for testing 
-  {/*
+  // adding products for testing
+  {
+    /*
   try {
     const updatedCart = await addTestItemsToCart(cart.id, cart.version);
     console.log('Корзина после добавления товара:', updatedCart);
@@ -93,6 +84,7 @@ export async function getOrUpdateCustomerCart() {
     console.error('Ошибка при добавлении товара в корзину:', error);
     
   }
-    */}
-    return cart;
+    */
+  }
+  return cart;
 }
