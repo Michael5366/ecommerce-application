@@ -30,6 +30,7 @@ export const useCart = () => {
     try {
       setIsLoading(true);
       const activeCart = await getActiveCart();
+      // console.log(activeCart);
       setCart(activeCart);
       const items = activeCart?.lineItems.map((item) => item.productId) || [];
       setCartItems(items);

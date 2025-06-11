@@ -20,7 +20,6 @@ const ProductPage = () => {
     return <div>{t('loading')}</div>;
   }
 
-  // Текущий язык
   const currentLang = i18n.language || 'en';
 
   const product = products.find((product: Product) => {

@@ -7,7 +7,7 @@
   transition: all 0.3s ease;
   cursor: pointer;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  padding-bottom: 15px;
+  padding-bottom: 35px;
 }
 
 .productCard:hover {
@@ -65,7 +65,7 @@
 
 .priceContainer {
   position: absolute;
-  bottom: 10px;
+  bottom: 20px;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -158,12 +158,12 @@
 
 .addToCartButton {
   position: absolute;
-  bottom: 10px;
-  right: 10px;
+  bottom: 14px;
+  right: 16px;
   display: flex;
   align-items: center;
   gap: 5px;
-  padding: 8px 12px;
+  padding: 8px 8px;
   background-color: var(--primary-color);
   color: white;
   border: none;
@@ -174,7 +174,7 @@
 }
 
 .addToCartButton:hover:not(:disabled) {
-  background-color: var(--primary-dark-color);
+  background-color: var(--hover-color);
 }
 
 .addToCartButton:disabled {

@@ -20,7 +20,7 @@
   }
 }
 
-@media (max-width: 500px) {
+@media (max-width: 620px) {
   .productGrid {
     grid-template-columns: 1fr;
   }

@@ -1,4 +1,4 @@
-import { getAuthToken, CommerceToolsAuthError } from '../Auth/authAPI';
+import { CommerceToolsAuthError } from '../Auth/authAPI';
 import { getAnonymousToken } from '../Catalog/catalogAPI';
 
 const PROJECT_KEY = import.meta.env.VITE_CTP_PROJECT_KEY;
@@ -24,10 +24,11 @@ export interface LineItem {
 }
 
 const getAuthHeader = async (): Promise<string> => {
-  const token = getAuthToken();
+  const token = sessionStorage.getItem('auth_token');
   if (token) return `Bearer ${token}`;
 
   const anonymousToken = await getAnonymousToken();
+  console.log(anonymousToken);
   return `Bearer ${anonymousToken}`;
 };
 
@@ -46,10 +47,12 @@ export const getActiveCart = async (): Promise<Cart | null> => {
     }
 
     if (!response.ok) {
+      const error = await response.json();
       if (response.status === 403) {
+        // Token might have expired or have insufficient scopes
+        sessionStorage.removeItem('auth_token');
         return null;
       }
-      const error = await response.json();
       throw new CommerceToolsAuthError(error);
     }
 
@@ -63,6 +66,7 @@ export const getActiveCart = async (): Promise<Cart | null> => {
 export const createCart = async (currency = 'USD'): Promise<Cart> => {
   try {
     const authHeader = await getAuthHeader();
+    const token = sessionStorage.getItem('auth_token');
 
     const response = await fetch(`${API_URL}/${PROJECT_KEY}/me/carts`, {
       method: 'POST',
@@ -73,7 +77,7 @@ export const createCart = async (currency = 'USD'): Promise<Cart> => {
       body: JSON.stringify({
         currency,
         country: 'US',
-        ...(!getAuthToken() && { anonymousId: generateAnonymousId() }),
+        ...(!token && { anonymousId: generateAnonymousId() }),
       }),
     });
 
@@ -81,7 +85,6 @@ export const createCart = async (currency = 'USD'): Promise<Cart> => {
       const error = await response.json();
       throw new CommerceToolsAuthError(error);
     }
-
     return response.json();
   } catch (error) {
     console.error('Error creating cart:', error);
@@ -90,7 +93,12 @@ export const createCart = async (currency = 'USD'): Promise<Cart> => {
 };
 
 const generateAnonymousId = (): string => {
-  return 'anon_' + Math.random().toString(36).substring(2, 15);
+  const storedId = localStorage.getItem('anonymous_id');
+  if (storedId) return storedId;
+
+  const newId = 'anon_' + Math.random().toString(36).substring(2, 15);
+  localStorage.setItem('anonymous_id', newId);
+  return newId;
 };
 
 export const addToCart = async (productId: string, variantId = 1, quantity = 1): Promise<Cart> => {
@@ -123,6 +131,11 @@ export const addToCart = async (productId: string, variantId = 1, quantity = 1):
 
     if (!response.ok) {
       const error = await response.json();
+      if (response.status === 401 || response.status === 403) {
+        // Token might be expired, try with fresh token
+        sessionStorage.removeItem('auth_token');
+        return addToCart(productId, variantId, quantity);
+      }
       throw new CommerceToolsAuthError(error);
     }
 

@@ -12,7 +12,16 @@ export const getAnonymousToken = async (): Promise<string> => {
   try {
     const authParams = new URLSearchParams({
       grant_type: 'client_credentials',
-      scope: `view_products:${PROJECT_KEY} view_categories:${PROJECT_KEY} manage_my_orders:${PROJECT_KEY}`,
+      scope: [
+        `manage_customers:${PROJECT_KEY}`,
+        `manage_my_profile:${PROJECT_KEY}`,
+        `manage_my_orders:${PROJECT_KEY}`,
+        `manage_my_shopping_lists:${PROJECT_KEY}`,
+        `manage_my_payments:${PROJECT_KEY}`,
+        `view_published_products:${PROJECT_KEY}`,
+        `view_products:${PROJECT_KEY}`,
+        `view_categories:${PROJECT_KEY}`,
+      ].join(' '),
     });
 
     const authHeader = ANONYMOUS_ID
@@ -29,10 +38,12 @@ export const getAnonymousToken = async (): Promise<string> => {
     });
 
     if (!response.ok) {
-      throw new Error('Failed to get anonymous token');
+      const error = await response.json();
+      throw new Error(error.message || 'Failed to get anonymous token');
     }
 
-    return (await response.json()).access_token;
+    const tokenData = await response.json();
+    return tokenData.access_token;
   } catch (error) {
     console.error('Error getting anonymous token:', error);
     throw new Error('Failed to authenticate anonymously');
