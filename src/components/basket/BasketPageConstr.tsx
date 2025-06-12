@@ -3,6 +3,7 @@ import { getOrUpdateCustomerCart } from '../../services/Basket/updateBasket';
 import { ProductCardBusket } from './createCard';
 import { useTranslation } from 'react-i18next';
 import { getAnonymousToken } from '../../services/auth-registration';
+import { addTestItemsToAnonCart } from '../../services/Basket/testAnonAddProduct';
 
 export interface CartResponse {
   type: string;
