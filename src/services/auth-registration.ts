@@ -25,6 +25,7 @@ interface ApiSuccessResponse {
 }
 
 export const getAnonymousToken = async () => {
+  console.log('anon module is active')
   const clientId = import.meta.env.VITE_CTP_CLIENT_ID;
   const clientSecret = import.meta.env.VITE_CTP_CLIENT_SECRET;
   const projectKey = import.meta.env.VITE_CTP_PROJECT_KEY;
@@ -39,7 +40,7 @@ export const getAnonymousToken = async () => {
         Authorization: 'Basic ' + btoa(`${clientId}:${clientSecret}`),
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: `grant_type=client_credentials&scope=create_anonymous_token:${projectKey} manage_my_profile:${projectKey} view_orders:${projectKey}`,
+      body: `grant_type=client_credentials&scope=create_anonymous_token:${projectKey} manage_my_profile:${projectKey} view_orders:${projectKey} manage_orders:${projectKey} view_published_products:${projectKey}`,
     }
   );
 
@@ -49,7 +50,7 @@ export const getAnonymousToken = async () => {
     console.error('Failed to get anonymous token:', data);
     throw new Error(data.error_description || 'Anonymous token failed');
   }
-
+  sessionStorage.setItem('guestToken', data.access_token);
   return data.access_token;
 };
 

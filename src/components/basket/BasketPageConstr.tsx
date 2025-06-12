@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { getOrUpdateCustomerCart } from '../../services/Basket/updateBasket';
 import { ProductCardBusket } from './createCard';
 import { useTranslation } from 'react-i18next';
+import { getAnonymousToken } from '../../services/auth-registration';
 
 export interface CartResponse {
   type: string;
@@ -39,6 +40,26 @@ export function BasketCompClient() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+useEffect(() => {
+  async function initialize() {
+    try {
+      // Получаем токен, если пользователь не авторизован
+      if (!sessionStorage.getItem('auth_token')) {
+        await getAnonymousToken();
+      }
+      const cartData = await getOrUpdateCustomerCart();
+      setCart(cartData);
+    } catch (error) {
+      console.error('Ошибка при загрузке корзины:', error);
+      setError(t('Failed to load cart'));
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  initialize();
+}, []);
+
   useEffect(() => {
     async function fetchCart() {
       try {
@@ -61,10 +82,12 @@ export function BasketCompClient() {
       
       const projectKey = import.meta.env.VITE_CTP_PROJECT_KEY;
       const apiUrl = import.meta.env.VITE_CTP_API_URL;
-      const token = sessionStorage.getItem('auth_token');
+      const token = sessionStorage.getItem('auth_token') || sessionStorage.getItem('guestToken');
+      const isAnonymous = !sessionStorage.getItem('auth_token');
+      const endpoint = isAnonymous ? 'carts' : 'me/carts';
       
       const response = await fetch(
-        `${apiUrl}/${projectKey}/me/carts/${cart.id}`,
+        `${apiUrl}/${projectKey}/${endpoint}/${cart.id}`,
         {
           method: 'POST',
           headers: {
@@ -109,10 +132,12 @@ export function BasketCompClient() {
 
       const projectKey = import.meta.env.VITE_CTP_PROJECT_KEY;
       const apiUrl = import.meta.env.VITE_CTP_API_URL;
-      const token = sessionStorage.getItem('auth_token');
+      const token = sessionStorage.getItem('auth_token') || sessionStorage.getItem('guestToken');
+      const isAnonymous = !sessionStorage.getItem('auth_token');
+      const endpoint = isAnonymous ? 'carts' : 'me/carts';
       
       const response = await fetch(
-        `${apiUrl}/${projectKey}/me/carts/${cart.id}`,
+        `${apiUrl}/${projectKey}/${endpoint}/${cart.id}`,
         {
           method: 'POST',
           headers: {
