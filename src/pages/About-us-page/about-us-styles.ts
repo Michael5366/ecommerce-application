@@ -71,9 +71,9 @@ const aboutPageStyles = makeStyles({
 
   content__avatar: {
     order: 1,
-    width: '100px',
-    height: '100px',
-    borderRadius: '100%',
+    objectFit: 'cover',
+    width: '250px',
+    height: '250px',
     paddingBottom: '20px',
   },
 

@@ -19,7 +19,7 @@ const teamData: TeamMember[] = [
     quote: 'Turning choice into clarity.',
     biography: '',
     github: 'https://github.com/viktoriiapet',
-    photo: 'https://picsum.photos/200/300',
+    photo: '/Viktoriia_Petukhova.jpg',
   },
   {
     name: 'Vladislav Murylev',
@@ -30,7 +30,7 @@ const teamData: TeamMember[] = [
     quote: 'Where logic meets design.',
     biography: '',
     github: 'https://github.com/vlad-m28',
-    photo: 'https://picsum.photos/200/300',
+    photo: '/Vladislav_Murylev.jpg',
   },
   {
     name: 'Michael Elsky',
@@ -41,7 +41,7 @@ const teamData: TeamMember[] = [
     quote: 'Turning flow into function.',
     biography: '',
     github: 'https://github.com/bob',
-    photo: 'https://picsum.photos/200/300',
+    photo: '/Michael_Elsky.jpg',
   },
 ];
 
