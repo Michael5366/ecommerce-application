@@ -12,9 +12,11 @@ const AboutUsPage = () => {
         <div className={css['about-us__headers']}>
           <h1 className={css['about-us__header']}>About us</h1>
           <p className={css['about-us__description']}>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur, officia ratione
-            veritatis neque enim sequi dicta id quisquam earum dolores nemo impedit ut omnis
-            sapiente nam distinctio provident, ipsam alias.
+            <strong>Built with code, driven by teamwork</strong>
+            <br />
+            We’re not designers — we’re developers who turn ideas into working solutions. This
+            project is the result of learning, collaboration, and late nights spent debugging and
+            building features that matter. Meet the team that made it happen.
           </p>
         </div>
 
