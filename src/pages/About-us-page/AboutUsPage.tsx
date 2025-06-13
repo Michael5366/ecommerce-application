@@ -7,7 +7,7 @@ const AboutUsPage = () => {
   const css = aboutPageStyles();
 
   return (
-    <Container className={css.wrapper} component="div">
+    <Container className={css.wrapper} component="div" maxWidth={false}>
       <section className={css['about-us']}>
         <div className={css['about-us__headers']}>
           <h1 className={css['about-us__header']}>About us</h1>
@@ -24,15 +24,15 @@ const AboutUsPage = () => {
           {teamData.map((member) => {
             return (
               <div className={css.content__card} key={member.name}>
-                <h2 className="content__header">{member.name}</h2>
+                <h2 className={css.content__header}>{member.name}</h2>
                 <img
                   className={css.content__avatar}
                   src={member.photo}
                   alt={`Here is the photo of the team member ${member.name}`}
                 />
 
-                <h3 className="content__position">{member.quote}</h3>
-                <p className="content__description">{member.description}</p>
+                <h3 className={css.content__quote}>{member.quote}</h3>
+                <p className={css.content__description}>{member.description}</p>
                 <Link className={css.content__link} to={member.github}>
                   GitHub
                 </Link>

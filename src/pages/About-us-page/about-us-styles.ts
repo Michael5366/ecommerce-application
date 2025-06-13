@@ -52,18 +52,36 @@ const aboutPageStyles = makeStyles({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'space-around',
-    minHeight: '30vh',
-    width: '340px',
+    minHeight: '40vh',
+    width: '300px',
+    padding: '40px',
     boxShadow: `0px 0px 15px ${theme.palette.background.paper}`,
   },
 
+  content__header: {
+    order: 5,
+  },
+
   content__avatar: {
+    order: 1,
     width: '100px',
     height: '100px',
     borderRadius: '100%',
   },
 
+  content__quote: {
+    textAlign: 'center',
+    fontSize: '1rem',
+    order: 2,
+  },
+
+  content__description: {
+    fontSize: '0.9rem',
+    order: 3,
+  },
+
   content__link: {
+    order: 7,
     color: 'inherit',
     textDecoration: 'none',
     transition: 'all 0.3s ease',

@@ -23,7 +23,7 @@ const Layout = () => {
             component={'main'}
             sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, justifyContent: 'center' }}
           >
-            <Container sx={{ py: 1 }}>
+            <Container sx={{ py: 1 }} maxWidth={false}>
               <Outlet />
             </Container>
           </Box>
