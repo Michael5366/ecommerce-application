@@ -1,9 +1,19 @@
-import { Container } from '@mui/material';
+import { Container, Fade, Modal } from '@mui/material';
 import teamData from './team-data';
 import aboutPageStyles from './about-us-styles';
+import { useState } from 'react';
 
 const AboutUsPage = () => {
   const css = aboutPageStyles();
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
     <Container className={css.wrapper} component="div" maxWidth={false}>
@@ -33,7 +43,22 @@ const AboutUsPage = () => {
                 <h3 className={css.content__quote}>{member.quote}</h3>
                 <p className={css.content__position}>{member.position}</p>
                 <p className={css.content__description}>{member.description}</p>
-                <p className={css.content__biography}>{member.biography} Read more</p>
+
+                <button className={css.content__btn} onClick={handleOpen}>
+                  Read more
+                </button>
+
+                <Modal className={css.content__modal} open={open} onClose={handleClose}>
+                  <Fade in={open}>
+                    <div className={css.content__biography}>
+                      <button className={css['content__close-btn']} onClick={handleClose}>
+                        &times;
+                      </button>
+                      {member.biography}
+                    </div>
+                  </Fade>
+                </Modal>
+
                 <a
                   className={css.content__link}
                   href={member.github}

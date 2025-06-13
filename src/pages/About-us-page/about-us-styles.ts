@@ -66,6 +66,7 @@ const aboutPageStyles = makeStyles({
 
   content__header: {
     order: 5,
+    paddingTop: '10px',
   },
 
   content__avatar: {
@@ -92,11 +93,46 @@ const aboutPageStyles = makeStyles({
     order: 3,
   },
 
-  content__biography: {
+  content__btn: {
     order: 4,
+    all: 'unset',
     color: theme.palette.text.hover,
     cursor: 'pointer',
     marginTop: 'auto',
+  },
+
+  content__modal: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  content__biography: {
+    position: 'relative',
+    textAlign: 'center',
+    fontSize: '20px',
+    color: theme.palette.text.primary,
+    width: '50%',
+    padding: '40px',
+    borderRadius: '3px',
+    background: theme.palette.background.default,
+  },
+
+  'content__close-btn': {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    background: 'transparent',
+    border: 'none',
+    fontSize: '28px',
+    cursor: 'pointer',
+    color: '#333',
+    zIndex: 10,
+    transition: 'all 0.3s ease',
+
+    '&:hover': {
+      color: theme.palette.text.hover,
+    },
   },
 
   content__link: {
