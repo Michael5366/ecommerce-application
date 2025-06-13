@@ -31,7 +31,7 @@ const AboutUsPage = () => {
                   alt={`Here is the photo of the team member ${member.name}`}
                 />
 
-                <h3 className="content__position">{member.position}</h3>
+                <h3 className="content__position">{member.quote}</h3>
                 <p className="content__description">{member.description}</p>
                 <Link className={css.content__link} to={member.github}>
                   GitHub
