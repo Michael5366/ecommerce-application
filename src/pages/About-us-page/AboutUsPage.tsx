@@ -32,7 +32,9 @@ const AboutUsPage = () => {
                 />
 
                 <h3 className={css.content__quote}>{member.quote}</h3>
+                <p className={css.content__position}>{member.position}</p>
                 <p className={css.content__description}>{member.description}</p>
+                <p className={css.content__biography}>{member.biography} Read more</p>
                 <Link className={css.content__link} to={member.github}>
                   GitHub
                 </Link>

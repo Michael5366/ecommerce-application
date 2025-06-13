@@ -23,6 +23,9 @@ const aboutPageStyles = makeStyles({
   },
 
   'about-us__headers': {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
     width: '70%',
     color: 'inherit',
     textAlign: 'center',
@@ -35,7 +38,9 @@ const aboutPageStyles = makeStyles({
 
   'about-us__description': {
     fontSize: '1rem',
+    width: '50%',
     color: 'inherit',
+    marginTop: 0,
   },
 
   content: {
@@ -44,6 +49,7 @@ const aboutPageStyles = makeStyles({
     flexWrap: 'wrap',
     gap: '30px',
     width: '100%',
+    marginTop: '20px',
   },
 
   content__card: {
@@ -67,12 +73,18 @@ const aboutPageStyles = makeStyles({
     width: '100px',
     height: '100px',
     borderRadius: '100%',
+    paddingBottom: '20px',
   },
 
   content__quote: {
+    order: 2,
     textAlign: 'center',
     fontSize: '1rem',
-    order: 2,
+  },
+
+  content__position: {
+    order: 6,
+    margin: 0,
   },
 
   content__description: {
@@ -80,10 +92,18 @@ const aboutPageStyles = makeStyles({
     order: 3,
   },
 
+  content__biography: {
+    order: 4,
+    color: theme.palette.text.hover,
+    cursor: 'pointer',
+    marginTop: 'auto',
+  },
+
   content__link: {
     order: 7,
     color: 'inherit',
     textDecoration: 'none',
+    marginTop: '10px',
     transition: 'all 0.3s ease',
 
     '&:hover': {

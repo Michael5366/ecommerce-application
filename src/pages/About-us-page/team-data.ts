@@ -16,7 +16,7 @@ const teamData: TeamMember[] = [
     position: 'User Profile & Shopping Cart',
     description:
       'Developed the user profile and shopping cart pages, implementing dynamic forms, validation, and API integration for address management, profile editing, and promo code logic. Ensured a responsive and user-friendly interface for all basket-related actions.',
-    quote: 'Bringing structure to the shopping experience.',
+    quote: 'Turning choice into clarity.',
     biography: '',
     github: 'https://github.com/viktoriiapet',
     photo: 'https://picsum.photos/200/300',
