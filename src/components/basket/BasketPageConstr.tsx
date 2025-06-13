@@ -3,8 +3,15 @@ import { getOrUpdateCustomerCart } from '../../services/Basket/updateBasket';
 import { ProductCardBusket } from './createCard';
 import { useTranslation } from 'react-i18next';
 import { getAnonymousToken } from '../../services/auth-registration';
-import { addTestItemsToAnonCart } from '../../services/Basket/testAnonAddProduct';
+import styles from './cardsStiles.module.css';
+import DeleteIcon from '@mui/icons-material/Delete';
+//import { addTestItemsToAnonCart } from '../../services/Basket/testAnonAddProduct';
 
+type CartAction = 
+  | { action: 'removeDiscountCode'; discountCode: { typeId: 'discount-code'; id: string } }
+  | { action: string; lineItemId: string };
+
+  
 export interface CartResponse {
   type: string;
   id: string;
@@ -33,6 +40,22 @@ export interface CartResponse {
     centAmount: number;
     currencyCode: string;
   };
+   discountCodes?: Array<{
+    discountCode: {
+      typeId: string;
+      id: string;
+      obj?: {
+        code: string;
+      };
+    };
+    state: string;
+  }>;
+  discountOnTotalPrice?: {
+    discountedAmount: {
+      centAmount: number;
+      currencyCode: string;
+    };
+  };
 }
 
 export function BasketCompClient() {
@@ -40,30 +63,16 @@ export function BasketCompClient() {
   const [cart, setCart] = useState<CartResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-useEffect(() => {
-  async function initialize() {
-    try {
-      // Получаем токен, если пользователь не авторизован
-      if (!sessionStorage.getItem('auth_token')) {
-        await getAnonymousToken();
-      }
-      const cartData = await getOrUpdateCustomerCart();
-      setCart(cartData);
-    } catch (error) {
-      console.error('Ошибка при загрузке корзины:', error);
-      setError(t('Failed to load cart'));
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  initialize();
-}, []);
+    const [promoCode, setPromoCode] = useState('');
+  const [promoError, setPromoError] = useState<string | null>(null);
+  const [promoSuccess, setPromoSuccess] = useState<string | null>(null);
 
   useEffect(() => {
-    async function fetchCart() {
+    async function initialize() {
       try {
+        if (!sessionStorage.getItem('auth_token')) {
+          await getAnonymousToken();
+        }
         const cartData = await getOrUpdateCustomerCart();
         setCart(cartData);
       } catch (error) {
@@ -74,38 +83,37 @@ useEffect(() => {
       }
     }
 
-    fetchCart();
+    initialize();
   }, []);
+
+
 
   const handleRemoveItem = async (itemId: string) => {
     try {
       if (!cart) return;
-      
+
       const projectKey = import.meta.env.VITE_CTP_PROJECT_KEY;
       const apiUrl = import.meta.env.VITE_CTP_API_URL;
       const token = sessionStorage.getItem('auth_token') || sessionStorage.getItem('guestToken');
       const isAnonymous = !sessionStorage.getItem('auth_token');
       const endpoint = isAnonymous ? 'carts' : 'me/carts';
-      
-      const response = await fetch(
-        `${apiUrl}/${projectKey}/${endpoint}/${cart.id}`,
-        {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            version: cart.version,
-            actions: [
-              {
-                action: 'removeLineItem',
-                lineItemId: itemId,
-              },
-            ],
-          }),
-        }
-      );
+
+      const response = await fetch(`${apiUrl}/${projectKey}/${endpoint}/${cart.id}`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          version: cart.version,
+          actions: [
+            {
+              action: 'removeLineItem',
+              lineItemId: itemId,
+            },
+          ],
+        }),
+      });
 
       if (response.ok) {
         const updatedCart = await response.json();
@@ -123,7 +131,7 @@ useEffect(() => {
     try {
       if (!cart) return;
 
-      const lineItem = cart.lineItems.find(item => item.id === itemId);
+      const lineItem = cart.lineItems.find((item) => item.id === itemId);
       if (!lineItem) return;
 
       if (newQuantity <= 0) {
@@ -136,27 +144,24 @@ useEffect(() => {
       const token = sessionStorage.getItem('auth_token') || sessionStorage.getItem('guestToken');
       const isAnonymous = !sessionStorage.getItem('auth_token');
       const endpoint = isAnonymous ? 'carts' : 'me/carts';
-      
-      const response = await fetch(
-        `${apiUrl}/${projectKey}/${endpoint}/${cart.id}`,
-        {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            version: cart.version,
-            actions: [
-              {
-                action: 'changeLineItemQuantity',
-                lineItemId: itemId,
-                quantity: newQuantity,
-              },
-            ],
-          }),
-        }
-      );
+
+      const response = await fetch(`${apiUrl}/${projectKey}/${endpoint}/${cart.id}`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          version: cart.version,
+          actions: [
+            {
+              action: 'changeLineItemQuantity',
+              lineItemId: itemId,
+              quantity: newQuantity,
+            },
+          ],
+        }),
+      });
 
       if (response.ok) {
         const updatedCart = await response.json();
@@ -170,14 +175,227 @@ useEffect(() => {
     }
   };
 
+  const handleApplyPromoCode = async () => {
+    try {
+      if (!cart || !promoCode.trim()) return;
+
+      setPromoError(null);
+      setPromoSuccess(null);
+
+      const projectKey = import.meta.env.VITE_CTP_PROJECT_KEY;
+      const apiUrl = import.meta.env.VITE_CTP_API_URL;
+      const token = sessionStorage.getItem('auth_token') || sessionStorage.getItem('guestToken');
+      const isAnonymous = !sessionStorage.getItem('auth_token');
+      const endpoint = isAnonymous ? 'carts' : 'me/carts';
+
+      const response = await fetch(`${apiUrl}/${projectKey}/${endpoint}/${cart.id}`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          version: cart.version,
+          actions: [
+            {
+              action: 'addDiscountCode',
+              code: promoCode,
+            },
+          ],
+        }),
+      });
+
+      if (response.ok) {
+        const updatedCart = await response.json();
+        setCart(updatedCart);
+        setPromoSuccess(t('Promo code applied successfully'));
+        setPromoCode('');
+      } else {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to apply promo code');
+      }
+    } catch (error) {
+      console.error('Error applying promo code:', error);
+      setPromoError(t('Invalid or expired promo code'));
+    }
+  };
+
+  const handleRemovePromoCode = async (discountCodeId: string) => {
+    try {
+      if (!cart) return;
+
+      const projectKey = import.meta.env.VITE_CTP_PROJECT_KEY;
+      const apiUrl = import.meta.env.VITE_CTP_API_URL;
+      const token = sessionStorage.getItem('auth_token') || sessionStorage.getItem('guestToken');
+      const isAnonymous = !sessionStorage.getItem('auth_token');
+      const endpoint = isAnonymous ? 'carts' : 'me/carts';
+
+      const response = await fetch(`${apiUrl}/${projectKey}/${endpoint}/${cart.id}`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          version: cart.version,
+          actions: [
+            {
+              action: 'removeDiscountCode',
+              discountCode: {
+                typeId: 'discount-code',
+                id: discountCodeId,
+              },
+            },
+          ],
+        }),
+      });
+
+      if (response.ok) {
+        const updatedCart = await response.json();
+        setCart(updatedCart);
+        setPromoSuccess(t('Promo code removed successfully'));
+      } else {
+        throw new Error('Failed to remove promo code');
+      }
+    } catch (error) {
+      console.error('Error removing promo code:', error);
+      setPromoError(t('Failed to remove promo code'));
+    }
+  };
+
+  const handleClearCart = async () => {
+    try {
+      if (!cart || cart.lineItems.length === 0) return;
+
+      const projectKey = import.meta.env.VITE_CTP_PROJECT_KEY;
+      const apiUrl = import.meta.env.VITE_CTP_API_URL;
+      const token = sessionStorage.getItem('auth_token') || sessionStorage.getItem('guestToken');
+      const isAnonymous = !sessionStorage.getItem('auth_token');
+      const endpoint = isAnonymous ? 'carts' : 'me/carts';
+
+      // Create actions to remove all line items
+      const actions: CartAction[] = cart.lineItems.map((item) => ({
+        action: 'removeLineItem',
+        lineItemId: item.id,
+      }));
+
+      // If there are discount codes, remove them as well
+      if (cart.discountCodes && cart.discountCodes.length > 0) {
+        cart.discountCodes.forEach((discountCode) => {
+          actions.push({
+            action: 'removeDiscountCode',
+            discountCode: {
+              typeId: 'discount-code',
+              id: discountCode.discountCode.id,
+            },
+          });
+        });
+      }
+
+      const response = await fetch(`${apiUrl}/${projectKey}/${endpoint}/${cart.id}`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          version: cart.version,
+          actions,
+        }),
+      });
+
+      if (response.ok) {
+        const updatedCart = await response.json();
+        setCart(updatedCart);
+      } else {
+        throw new Error('Failed to clear cart');
+      }
+    } catch (error) {
+      console.error('Error clearing cart:', error);
+      setError(t('Failed to clear cart'));
+    }
+  };
+
   if (loading) return <div>{t('Loading cart...')}</div>;
   if (error) return <div className="error">{error}</div>;
   if (!cart) return <div>{t('Cart not found')}</div>;
 
+  interface DiscountCode {
+  obj?: {
+    code: string;
+  };
+  discountCode: {
+    id: string;
+  };
+}
+
+  const getPromoCodeDisplay = (discountCode: DiscountCode): string => {
+    return discountCode.obj?.code || discountCode.discountCode.id;
+  };
+  let originalTotalPrice:number;
+  let discountedAmount:number;
+
+  if(cart.discountOnTotalPrice?.discountedAmount.centAmount) {
+     originalTotalPrice = cart.totalPrice.centAmount / 100;
+    discountedAmount = cart.discountOnTotalPrice?.discountedAmount.centAmount / 100 || 0;
+  }
+
+
   return (
     <div className="basket-container">
       <h2>{t('Your cart')}</h2>
-      
+
+<div className={styles.promoCodeSection}>
+        <div className={styles.promoCodeInput}>
+          <input
+            type="text"
+            value={promoCode}
+            onChange={(e) => setPromoCode(e.target.value)}
+            placeholder={t('Enter promo code')}
+            className={styles.promoInput}
+          />
+          <button 
+            onClick={handleApplyPromoCode} 
+            className={styles.applyPromoButton}
+            disabled={!promoCode.trim()}
+          >
+            {t('Apply')}
+          </button>
+        </div>
+        {promoError && <div className={styles.promoError}>{promoError}</div>}
+        {promoSuccess && <div className={styles.promoSuccess}>{promoSuccess}</div>}
+        
+        {/* Display applied promo codes */}
+
+       {cart.discountCodes && cart.discountCodes.length > 0 && (
+          <div className={styles.appliedPromoCodes}>
+            <h4>{t('Applied Promo Codes')}:</h4>
+            <ul>
+              {cart.discountCodes.map((discountCode) => (
+                <li key={discountCode.discountCode.id} className={styles.appliedPromoItem}>
+                  <div>Number of promocode {getPromoCodeDisplay(discountCode)}</div>
+                  <button 
+                    onClick={() => handleRemovePromoCode(discountCode.discountCode.id)}
+                    className={styles.removePromoButton}
+                    title={t('Remove promo code')}
+                  >
+                    <DeleteIcon fontSize="small" />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+      </div>
+  {cart.lineItems && cart.lineItems.length > 0 && (
+        <button 
+          onClick={handleClearCart} 
+          className={styles.clearCartButton}
+        >
+          {t('Clear Cart')}
+        </button>
+      )}
       {cart.lineItems && cart.lineItems.length > 0 ? (
         <>
           <div className="cart-items">
@@ -190,14 +408,23 @@ useEffect(() => {
               />
             ))}
           </div>
-          
+
           <div className="cart-summary">
             <h3>
               {t('Total')}: ${(cart.totalPrice.centAmount / 100).toFixed(2)}
             </h3>
-            <button className="checkout-button">
-              {t('Proceed to Checkout')}
-            </button>
+            {cart.discountOnTotalPrice && (
+ 
+              <>
+      <div className={styles.discountAmount}>
+        Price without promocode: ${((cart.totalPrice.centAmount + cart.discountOnTotalPrice.discountedAmount.centAmount) / 100).toFixed(2)}
+      </div>
+      <div className={styles.discountAmount}>
+        Your discount from promocode: -${(cart.discountOnTotalPrice.discountedAmount.centAmount / 100).toFixed(2)}
+      </div>
+    </>
+          )}
+            <button className="checkout-button">{t('Proceed to Checkout')}</button>
           </div>
         </>
       ) : (

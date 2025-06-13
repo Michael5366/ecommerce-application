@@ -9,7 +9,15 @@
   background-color: white;
   transition: box-shadow 0.2s;
 }
-
+.appliedPromoItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  background-color: white;
+  border-radius: 4px;
+  margin-bottom: 5px;
+}
 .imageContainer {
   width: 80px;
   height: 80px;

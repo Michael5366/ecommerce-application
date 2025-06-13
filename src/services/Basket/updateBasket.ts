@@ -62,15 +62,16 @@ export async function getOrUpdateCustomerCart() {
       },
       body: JSON.stringify({
         currency: 'USD',
-        ...(isAnonymous && { anonymousId: sessionStorage.getItem('anonymousId') || generateAnonymousId()
-          })
+        ...(isAnonymous && {
+          anonymousId: sessionStorage.getItem('anonymousId') || generateAnonymousId(),
+        }),
       }),
     });
 
     if (response.ok) {
       cart = await response.json();
       sessionStorage.setItem('cart_id', cart.id);
-       if (isAnonymous && !sessionStorage.getItem('anonymousId')) {
+      if (isAnonymous && !sessionStorage.getItem('anonymousId')) {
         sessionStorage.setItem('anonymousId', cart.anonymousId);
       }
       console.log('The new basket was created:', cart);
@@ -98,5 +99,9 @@ export async function getOrUpdateCustomerCart() {
 }
 
 function generateAnonymousId() {
-  return 'anon_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+  return (
+    'anon_' +
+    Math.random().toString(36).substring(2, 15) +
+    Math.random().toString(36).substring(2, 15)
+  );
 }

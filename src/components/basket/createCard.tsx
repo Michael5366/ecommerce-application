@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useTranslation } from 'react-i18next';
-import  styles from './cardsStiles.module.css'
+import styles from './cardsStiles.module.css';
 interface CartItemCardProps {
   item: {
     id: string;
@@ -18,7 +18,7 @@ interface CartItemCardProps {
         centAmount: number;
         currencyCode: string;
       };
-             discounted?: {
+      discounted?: {
         value: {
           centAmount: number;
           currencyCode: string;
@@ -34,11 +34,7 @@ interface CartItemCardProps {
   onQuantityChange?: (itemId: string, newQuantity: number) => void;
 }
 
-export const ProductCardBusket: FC<CartItemCardProps> = ({
-  item,
-  onRemove,
-  onQuantityChange,
-}) => {
+export const ProductCardBusket: FC<CartItemCardProps> = ({ item, onRemove, onQuantityChange }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
@@ -64,8 +60,8 @@ export const ProductCardBusket: FC<CartItemCardProps> = ({
 
   return (
     <div className={styles.cardItemCard}>
-      <div 
-        className={styles.imageContainer} 
+      <div
+        className={styles.imageContainer}
         onClick={handleProductClick}
         role="button"
         tabIndex={0}
@@ -81,25 +77,25 @@ export const ProductCardBusket: FC<CartItemCardProps> = ({
       <div className={styles.itemInfo}>
         <h3 className={styles.productName}>{productName}</h3>
         <p className={styles.variantInfo}>SKU: {item.variant.sku}</p>
-        
+
         <div className={styles.priceInfo}>
-{item.price.discounted ? (
-    <>
-      <span className={styles.originalPrice}>
-        ${(item.price.value.centAmount / 100).toFixed(2)}
-      </span>
-      <span className={styles.discountedPrice}>
-        ${(item.price.discounted.value.centAmount / 100).toFixed(2)} {t('each')}
-      </span>
-    </>
-  ) : (
-    <span className={styles.pricePerItem}>
-      ${pricePerItem.toFixed(2)} {t('each')}
-    </span>
-  )}
-  <span className={styles.totalPrice}>
-    ${totalPrice.toFixed(2)} {t('total')}
-  </span>
+          {item.price.discounted ? (
+            <>
+              <span className={styles.originalPrice}>
+                ${(item.price.value.centAmount / 100).toFixed(2)}
+              </span>
+              <span className={styles.discountedPrice}>
+                ${(item.price.discounted.value.centAmount / 100).toFixed(2)} {t('each')}
+              </span>
+            </>
+          ) : (
+            <span className={styles.pricePerItem}>
+              ${pricePerItem.toFixed(2)} {t('each')}
+            </span>
+          )}
+          <span className={styles.totalPrice}>
+            ${totalPrice.toFixed(2)} {t('total')}
+          </span>
         </div>
       </div>
 

@@ -25,7 +25,7 @@ interface ApiSuccessResponse {
 }
 
 export const getAnonymousToken = async () => {
-  console.log('anon module is active')
+  console.log('anon module is active');
   const clientId = import.meta.env.VITE_CTP_CLIENT_ID;
   const clientSecret = import.meta.env.VITE_CTP_CLIENT_SECRET;
   const projectKey = import.meta.env.VITE_CTP_PROJECT_KEY;
