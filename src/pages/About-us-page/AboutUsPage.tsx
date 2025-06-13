@@ -1,6 +1,5 @@
 import { Container } from '@mui/material';
 import teamData from './team-data';
-import { Link } from 'react-router-dom';
 import aboutPageStyles from './about-us-styles';
 
 const AboutUsPage = () => {
@@ -35,9 +34,14 @@ const AboutUsPage = () => {
                 <p className={css.content__position}>{member.position}</p>
                 <p className={css.content__description}>{member.description}</p>
                 <p className={css.content__biography}>{member.biography} Read more</p>
-                <Link className={css.content__link} to={member.github}>
+                <a
+                  className={css.content__link}
+                  href={member.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   GitHub
-                </Link>
+                </a>
               </div>
             );
           })}
