@@ -6,7 +6,8 @@ import { getAnonymousToken } from '../../services/auth-registration';
 import styles from './cardsStiles.module.css';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Link } from 'react-router-dom';
-import { addTestItemsToAnonCart } from '../../services/Basket/testAnonAddProduct';
+//import { addTestItemsToAnonCart } from '../../services/Basket/testAnonAddProduct';
+//import { addTestItemsToCart } from '../../services/Basket/temporalBasket';
 
 type CartAction =
   | { action: 'removeDiscountCode'; discountCode: { typeId: 'discount-code'; id: string } }
@@ -66,21 +67,26 @@ export function BasketCompClient() {
   const [promoCode, setPromoCode] = useState('');
   const [promoError, setPromoError] = useState<string | null>(null);
   const [promoSuccess, setPromoSuccess] = useState<string | null>(null);
+  const [showClearCartModal, setShowClearCartModal] = useState(false);
 
   useEffect(() => {
     async function initialize() {
+      let cartData: CartResponse | null = null;
       try {
         if (!sessionStorage.getItem('auth_token')) {
           await getAnonymousToken();
         }
-        const cartData = await getOrUpdateCustomerCart();
+        cartData = await getOrUpdateCustomerCart();
         setCart(cartData);
+        console.log(cartData)
       } catch (error) {
         console.error('Ошибка при загрузке корзины:', error);
         setError(t('Failed to load cart'));
       } finally {
         setLoading(false);
-        addTestItemsToAnonCart();
+        if(cartData) {
+       //addTestItemsToCart(cartData.id, cartData.version);
+        }
       }
     }
 
@@ -262,7 +268,17 @@ export function BasketCompClient() {
     }
   };
 
+  const showClearCartConfirmation = () => {
+  setShowClearCartModal(true);
+};
+
+const confirmClearCart = async () => {
+  setShowClearCartModal(false);
+  await handleClearCart();
+};
+
   const handleClearCart = async () => {
+
     try {
       if (!cart || cart.lineItems.length === 0) return;
 
@@ -378,11 +394,7 @@ export function BasketCompClient() {
           </div>
         )}
       </div>
-      {cart.lineItems && cart.lineItems.length > 0 && (
-        <button onClick={handleClearCart} className={styles.clearCartButton}>
-          {t('Clear Cart')}
-        </button>
-      )}
+
       {cart.lineItems && cart.lineItems.length > 0 ? (
         <>
           <div className="cart-items">
@@ -418,12 +430,41 @@ export function BasketCompClient() {
             )}
             <button className="checkout-button">{t('Proceed to Checkout')}</button>
           </div>
+                {cart.lineItems && cart.lineItems.length > 0 && (
+        <button onClick={showClearCartConfirmation} className={styles.clearCartButton}>
+          {t('Clear Cart')}
+        </button>
+      )}
+
+      {showClearCartModal && (
+  <div className={styles.modalOverlay}>
+    <div className={styles.modalContent}>
+      <h3>{t('Clear cart')}</h3>
+      <p>{t('Are you sure you want to remove all items from your cart?')}</p>
+      <div className={styles.modalButtons}>
+        <button 
+          onClick={() => setShowClearCartModal(false)}
+          className={styles.cancelButton}
+        >
+          {t('Cancel')}
+        </button>
+        <button 
+          onClick={confirmClearCart}
+          className={styles.confirmButton}
+        >
+          {t('Clear cart')}
+        </button>
+      </div>
+    </div>
+  </div>
+)}
         </>
+        
       ) : (
         <div className={styles.stylesEmptyCartMessage}>
           <p>{t('Your cart is empty')}</p>
           <Link to="/catalog" className={styles.link}>
-           {t('Go to the catalog page!')}
+            {t('Go to the catalog page!')}
           </Link>
         </div>
       )}

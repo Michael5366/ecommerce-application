@@ -14,7 +14,7 @@ export async function addTestItemsToCart(cartId: string, version: number) {
       actions: [
         {
           action: 'addLineItem',
-          productId: 'b01609f1-34f2-4c9f-84c1-23dd575e9415',
+          productId: 'c928a059-d25e-4c9b-91e6-efbcaa117e18',
           variantId: 1,
           quantity: 2,
         },
