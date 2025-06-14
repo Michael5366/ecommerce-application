@@ -41,6 +41,10 @@ const aboutPageStyles = makeStyles({
     width: '50%',
     color: 'inherit',
     marginTop: 0,
+
+    '@media (max-width: 1310px)': {
+      width: '100%',
+    },
   },
 
   content: {
@@ -62,6 +66,10 @@ const aboutPageStyles = makeStyles({
     width: '300px',
     padding: '40px',
     boxShadow: `0px 0px 15px ${theme.palette.background.paper}`,
+
+    '@media (max-width: 345px)': {
+      padding: 0,
+    },
   },
 
   content__header: {
