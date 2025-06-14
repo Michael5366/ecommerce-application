@@ -65,6 +65,8 @@ const ShowMenu = () => {
                   key="logout"
                   onClick={() => {
                     handleMenuClose();
+                    sessionStorage.removeItem('guestToken');
+                    sessionStorage.removeItem('cart_id')
                     logout();
                     navigate(Path.LOGIN);
                   }}
@@ -104,6 +106,8 @@ const ShowMenu = () => {
             variant="outlined"
             color="inherit"
             onClick={() => {
+              sessionStorage.removeItem('guestToken');
+              sessionStorage.removeItem('cart_id')
               logout();
               navigate(Path.LOGIN);
             }}

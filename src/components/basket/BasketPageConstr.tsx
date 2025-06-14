@@ -78,14 +78,14 @@ export function BasketCompClient() {
         }
         cartData = await getOrUpdateCustomerCart();
         setCart(cartData);
-        console.log(cartData)
+        console.log(cartData);
       } catch (error) {
         console.error('Ошибка при загрузке корзины:', error);
         setError(t('Failed to load cart'));
       } finally {
         setLoading(false);
-        if(cartData) {
-       //addTestItemsToCart(cartData.id, cartData.version);
+        if (cartData) {
+          //addTestItemsToCart(cartData.id, cartData.version);
         }
       }
     }
@@ -269,16 +269,15 @@ export function BasketCompClient() {
   };
 
   const showClearCartConfirmation = () => {
-  setShowClearCartModal(true);
-};
+    setShowClearCartModal(true);
+  };
 
-const confirmClearCart = async () => {
-  setShowClearCartModal(false);
-  await handleClearCart();
-};
+  const confirmClearCart = async () => {
+    setShowClearCartModal(false);
+    await handleClearCart();
+  };
 
   const handleClearCart = async () => {
-
     try {
       if (!cart || cart.lineItems.length === 0) return;
 
@@ -430,36 +429,32 @@ const confirmClearCart = async () => {
             )}
             <button className="checkout-button">{t('Proceed to Checkout')}</button>
           </div>
-                {cart.lineItems && cart.lineItems.length > 0 && (
-        <button onClick={showClearCartConfirmation} className={styles.clearCartButton}>
-          {t('Clear Cart')}
-        </button>
-      )}
+          {cart.lineItems && cart.lineItems.length > 0 && (
+            <button onClick={showClearCartConfirmation} className={styles.clearCartButton}>
+              {t('Clear Cart')}
+            </button>
+          )}
 
-      {showClearCartModal && (
-  <div className={styles.modalOverlay}>
-    <div className={styles.modalContent}>
-      <h3>{t('Clear cart')}</h3>
-      <p>{t('Are you sure you want to remove all items from your cart?')}</p>
-      <div className={styles.modalButtons}>
-        <button 
-          onClick={() => setShowClearCartModal(false)}
-          className={styles.cancelButton}
-        >
-          {t('Cancel')}
-        </button>
-        <button 
-          onClick={confirmClearCart}
-          className={styles.confirmButton}
-        >
-          {t('Clear cart')}
-        </button>
-      </div>
-    </div>
-  </div>
-)}
+          {showClearCartModal && (
+            <div className={styles.modalOverlay}>
+              <div className={styles.modalContent}>
+                <h3>{t('Clear cart')}</h3>
+                <p>{t('Are you sure you want to remove all items from your cart?')}</p>
+                <div className={styles.modalButtons}>
+                  <button
+                    onClick={() => setShowClearCartModal(false)}
+                    className={styles.cancelButton}
+                  >
+                    {t('Cancel')}
+                  </button>
+                  <button onClick={confirmClearCart} className={styles.confirmButton}>
+                    {t('Clear cart')}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </>
-        
       ) : (
         <div className={styles.stylesEmptyCartMessage}>
           <p>{t('Your cart is empty')}</p>
