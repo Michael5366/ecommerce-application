@@ -96,3 +96,14 @@
   color: #f44336;
   font-weight: bold;
 }
+.link{
+  color: inherit;
+  text-decoration: none;
+  border: #666 dotted 1px;
+  padding: 1vw;
+}
+.stylesEmptyCartMessage{
+    display: flex;
+    flex-direction: column;
+    gap: 1vw;
+}

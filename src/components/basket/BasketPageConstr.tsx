@@ -5,13 +5,13 @@ import { useTranslation } from 'react-i18next';
 import { getAnonymousToken } from '../../services/auth-registration';
 import styles from './cardsStiles.module.css';
 import DeleteIcon from '@mui/icons-material/Delete';
-//import { addTestItemsToAnonCart } from '../../services/Basket/testAnonAddProduct';
+import { Link } from 'react-router-dom';
+import { addTestItemsToAnonCart } from '../../services/Basket/testAnonAddProduct';
 
-type CartAction = 
+type CartAction =
   | { action: 'removeDiscountCode'; discountCode: { typeId: 'discount-code'; id: string } }
   | { action: string; lineItemId: string };
 
-  
 export interface CartResponse {
   type: string;
   id: string;
@@ -40,7 +40,7 @@ export interface CartResponse {
     centAmount: number;
     currencyCode: string;
   };
-   discountCodes?: Array<{
+  discountCodes?: Array<{
     discountCode: {
       typeId: string;
       id: string;
@@ -63,7 +63,7 @@ export function BasketCompClient() {
   const [cart, setCart] = useState<CartResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-    const [promoCode, setPromoCode] = useState('');
+  const [promoCode, setPromoCode] = useState('');
   const [promoError, setPromoError] = useState<string | null>(null);
   const [promoSuccess, setPromoSuccess] = useState<string | null>(null);
 
@@ -80,13 +80,12 @@ export function BasketCompClient() {
         setError(t('Failed to load cart'));
       } finally {
         setLoading(false);
+        addTestItemsToAnonCart();
       }
     }
 
     initialize();
   }, []);
-
-
 
   const handleRemoveItem = async (itemId: string) => {
     try {
@@ -321,31 +320,23 @@ export function BasketCompClient() {
   if (!cart) return <div>{t('Cart not found')}</div>;
 
   interface DiscountCode {
-  obj?: {
-    code: string;
-  };
-  discountCode: {
-    id: string;
-  };
-}
+    obj?: {
+      code: string;
+    };
+    discountCode: {
+      id: string;
+    };
+  }
 
   const getPromoCodeDisplay = (discountCode: DiscountCode): string => {
     return discountCode.obj?.code || discountCode.discountCode.id;
   };
-  let originalTotalPrice:number;
-  let discountedAmount:number;
-
-  if(cart.discountOnTotalPrice?.discountedAmount.centAmount) {
-     originalTotalPrice = cart.totalPrice.centAmount / 100;
-    discountedAmount = cart.discountOnTotalPrice?.discountedAmount.centAmount / 100 || 0;
-  }
-
 
   return (
     <div className="basket-container">
       <h2>{t('Your cart')}</h2>
 
-<div className={styles.promoCodeSection}>
+      <div className={styles.promoCodeSection}>
         <div className={styles.promoCodeInput}>
           <input
             type="text"
@@ -354,8 +345,8 @@ export function BasketCompClient() {
             placeholder={t('Enter promo code')}
             className={styles.promoInput}
           />
-          <button 
-            onClick={handleApplyPromoCode} 
+          <button
+            onClick={handleApplyPromoCode}
             className={styles.applyPromoButton}
             disabled={!promoCode.trim()}
           >
@@ -364,17 +355,17 @@ export function BasketCompClient() {
         </div>
         {promoError && <div className={styles.promoError}>{promoError}</div>}
         {promoSuccess && <div className={styles.promoSuccess}>{promoSuccess}</div>}
-        
+
         {/* Display applied promo codes */}
 
-       {cart.discountCodes && cart.discountCodes.length > 0 && (
+        {cart.discountCodes && cart.discountCodes.length > 0 && (
           <div className={styles.appliedPromoCodes}>
             <h4>{t('Applied Promo Codes')}:</h4>
             <ul>
               {cart.discountCodes.map((discountCode) => (
                 <li key={discountCode.discountCode.id} className={styles.appliedPromoItem}>
                   <div>Number of promocode {getPromoCodeDisplay(discountCode)}</div>
-                  <button 
+                  <button
                     onClick={() => handleRemovePromoCode(discountCode.discountCode.id)}
                     className={styles.removePromoButton}
                     title={t('Remove promo code')}
@@ -386,13 +377,9 @@ export function BasketCompClient() {
             </ul>
           </div>
         )}
-
       </div>
-  {cart.lineItems && cart.lineItems.length > 0 && (
-        <button 
-          onClick={handleClearCart} 
-          className={styles.clearCartButton}
-        >
+      {cart.lineItems && cart.lineItems.length > 0 && (
+        <button onClick={handleClearCart} className={styles.clearCartButton}>
           {t('Clear Cart')}
         </button>
       )}
@@ -414,22 +401,30 @@ export function BasketCompClient() {
               {t('Total')}: ${(cart.totalPrice.centAmount / 100).toFixed(2)}
             </h3>
             {cart.discountOnTotalPrice && (
- 
               <>
-      <div className={styles.discountAmount}>
-        Price without promocode: ${((cart.totalPrice.centAmount + cart.discountOnTotalPrice.discountedAmount.centAmount) / 100).toFixed(2)}
-      </div>
-      <div className={styles.discountAmount}>
-        Your discount from promocode: -${(cart.discountOnTotalPrice.discountedAmount.centAmount / 100).toFixed(2)}
-      </div>
-    </>
-          )}
+                <div className={styles.discountAmount}>
+                  Price without promocode: $
+                  {(
+                    (cart.totalPrice.centAmount +
+                      cart.discountOnTotalPrice.discountedAmount.centAmount) /
+                    100
+                  ).toFixed(2)}
+                </div>
+                <div className={styles.discountAmount}>
+                  Your discount from promocode: -$
+                  {(cart.discountOnTotalPrice.discountedAmount.centAmount / 100).toFixed(2)}
+                </div>
+              </>
+            )}
             <button className="checkout-button">{t('Proceed to Checkout')}</button>
           </div>
         </>
       ) : (
-        <div className="empty-cart-message">
+        <div className={styles.stylesEmptyCartMessage}>
           <p>{t('Your cart is empty')}</p>
+          <Link to="/catalog" className={styles.link}>
+           {t('Go to the catalog page!')}
+          </Link>
         </div>
       )}
     </div>
