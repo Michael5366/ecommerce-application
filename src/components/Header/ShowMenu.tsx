@@ -8,16 +8,17 @@ import {
   useMediaQuery,
   // useTheme,
 } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
+
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Path } from '../../types/paths';
 import { useAuth } from '../../context/context';
 import { useTranslation } from 'react-i18next';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 const ShowMenu = () => {
   // const theme = useTheme();
   // const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const isMobile = useMediaQuery('(max-width:860px)');
+  const isMobile = useMediaQuery('(max-width:900px)');
 
   const { token, logout } = useAuth();
   const auth = Boolean(token);
@@ -44,8 +45,13 @@ const ShowMenu = () => {
   if (isMobile) {
     return (
       <>
-        <IconButton onClick={handleMenuOpen}>
-          <MenuIcon />
+        <IconButton
+          aria-label="more"
+          aria-controls="long-menu"
+          aria-haspopup="true"
+          onClick={handleMenuOpen}
+        >
+          <MoreVertIcon />
         </IconButton>
 
         <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
