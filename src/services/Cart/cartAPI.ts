@@ -28,35 +28,49 @@ const getAuthHeader = async (): Promise<string> => {
   if (token) return `Bearer ${token}`;
 
   const anonymousToken = await getAnonymousToken();
-  console.log(anonymousToken);
   return `Bearer ${anonymousToken}`;
 };
+
+const isAnonymous = (): boolean => !sessionStorage.getItem('auth_token');
 
 export const getActiveCart = async (): Promise<Cart | null> => {
   try {
     const authHeader = await getAuthHeader();
+    const anonymous = isAnonymous();
 
-    const response = await fetch(`${API_URL}/${PROJECT_KEY}/me/active-cart`, {
-      headers: {
-        Authorization: authHeader,
-      },
+    if (anonymous) {
+      const savedCartId = localStorage.getItem('anonymous_cart_id');
+      if (savedCartId) {
+        const savedCartResponse = await fetch(`${API_URL}/${PROJECT_KEY}/carts/${savedCartId}`, {
+          headers: { Authorization: authHeader },
+        });
+        if (savedCartResponse.ok) return savedCartResponse.json();
+      }
+    }
+
+    const activeCartResponse = await fetch(`${API_URL}/${PROJECT_KEY}/me/active-cart`, {
+      headers: { Authorization: authHeader },
     });
 
-    if (response.status === 404) {
+    if (activeCartResponse.ok) {
+      return activeCartResponse.json();
+    }
+
+    if (activeCartResponse.status === 404) {
+      return createCart();
+    }
+
+    if (activeCartResponse.status === 403) {
+      sessionStorage.removeItem('auth_token');
       return null;
     }
 
-    if (!response.ok) {
-      const error = await response.json();
-      if (response.status === 403) {
-        // Token might have expired or have insufficient scopes
-        sessionStorage.removeItem('auth_token');
-        return null;
-      }
+    if (!activeCartResponse.ok) {
+      const error = await activeCartResponse.json();
       throw new CommerceToolsAuthError(error);
     }
 
-    return response.json();
+    return null;
   } catch (error) {
     console.error('Error fetching active cart:', error);
     return null;
@@ -66,9 +80,10 @@ export const getActiveCart = async (): Promise<Cart | null> => {
 export const createCart = async (currency = 'USD'): Promise<Cart> => {
   try {
     const authHeader = await getAuthHeader();
-    const token = sessionStorage.getItem('auth_token');
+    const anonymous = isAnonymous();
+    const endpoint = anonymous ? 'carts' : 'me/carts';
 
-    const response = await fetch(`${API_URL}/${PROJECT_KEY}/me/carts`, {
+    const response = await fetch(`${API_URL}/${PROJECT_KEY}/${endpoint}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -77,7 +92,7 @@ export const createCart = async (currency = 'USD'): Promise<Cart> => {
       body: JSON.stringify({
         currency,
         country: 'US',
-        ...(!token && { anonymousId: generateAnonymousId() }),
+        ...(anonymous && { anonymousId: generateAnonymousId() }),
       }),
     });
 
@@ -85,7 +100,14 @@ export const createCart = async (currency = 'USD'): Promise<Cart> => {
       const error = await response.json();
       throw new CommerceToolsAuthError(error);
     }
-    return response.json();
+
+    const cart = await response.json();
+
+    if (anonymous && cart.id) {
+      localStorage.setItem('anonymous_cart_id', cart.id);
+    }
+
+    return cart;
   } catch (error) {
     console.error('Error creating cart:', error);
     throw error;
@@ -104,13 +126,16 @@ const generateAnonymousId = (): string => {
 export const addToCart = async (productId: string, variantId = 1, quantity = 1): Promise<Cart> => {
   try {
     const authHeader = await getAuthHeader();
+    const anonymous = isAnonymous();
+    const endpoint = anonymous ? 'carts' : 'me/carts';
+
     let cart = await getActiveCart();
 
     if (!cart) {
       cart = await createCart();
     }
 
-    const response = await fetch(`${API_URL}/${PROJECT_KEY}/me/carts/${cart.id}`, {
+    const response = await fetch(`${API_URL}/${PROJECT_KEY}/${endpoint}/${cart.id}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -132,7 +157,6 @@ export const addToCart = async (productId: string, variantId = 1, quantity = 1):
     if (!response.ok) {
       const error = await response.json();
       if (response.status === 401 || response.status === 403) {
-        // Token might be expired, try with fresh token
         sessionStorage.removeItem('auth_token');
         return addToCart(productId, variantId, quantity);
       }

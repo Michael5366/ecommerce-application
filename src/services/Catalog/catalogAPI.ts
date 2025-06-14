@@ -16,6 +16,7 @@ export const getAnonymousToken = async (): Promise<string> => {
         `manage_customers:${PROJECT_KEY}`,
         `manage_my_profile:${PROJECT_KEY}`,
         `manage_my_orders:${PROJECT_KEY}`,
+        `manage_orders:${PROJECT_KEY}`,
         `manage_my_shopping_lists:${PROJECT_KEY}`,
         `manage_my_payments:${PROJECT_KEY}`,
         `view_published_products:${PROJECT_KEY}`,
