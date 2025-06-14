@@ -74,13 +74,14 @@ const aboutPageStyles = makeStyles({
     objectFit: 'cover',
     width: '250px',
     height: '250px',
-    paddingBottom: '20px',
+    borderRadius: '108%',
   },
 
   content__quote: {
     order: 2,
     textAlign: 'center',
     fontSize: '1rem',
+    marginTop: '20px',
   },
 
   content__position: {
@@ -89,8 +90,9 @@ const aboutPageStyles = makeStyles({
   },
 
   content__description: {
-    fontSize: '0.9rem',
     order: 3,
+    fontSize: '0.9rem',
+    marginTop: '20px',
   },
 
   content__btn: {
