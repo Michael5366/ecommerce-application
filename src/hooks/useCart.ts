@@ -1,5 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
-import { getActiveCart, addToCart as apiAddToCart, Cart } from '../services/Cart/cartAPI';
+import {
+  getActiveCart,
+  addToCart as apiAddToCart,
+  removeFromCart as apiRemoveFromCart,
+  isProductInCart,
+  getLineItemId,
+  Cart,
+} from '../services/Cart/cartAPI';
 
 const CART_ITEMS_KEY = 'cart_items';
 
@@ -59,11 +66,45 @@ export const useCart = () => {
     }
   }, []);
 
+  const removeFromCart = useCallback(
+    async (productId: string) => {
+      try {
+        setIsLoading(true);
+        if (!cart) throw new Error('Cart not found');
+
+        const lineItemId = getLineItemId(cart, productId);
+        if (!lineItemId) throw new Error('Product not in cart');
+
+        const updatedCart = await apiRemoveFromCart(lineItemId);
+        setCart(updatedCart);
+        const items = updatedCart.lineItems.map((item) => item.productId);
+        setCartItems(items);
+        return updatedCart;
+      } catch (error) {
+        console.error('Error removing from cart:', error);
+        throw error;
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [cart]
+  );
+
+  const productInCart = useCallback(
+    (productId?: string) => {
+      if (!productId) return false;
+      return isProductInCart(cart, productId);
+    },
+    [cart]
+  );
+
   return {
     cart,
     cartItems,
     isLoading,
     addToCart,
+    removeFromCart,
+    productInCart,
     refreshCart: fetchCart,
   };
 };

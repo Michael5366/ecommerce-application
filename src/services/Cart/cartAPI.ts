@@ -169,3 +169,55 @@ export const addToCart = async (productId: string, variantId = 1, quantity = 1):
     throw error;
   }
 };
+
+export const removeFromCart = async (lineItemId: string): Promise<Cart> => {
+  try {
+    const authHeader = await getAuthHeader();
+    const anonymous = isAnonymous();
+    const endpoint = anonymous ? 'carts' : 'me/carts';
+
+    const cart = await getActiveCart();
+    if (!cart) {
+      throw new Error('Cart not found');
+    }
+
+    const response = await fetch(`${API_URL}/${PROJECT_KEY}/${endpoint}/${cart.id}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: authHeader,
+      },
+      body: JSON.stringify({
+        version: cart.version,
+        actions: [
+          {
+            action: 'removeLineItem',
+            lineItemId,
+          },
+        ],
+      }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      if (response.status === 401 || response.status === 403) {
+        sessionStorage.removeItem('auth_token');
+        return removeFromCart(lineItemId);
+      }
+      throw new CommerceToolsAuthError(error);
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error('Error removing from cart:', error);
+    throw error;
+  }
+};
+
+export const isProductInCart = (cart: Cart | null, productId: string): boolean => {
+  return cart?.lineItems.some((item) => item.productId === productId) || false;
+};
+
+export const getLineItemId = (cart: Cart | null, productId: string): string | undefined => {
+  return cart?.lineItems.find((item) => item.productId === productId)?.id;
+};
