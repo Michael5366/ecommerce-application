@@ -19,7 +19,7 @@ describe('createEmptyCart', () => {
     globalThis.fetch = vi.fn().mockResolvedValue({
       ok: true,
       json: async () => mockCartResponse,
-    }) as any;
+    });
 
     const result = await createEmptyCart(mockToken);
 
@@ -45,7 +45,7 @@ describe('createEmptyCart', () => {
     globalThis.fetch = vi.fn().mockResolvedValue({
       ok: false,
       json: async () => mockError,
-    }) as any;
+    });
 
     const result = await createEmptyCart(mockToken);
 
@@ -53,4 +53,3 @@ describe('createEmptyCart', () => {
     expect(consoleSpy).toHaveBeenCalledWith('Error fo creating the basket:', mockError);
   });
 });
-  

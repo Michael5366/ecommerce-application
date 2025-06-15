@@ -79,7 +79,7 @@ export function BasketCompClient() {
         cartData = await getOrUpdateCustomerCart();
         setCart(cartData);
         //console.log(cartData);
-      } catch (error) {
+      } catch {
         setError(t('Failed to load cart'));
       } finally {
         setLoading(false);
@@ -125,7 +125,7 @@ export function BasketCompClient() {
       } else {
         throw new Error('Failed to remove item');
       }
-    } catch (error) {
+    } catch {
       //console.error('Error removing item:', error);
       setError(t('Failed to remove item'));
     }
@@ -173,7 +173,7 @@ export function BasketCompClient() {
       } else {
         throw new Error('Failed to update quantity');
       }
-    } catch (error) {
+    } catch {
       //console.error('Error updating quantity:', error);
       setError(t('Failed to update quantity'));
     }
@@ -218,7 +218,7 @@ export function BasketCompClient() {
         const errorData = await response.json();
         throw new Error(errorData.message || 'Failed to apply promo code');
       }
-    } catch (error) {
+    } catch {
       //console.error('Error applying promo code:', error);
       setPromoError(t('Invalid or expired promo code'));
     }
@@ -261,7 +261,7 @@ export function BasketCompClient() {
       } else {
         throw new Error('Failed to remove promo code');
       }
-    } catch (error) {
+    } catch {
       //console.error('Error removing promo code:', error);
       setPromoError(t('Failed to remove promo code'));
     }
@@ -323,7 +323,7 @@ export function BasketCompClient() {
       } else {
         throw new Error('Failed to clear cart');
       }
-    } catch (error) {
+    } catch {
       setError(t('Failed to clear cart'));
     }
   };

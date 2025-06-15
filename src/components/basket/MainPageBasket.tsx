@@ -3,6 +3,7 @@ import { CartResponse } from './BasketPageConstr';
 import { getAnonymousToken } from '../../services/auth-registration';
 import { getOrUpdateCustomerCart } from '../../services/Basket/updateBasket';
 import styles from './MainPageBasket.module.css';
+//import { addTestItemsToCart } from '../../services/Basket/temporalBasket';
 export function CreateCardEnter() {
   useEffect(() => {
     async function initialize() {
@@ -12,11 +13,12 @@ export function CreateCardEnter() {
           await getAnonymousToken();
         }
         cartData = await getOrUpdateCustomerCart();
-      } catch {
-        //console.error('Ошибка при загрузке корзины:', error);
+        console.log(cartData);
+      } catch (error) {
+        console.error('Ошибка при загрузке корзины:', error);
       } finally {
         if (cartData) {
-          //addTestItemsToCart(cartData.id, cartData.version);
+          //  addTestItemsToCart(cartData.id, cartData.version);
         }
       }
     }
