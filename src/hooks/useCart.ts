@@ -5,8 +5,8 @@ import {
   removeFromCart as apiRemoveFromCart,
   isProductInCart,
   getLineItemId,
-  Cart,
 } from '../services/Cart/cartAPI';
+import { Cart } from '../services/Cart/cartAPI.types';
 
 const CART_ITEMS_KEY = 'cart_items';
 

@@ -1,12 +1,6 @@
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
-import {
-  getActiveCart,
-  createCart,
-  addToCart,
-  isProductInCart,
-  getLineItemId,
-  Cart,
-} from './cartAPI';
+import { getActiveCart, createCart, addToCart, isProductInCart, getLineItemId } from './cartAPI';
+import { Cart } from './cartAPI.types';
 
 vi.mock('../Auth/authAPI', () => ({
   CommerceToolsAuthError: class MockCommerceToolsAuthError extends Error {

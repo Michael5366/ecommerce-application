@@ -1,27 +1,9 @@
 import { CommerceToolsAuthError } from '../Auth/authAPI';
 import { getAnonymousToken } from '../Catalog/catalogAPI';
+import { Cart } from './cartAPI.types';
 
 const PROJECT_KEY = import.meta.env.VITE_CTP_PROJECT_KEY;
 const API_URL = import.meta.env.VITE_CTP_API_URL;
-
-export interface Cart {
-  id: string;
-  version: number;
-  lineItems: LineItem[];
-}
-
-export interface LineItem {
-  id: string;
-  productId: string;
-  name: string;
-  quantity: number;
-  price: {
-    value: {
-      centAmount: number;
-      currencyCode: string;
-    };
-  };
-}
 
 const getAuthHeader = async (): Promise<string> => {
   const token = sessionStorage.getItem('auth_token');
