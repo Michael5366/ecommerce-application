@@ -115,6 +115,7 @@ const aboutPageStyles = makeStyles({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    flexGrow: '1000px',
   },
 
   content__biography: {
@@ -126,6 +127,17 @@ const aboutPageStyles = makeStyles({
     padding: '40px',
     borderRadius: '3px',
     background: theme.palette.background.default,
+
+    '@media (max-width: 888px)': {
+      width: '85%',
+    },
+
+    '@media (max-width: 550px)': {
+      fontSize: 16,
+      height: '300px',
+      overflowY: 'auto',
+      padding: 10,
+    },
   },
 
   'content__close-btn': {

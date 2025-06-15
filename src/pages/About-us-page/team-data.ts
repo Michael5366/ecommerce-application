@@ -47,7 +47,11 @@ const teamData: TeamMember[] = [
     description:
       'Implemented the product detail pages with image sliders, modals, and detailed descriptions. Integrated routing across all pages, ensuring smooth navigation between catalog, product, profile, basket, and about pages, including browser history support.',
     quote: 'Turning flow into function.',
-    biography: '',
+    biography: `
+      Hi! I'm Mikhail, a passionate self-taught developer based in Russia. My journey in tech started back in 2004 when I entered university to study Applied Informatics in Economics. Unfortunately, due to a long-term health issue, I had to pause my education and career plans.
+      Despite the challenges, I stayed curious and explored various interests-from online games and music to anime voiceovers. But it was in 2016 that I truly found a spark in front-end development. I began learning HTML and CSS on my own and felt a strong connection to building user interfaces.
+      In 2023, after many difficult years, I managed to bring my health condition under control. Around the same time, I discovered RSSchool and immediately joined. I’ve grown a lot through this program, especially in teamwork and project development. Now, I’m focused on improving my English, building my portfolio, and continuing this long-awaited journey into IT.
+    `,
     github: 'https://github.com/bob',
     photo: '/Michael_Elsky.jpg',
   },
