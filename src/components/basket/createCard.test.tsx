@@ -36,7 +36,11 @@ describe('ProductCardBusket', () => {
 
     render(
       <BrowserRouter>
-        <ProductCardBusket item={mockItem} onRemove={onRemove} onQuantityChange={onQuantityChange} />
+        <ProductCardBusket
+          item={mockItem}
+          onRemove={onRemove}
+          onQuantityChange={onQuantityChange}
+        />
       </BrowserRouter>
     );
 

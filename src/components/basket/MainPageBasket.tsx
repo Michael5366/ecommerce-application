@@ -12,8 +12,8 @@ export function CreateCardEnter() {
           await getAnonymousToken();
         }
         cartData = await getOrUpdateCustomerCart();
-      } catch (error) {
-        console.error('Ошибка при загрузке корзины:', error);
+      } catch {
+        //console.error('Ошибка при загрузке корзины:', error);
       } finally {
         if (cartData) {
           //addTestItemsToCart(cartData.id, cartData.version);

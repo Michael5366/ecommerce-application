@@ -5,7 +5,6 @@ export async function addTestItemsToAnonCart() {
   const cartId = sessionStorage.getItem('cart_id');
 
   if (!cartId || !token) {
-    console.error('No cart ID or token found');
     return;
   }
 
@@ -17,7 +16,6 @@ export async function addTestItemsToAnonCart() {
   });
 
   if (!cartResponse.ok) {
-    console.error('Failed to fetch cart');
     return;
   }
 
@@ -60,11 +58,9 @@ export async function addTestItemsToAnonCart() {
 
   if (response.ok) {
     const updatedCart = await response.json();
-    console.log('Товары успешно добавлены:', updatedCart);
     return updatedCart;
   } else {
     const error = await response.json();
-    console.error('Ошибка при добавлении товаров:', error);
     throw error;
   }
 }

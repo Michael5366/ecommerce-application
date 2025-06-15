@@ -50,9 +50,7 @@ describe('createEmptyCart', () => {
     const result = await createEmptyCart(mockToken);
 
     expect(result).toBeNull();
-    expect(consoleSpy).toHaveBeenCalledWith(
-      'Error fo creating the basket:',
-      mockError
-    );
+    expect(consoleSpy).toHaveBeenCalledWith('Error fo creating the basket:', mockError);
   });
 });
+  
