@@ -7,7 +7,7 @@
   transition: all 0.3s ease;
   cursor: pointer;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  padding-bottom: 35px;
+  padding-bottom: 3.5rem;
 }
 
 .productCard:hover {
@@ -16,7 +16,7 @@
 }
 
 .imageContainer {
-  height: 200px;
+  height: 12.5rem;
   width: 100%;
   overflow: hidden;
   position: relative;
@@ -28,8 +28,6 @@
   height: 100%;
   object-fit: cover;
   object-position: center;
-  min-width: 100%;
-  min-height: 100%;
   transition: transform 0.3s ease;
 }
 
@@ -65,7 +63,8 @@
 
 .priceContainer {
   position: absolute;
-  bottom: 20px;
+  bottom: 1.25rem;
+  left: 1rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -96,8 +95,8 @@
 
 .discountBadge {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 0.625rem;
+  right: 0.625rem;
   background-color: #d32f2f;
   color: white;
   padding: 0.25rem 0.5rem;
@@ -108,69 +107,21 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-@media (max-width: 768px) {
-  .productDescription {
-    font-size: 0.8rem;
-  }
-}
-
-.cartIcon {
-  position: absolute;
-  bottom: 8px;
-  right: 16px;
-  width: 32px;
-  height: 32px;
-  background-color: var(--primary-color);
-  color: white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  z-index: 2;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-}
-
-.cartIcon:hover {
-  background-color: #733cc0;
-  transform: scale(1.1);
-}
-
-.cartIcon .MuiSvgIcon-root {
-  width: 18px;
-  height: 18px;
-}
-
-@media (max-width: 768px) {
-  .cartIcon {
-    width: 28px;
-    height: 28px;
-    bottom: 6px;
-    right: 16px;
-  }
-
-  .cartIcon .MuiSvgIcon-root {
-    width: 16px;
-    height: 16px;
-  }
-}
-
 .addToCartButton {
   position: absolute;
-  bottom: 14px;
-  right: 16px;
+  bottom: 0.875rem;
+  right: 1rem;
   display: flex;
   align-items: center;
-  gap: 5px;
-  padding: 8px 8px;
+  gap: 0.3125rem;
+  padding: 0.5rem;
   background-color: var(--primary-color);
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 0.25rem;
   cursor: pointer;
   transition: background-color 0.2s;
-  font-size: 14px;
+  font-size: 0.875rem;
 }
 
 .addToCartButton:hover:not(:disabled) {
@@ -187,8 +138,8 @@
 }
 
 .spinner {
-  width: 16px;
-  height: 16px;
+  width: 1rem;
+  height: 1rem;
   border: 2px solid rgba(255, 255, 255, 0.3);
   border-radius: 50%;
   border-top-color: white;
@@ -198,5 +149,16 @@
 @keyframes spin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 48rem) {
+  .productDescription,
+  .addToCartButton {
+    font-size: 0.8rem;
+  }
+  
+  .imageContainer {
+    height: 10rem;
   }
 }
