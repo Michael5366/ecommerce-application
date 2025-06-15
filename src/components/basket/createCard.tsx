@@ -95,7 +95,7 @@ export const ProductCardBusket: FC<CartItemCardProps> = ({ item, onRemove, onQua
           )}
           <span className={styles.totalPrice}>
             ${totalPrice.toFixed(2)} {t('total')}
-          </span>
+          </span>npm test -- --coverage
         </div>
       </div>
 

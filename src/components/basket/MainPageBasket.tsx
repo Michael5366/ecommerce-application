@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { CartResponse } from './BasketPageConstr';
 import { getAnonymousToken } from '../../services/auth-registration';
 import { getOrUpdateCustomerCart } from '../../services/Basket/updateBasket';
-import styles from './MainPageBasket.module.css'
+import styles from './MainPageBasket.module.css';
 export function CreateCardEnter() {
   useEffect(() => {
     async function initialize() {
