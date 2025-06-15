@@ -17,7 +17,15 @@ const teamData: TeamMember[] = [
     description:
       'Developed the user profile and shopping cart pages, implementing dynamic forms, validation, and API integration for address management, profile editing, and promo code logic. Ensured a responsive and user-friendly interface for all basket-related actions.',
     quote: 'Turning choice into clarity.',
-    biography: '',
+    biography: `
+      My name is Viktoriia, and I am 28 years old.
+      I live in Barcelona, Spain. I speak Spanish at a B1 level and also know Catalan and English. I really enjoy learning languages and want to keep improving them.
+      I have a university degree in Sociology. I was also a student at the Higher School of Economics, where I studied Data Analysis. Later, I discovered my true passion—programming, and I absolutely love it. It inspires me like nothing else. I enjoy how it combines structure, problem-solving, and creativity.
+      My first experience with coding was at university. I started with R for data analysis and then explored neural networks in Python. However, I realized that my real interest lies in front-end development. I love how visual and interactive it is—every small detail matters and teaches me something new.
+      This course at Rolling Scopes School is my first real experience with front-end development, and it feels like I’ve finally found what truly excites me.
+      I’m a very creative person and love making things with my hands—whether it’s sewing clothes, knitting, or decorating cakes. I’m also a professional pastry chef and can make custom-designed cakes, although now programming has become my main focus.
+      My goals are to significantly improve my programming skills and to learn Chinese—two challenges I’m very motivated to pursue.
+    `,
     github: 'https://github.com/viktoriiapet',
     photo: '/Viktoriia_Petukhova.jpg',
   },
