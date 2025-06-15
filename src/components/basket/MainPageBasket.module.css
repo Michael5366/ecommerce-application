@@ -1,0 +1,14 @@
+.blockPromo{
+    display: flex;
+    padding: 2vw;
+    flex-direction: column;
+    align-items: center;
+    border: green 1px solid;
+    border-radius: 10px;
+}
+.promocode{
+    font-size: x-large;
+}
+.promocodeTitle{
+    font-size: xx-large;
+}

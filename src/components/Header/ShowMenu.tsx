@@ -66,7 +66,7 @@ const ShowMenu = () => {
                   onClick={() => {
                     handleMenuClose();
                     sessionStorage.removeItem('guestToken');
-                    sessionStorage.removeItem('cart_id')
+                    sessionStorage.removeItem('cart_id');
                     logout();
                     navigate(Path.LOGIN);
                   }}
@@ -107,7 +107,7 @@ const ShowMenu = () => {
             color="inherit"
             onClick={() => {
               sessionStorage.removeItem('guestToken');
-              sessionStorage.removeItem('cart_id')
+              sessionStorage.removeItem('cart_id');
               logout();
               navigate(Path.LOGIN);
             }}
