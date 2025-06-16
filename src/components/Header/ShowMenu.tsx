@@ -52,6 +52,9 @@ const ShowMenu = () => {
           <MenuItem onClick={handleMenuClose} component={Link} to={'/catalog'}>
             {t('Catalog')}
           </MenuItem>
+          <MenuItem onClick={handleMenuClose} component={Link} to={Path.BASKET}>
+            {t('Basket')}
+          </MenuItem>
 
           {auth
             ? [
@@ -62,6 +65,8 @@ const ShowMenu = () => {
                   key="logout"
                   onClick={() => {
                     handleMenuClose();
+                    sessionStorage.removeItem('guestToken');
+                    sessionStorage.removeItem('cart_id');
                     logout();
                     navigate(Path.LOGIN);
                   }}
@@ -88,6 +93,9 @@ const ShowMenu = () => {
       <Button component={Link} to={'/catalog'} color="inherit" variant="outlined">
         {t('Catalog')}
       </Button>
+      <Button component={Link} to={Path.BASKET} color="inherit" variant="outlined">
+        {t('Basket')}
+      </Button>
 
       {auth ? (
         <>
@@ -98,6 +106,8 @@ const ShowMenu = () => {
             variant="outlined"
             color="inherit"
             onClick={() => {
+              sessionStorage.removeItem('guestToken');
+              sessionStorage.removeItem('cart_id');
               logout();
               navigate(Path.LOGIN);
             }}

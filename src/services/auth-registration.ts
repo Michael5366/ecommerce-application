@@ -2,11 +2,7 @@
 import { Address } from '../types/form';
 import Toastify from 'toastify-js';
 import 'toastify-js/src/toastify.css';
-
-// const clientId = 'your_client_id';
-// const clientSecret = 'your_client_secret';
-// const credentials = btoa(`${clientId}:${clientSecret}`);
-// console.log('Base64 encoded credentials:', credentials);
+import { createEmptyCart } from './Basket/CreateBasketApi';
 
 interface ApiError {
   code: string;
@@ -24,6 +20,7 @@ interface ApiSuccessResponse {
 }
 
 export const getAnonymousToken = async () => {
+  console.log('anon module is active');
   const clientId = import.meta.env.VITE_CTP_CLIENT_ID;
   const clientSecret = import.meta.env.VITE_CTP_CLIENT_SECRET;
   const projectKey = import.meta.env.VITE_CTP_PROJECT_KEY;
@@ -38,7 +35,7 @@ export const getAnonymousToken = async () => {
         Authorization: 'Basic ' + btoa(`${clientId}:${clientSecret}`),
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: `grant_type=client_credentials&scope=create_anonymous_token:${projectKey} manage_my_profile:${projectKey}`,
+      body: `grant_type=client_credentials&scope=create_anonymous_token:${projectKey} manage_my_profile:${projectKey} view_orders:${projectKey} manage_orders:${projectKey} view_published_products:${projectKey}`,
     }
   );
 
@@ -48,7 +45,7 @@ export const getAnonymousToken = async () => {
     console.error('Failed to get anonymous token:', data);
     throw new Error(data.error_description || 'Anonymous token failed');
   }
-
+  sessionStorage.setItem('guestToken', data.access_token);
   return data.access_token;
 };
 
@@ -130,17 +127,24 @@ export const signUpUser = async (token: string, payload: SignUpPayload) => {
     throw new Error(error.message || 'Ошибка при регистрации пользователя');
   }
   const successData: ApiSuccessResponse = await response.json();
-  Toastify({
-    text: 'Регистрация успешно завершена! Переходим на главную страницу!',
-    duration: 3000,
-    close: true,
-    gravity: 'top',
-    position: 'right',
-    style: {
-      background: '#42ff9e',
-      color: '#fff',
-    },
-  }).showToast();
+  try {
+    const customerToken = await getCustomerToken(payload.email, payload.password);
+    await createEmptyCart(customerToken);
+    Toastify({
+      text: 'Регистрация успешно завершена! Переходим на главную страницу!',
+      duration: 3000,
+      close: true,
+      gravity: 'top',
+      position: 'right',
+      style: {
+        background: '#42ff9e',
+        color: '#fff',
+      },
+    }).showToast();
+  } catch (error) {
+    console.error('Ошибка при получении токена или создании корзины:', error);
+  }
+
   // router.push('/');
   // console.log(successData);
   return successData;
@@ -159,12 +163,12 @@ export const getCustomerToken = async (email: string, password: string) => {
         Authorization: 'Basic ' + btoa(`${clientId}:${clientSecret}`),
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: `grant_type=password&username=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}&scope=manage_my_profile:${projectKey} manage_my_orders:${projectKey}`,
+      body: `grant_type=password&username=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}&scope=manage_my_profile:${projectKey} manage_my_orders:${projectKey} view_orders:${projectKey}`,
     }
   );
 
   const data = await res.json();
-
+  console.log('🔥 Customer Token:', data.access_token);
   if (!res.ok) throw new Error(data.error_description || 'Login failed');
 
   return data.access_token;
