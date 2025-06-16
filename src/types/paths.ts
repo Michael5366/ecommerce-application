@@ -4,4 +4,5 @@ export enum Path {
   REGISTRATION = '/registration',
   CATALOG = '/catalog',
   ABOUTUS = '/about-us',
+  PROFILE = '/profile',
 }

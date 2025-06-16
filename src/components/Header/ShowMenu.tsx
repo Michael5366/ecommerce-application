@@ -53,13 +53,18 @@ const ShowMenu = () => {
         </IconButton>
 
         <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
-          <MenuItem onClick={handleMenuClose} component={Link} to={'/catalog'}>
+          <MenuItem onClick={handleMenuClose} component={Link} to={Path.CATALOG}>
             {t('Catalog')}
           </MenuItem>
 
           {auth
             ? [
-                <MenuItem key="profile" onClick={handleMenuClose} component={Link} to="/profile">
+                <MenuItem
+                  key="profile"
+                  onClick={handleMenuClose}
+                  component={Link}
+                  to={Path.PROFILE}
+                >
                   {t('Profile')}
                 </MenuItem>,
                 <MenuItem
@@ -106,13 +111,13 @@ const ShowMenu = () => {
 
   return (
     <>
-      <Button component={Link} to={'/catalog'} color="inherit" variant="outlined">
+      <Button component={Link} to={Path.CATALOG} color="inherit" variant="outlined">
         {t('Catalog')}
       </Button>
 
       {auth ? (
         <>
-          <Button component={Link} to="/profile" color="inherit" variant="outlined">
+          <Button component={Link} to={Path.PROFILE} color="inherit" variant="outlined">
             {t('Profile')}
           </Button>
           <Button
@@ -126,7 +131,7 @@ const ShowMenu = () => {
             {t('Logout')}
           </Button>
 
-          <Button component={Link} to={'/about-us'} color="inherit" variant="outlined">
+          <Button component={Link} to={Path.ABOUTUS} color="inherit" variant="outlined">
             {t('About us')}
           </Button>
         </>
@@ -155,7 +160,7 @@ const ShowMenu = () => {
           </Tooltip>
 
           <Tooltip title={t('About us')} arrow placement="bottom-start" enterDelay={500}>
-            <Button component={Link} to={'/about-us'} color="inherit" variant="outlined">
+            <Button component={Link} to={Path.ABOUTUS} color="inherit" variant="outlined">
               {t('About us')}
             </Button>
           </Tooltip>
