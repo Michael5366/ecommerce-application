@@ -1,9 +1,8 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
-import { ProductCardBusket } from './createCard';
+import { ProductCardBasket } from './createCard';
 import { BrowserRouter } from 'react-router-dom';
 
-// Мокаем i18n
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (key: string) => key,
@@ -36,7 +35,7 @@ describe('ProductCardBusket', () => {
 
     render(
       <BrowserRouter>
-        <ProductCardBusket
+        <ProductCardBasket
           item={mockItem}
           onRemove={onRemove}
           onQuantityChange={onQuantityChange}
@@ -44,24 +43,18 @@ describe('ProductCardBusket', () => {
       </BrowserRouter>
     );
 
-    // Название
     expect(screen.getByText('Test Product')).toBeInTheDocument();
-    // SKU
     expect(screen.getByText(/SKU: SKU123/)).toBeInTheDocument();
-    // Цена со скидкой
-    expect(screen.getByText('$19.99')).toBeInTheDocument(); // Original
-    expect(screen.getByText('$14.99 each')).toBeInTheDocument(); // Discounted
+    expect(screen.getByText('$19.99')).toBeInTheDocument();
+    expect(screen.getByText('$14.99 each')).toBeInTheDocument();
     expect(screen.getByText('$29.98 total')).toBeInTheDocument();
 
-    // Кол-во
     const select = screen.getByRole('combobox') as HTMLSelectElement;
     expect(select.value).toBe('2');
 
-    // Меняем кол-во
     fireEvent.change(select, { target: { value: '3' } });
     expect(onQuantityChange).toHaveBeenCalledWith('item123', 3);
 
-    // Удаление
     const deleteButton = screen.getByRole('button', { name: 'Remove from cart' });
     fireEvent.click(deleteButton);
     expect(onRemove).toHaveBeenCalledWith('item123');

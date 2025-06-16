@@ -93,7 +93,7 @@ const ShowMenu = () => {
       <Button component={Link} to={'/catalog'} color="inherit" variant="outlined">
         {t('Catalog')}
       </Button>
-      <Button component={Link} to={'/basket'} color="inherit" variant="outlined">
+      <Button component={Link} to={Path.BASKET} color="inherit" variant="outlined">
         {t('Basket')}
       </Button>
 

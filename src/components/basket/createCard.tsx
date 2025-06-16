@@ -34,7 +34,7 @@ interface CartItemCardProps {
   onQuantityChange?: (itemId: string, newQuantity: number) => void;
 }
 
-export const ProductCardBusket: FC<CartItemCardProps> = ({ item, onRemove, onQuantityChange }) => {
+export const ProductCardBasket: FC<CartItemCardProps> = ({ item, onRemove, onQuantityChange }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 

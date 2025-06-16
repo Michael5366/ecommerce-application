@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getOrUpdateCustomerCart } from '../../services/Basket/updateBasket';
-import { ProductCardBusket } from './createCard';
+import { ProductCardBasket } from './createCard';
 import { useTranslation } from 'react-i18next';
 import { getAnonymousToken } from '../../services/auth-registration';
 import styles from './cardsStiles.module.css';
@@ -396,7 +396,7 @@ export function BasketCompClient() {
         <>
           <div className="cart-items">
             {cart.lineItems.map((item) => (
-              <ProductCardBusket
+              <ProductCardBasket
                 key={item.id}
                 item={item}
                 onRemove={handleRemoveItem}
