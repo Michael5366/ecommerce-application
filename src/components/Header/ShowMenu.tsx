@@ -1,23 +1,14 @@
 import React, { useState } from 'react';
-import {
-  Button,
-  IconButton,
-  Menu,
-  MenuItem,
-  Tooltip,
-  useMediaQuery,
-  // useTheme,
-} from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
+import { Button, IconButton, Menu, MenuItem, Tooltip, useMediaQuery } from '@mui/material';
+
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Path } from '../../types/paths';
 import { useAuth } from '../../context/context';
 import { useTranslation } from 'react-i18next';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 const ShowMenu = () => {
-  // const theme = useTheme();
-  // const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const isMobile = useMediaQuery('(max-width:860px)');
+  const isMobile = useMediaQuery('(max-width:900px)');
 
   const { token, logout } = useAuth();
   const auth = Boolean(token);
@@ -44,12 +35,17 @@ const ShowMenu = () => {
   if (isMobile) {
     return (
       <>
-        <IconButton onClick={handleMenuOpen}>
-          <MenuIcon />
+        <IconButton
+          aria-label="more"
+          aria-controls="long-menu"
+          aria-haspopup="true"
+          onClick={handleMenuOpen}
+        >
+          <MoreVertIcon />
         </IconButton>
 
         <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
-          <MenuItem onClick={handleMenuClose} component={Link} to={'/catalog'}>
+          <MenuItem onClick={handleMenuClose} component={Link} to={Path.CATALOG}>
             {t('Catalog')}
           </MenuItem>
           <MenuItem onClick={handleMenuClose} component={Link} to={Path.BASKET}>
@@ -58,7 +54,12 @@ const ShowMenu = () => {
 
           {auth
             ? [
-                <MenuItem key="profile" onClick={handleMenuClose} component={Link} to="/profile">
+                <MenuItem
+                  key="profile"
+                  onClick={handleMenuClose}
+                  component={Link}
+                  to={Path.PROFILE}
+                >
                   {t('Profile')}
                 </MenuItem>,
                 <MenuItem
@@ -73,6 +74,15 @@ const ShowMenu = () => {
                 >
                   {t('Logout')}
                 </MenuItem>,
+                <MenuItem
+                  key="logout"
+                  onClick={() => {
+                    handleMenuClose();
+                    navigate(Path.ABOUTUS);
+                  }}
+                >
+                  {t('About us')}
+                </MenuItem>,
               ]
             : [
                 <MenuItem key="login" onClick={handleMenuClose} component={Link} to={Path.LOGIN}>
@@ -81,16 +91,24 @@ const ShowMenu = () => {
                 <MenuItem key="register" onClick={goToRegister}>
                   {t('Registration')}
                 </MenuItem>,
+                <MenuItem
+                  key="register"
+                  onClick={() => {
+                    handleMenuClose();
+                    navigate(Path.ABOUTUS);
+                  }}
+                >
+                  {t('About us')}
+                </MenuItem>,
               ]}
         </Menu>
       </>
     );
   }
 
-  // 💡 Меню для desktop
   return (
     <>
-      <Button component={Link} to={'/catalog'} color="inherit" variant="outlined">
+      <Button component={Link} to={Path.CATALOG} color="inherit" variant="outlined">
         {t('Catalog')}
       </Button>
       <Button component={Link} to={Path.BASKET} color="inherit" variant="outlined">
@@ -99,7 +117,7 @@ const ShowMenu = () => {
 
       {auth ? (
         <>
-          <Button component={Link} to="/profile" color="inherit" variant="outlined">
+          <Button component={Link} to={Path.PROFILE} color="inherit" variant="outlined">
             {t('Profile')}
           </Button>
           <Button
@@ -113,6 +131,10 @@ const ShowMenu = () => {
             }}
           >
             {t('Logout')}
+          </Button>
+
+          <Button component={Link} to={Path.ABOUTUS} color="inherit" variant="outlined">
+            {t('About us')}
           </Button>
         </>
       ) : (
@@ -136,6 +158,12 @@ const ShowMenu = () => {
           >
             <Button variant="outlined" color="inherit" onClick={goToRegister}>
               {t('Registration')}
+            </Button>
+          </Tooltip>
+
+          <Tooltip title={t('About us')} arrow placement="bottom-start" enterDelay={500}>
+            <Button component={Link} to={Path.ABOUTUS} color="inherit" variant="outlined">
+              {t('About us')}
             </Button>
           </Tooltip>
         </>

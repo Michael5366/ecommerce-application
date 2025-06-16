@@ -3,5 +3,7 @@ export enum Path {
   LOGIN = '/login',
   REGISTRATION = '/registration',
   CATALOG = '/catalog',
+  ABOUTUS = '/about-us',
+  PROFILE = '/profile',
   BASKET = '/basket',
 }

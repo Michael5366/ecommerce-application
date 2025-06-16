@@ -1,5 +1,11 @@
 import { createTheme } from '@mui/material';
 
+declare module '@mui/material/styles' {
+  interface TypeText {
+    hover?: string;
+  }
+}
+
 export const theme = createTheme({
   palette: {
     primary: {
@@ -10,9 +16,12 @@ export const theme = createTheme({
     },
     background: {
       default: '#ffffff',
+      paper: '#F1F1F1',
     },
     text: {
       primary: '#333333',
+      secondary: '#636363',
+      hover: '#CC0C77',
     },
   },
   components: {
