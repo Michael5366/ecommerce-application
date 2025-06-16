@@ -43,7 +43,7 @@ export interface Cart {
   createdAt?: string;
   lastModifiedAt?: string;
 }
-export async function getOrUpdateCustomerCart():Promise<Cart> {
+export async function getOrUpdateCustomerCart(): Promise<Cart> {
   const projectKey = import.meta.env.VITE_CTP_PROJECT_KEY;
   const apiUrl = import.meta.env.VITE_CTP_API_URL;
   const token = sessionStorage.getItem('auth_token') || sessionStorage.getItem('guestToken');
@@ -58,94 +58,92 @@ export async function getOrUpdateCustomerCart():Promise<Cart> {
   let cart: Cart | null = null;
 
   try {
+    if (cartId) {
+      const response = await fetch(`${apiUrl}/${projectKey}/${endpoint}/${cartId}`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
 
-  if (cartId) {
-    const response = await fetch(`${apiUrl}/${projectKey}/${endpoint}/${cartId}`, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (response.ok) {
-      cart = await response.json();
-      console.log('We have the basket from cart_id:', cart);
-    } else {
-      console.warn('We coundnt get the basket grom cart_id. Deleting.');
-      if (isAnonymous) {
-        localStorage.removeItem('anonymous_cart_id');
+      if (response.ok) {
+        cart = await response.json();
+        console.log('We have the basket from cart_id:', cart);
       } else {
-        sessionStorage.removeItem('cart_id');
-      }
-      cartId = null;
-    }
-  }
-
-  if (!cart && !isAnonymous) {
-    const response = await fetch(`${apiUrl}/${projectKey}/me/carts`, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      if (data.results && data.results.length > 0) {
-        cart = data.results[0];
-        if (cart) {
-      sessionStorage.setItem('cart_id', cart.id);
-    }
-        console.log('Found existing cart:', cart);
+        console.warn('We coundnt get the basket grom cart_id. Deleting.');
+        if (isAnonymous) {
+          localStorage.removeItem('anonymous_cart_id');
+        } else {
+          sessionStorage.removeItem('cart_id');
+        }
+        cartId = null;
       }
     }
-  }
 
-  if (!cart) {
-    const anonymousId = isAnonymous
-      ? localStorage.getItem('anonymous_id') || generateAnonymousId()
-      : undefined;
+    if (!cart && !isAnonymous) {
+      const response = await fetch(`${apiUrl}/${projectKey}/me/carts`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
 
-    const response = await fetch(`${apiUrl}/${projectKey}/${endpoint}`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        currency: 'USD',
-        ...(isAnonymous && { anonymousId }),
-      }),
-    });
-
-    if (response.ok) {
-      cart = await response.json();
-
-      if (isAnonymous) {
-        
-        if (cart) {
-      localStorage.setItem('anonymous_cart_id', cart.id);
+      if (response.ok) {
+        const data = await response.json();
+        if (data.results && data.results.length > 0) {
+          cart = data.results[0];
+          if (cart) {
+            sessionStorage.setItem('cart_id', cart.id);
+          }
+          console.log('Found existing cart:', cart);
         }
-        if (!localStorage.getItem('anonymous_id') && cart) {
-          localStorage.setItem('anonymous_id', cart.anonymousId!);
+      }
+    }
+
+    if (!cart) {
+      const anonymousId = isAnonymous
+        ? localStorage.getItem('anonymous_id') || generateAnonymousId()
+        : undefined;
+
+      const response = await fetch(`${apiUrl}/${projectKey}/${endpoint}`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          currency: 'USD',
+          ...(isAnonymous && { anonymousId }),
+        }),
+      });
+
+      if (response.ok) {
+        cart = await response.json();
+
+        if (isAnonymous) {
+          if (cart) {
+            localStorage.setItem('anonymous_cart_id', cart.id);
+          }
+          if (!localStorage.getItem('anonymous_id') && cart) {
+            localStorage.setItem('anonymous_id', cart.anonymousId!);
+          }
+        } else {
+          if (cart) {
+            sessionStorage.setItem('cart_id', cart.id);
+          }
         }
+        console.log('Created new cart:', cart);
       } else {
-        if(cart) {
-                  sessionStorage.setItem('cart_id', cart.id);
-        }
+        await response.json();
+        throw new Error('Cannot create cart');
       }
-      console.log('Created new cart:', cart);
-    } else {
-      await response.json();
-      throw new Error('Cannot create cart');
     }
-  }
     if (!cart) {
       throw new Error('Failed to get or create cart');
     }
-   return cart;
+    return cart;
   } catch (error) {
     console.error('Error in getOrUpdateCustomerCart:', error);
     if (error instanceof Error) {

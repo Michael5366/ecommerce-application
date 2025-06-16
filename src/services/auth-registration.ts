@@ -4,7 +4,6 @@ import Toastify from 'toastify-js';
 import 'toastify-js/src/toastify.css';
 import { createEmptyCart } from './Basket/CreateBasketApi';
 
-
 interface ApiError {
   code: string;
   message: string;
