@@ -4,6 +4,7 @@ import { Product, ProductPriceInfo, Category } from '../../types/productTypes';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import styles from './ProductCard.module.css';
 import { useTranslation } from 'react-i18next';
+import { useCartContext } from '../../hooks/CartContext';
 
 interface ProductCardProps {
   product: Product;
@@ -31,6 +32,7 @@ export const ProductCard: FC<ProductCardProps> = ({
   const productName = product.masterData?.current?.name?.en || product.id;
   const productDescription = product.masterData?.current?.description?.en;
   const mainImage = product.masterData?.current?.masterVariant?.images?.[0]?.url;
+  const { setItemCount, itemCount } = useCartContext();
 
   useEffect(() => {
     setLocalIsInCart(initialIsInCart);
@@ -113,6 +115,7 @@ export const ProductCard: FC<ProductCardProps> = ({
       setLocalIsInCart(true);
       if (onAddToCart) {
         await onAddToCart(product.id);
+        setItemCount(itemCount + 1);
       }
     } catch (err) {
       setLocalIsInCart(false);

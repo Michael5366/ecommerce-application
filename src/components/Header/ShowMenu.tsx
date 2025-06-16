@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Button, IconButton, Menu, MenuItem, Tooltip, useMediaQuery } from '@mui/material';
-
+import { Button, IconButton, Menu, MenuItem, Tooltip, useMediaQuery, Badge } from '@mui/material';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Path } from '../../types/paths';
 import { useAuth } from '../../context/context';
 import { useTranslation } from 'react-i18next';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { useCartContext } from '../../hooks/CartContext';
 
 const ShowMenu = () => {
   const isMobile = useMediaQuery('(max-width:900px)');
@@ -18,6 +19,9 @@ const ShowMenu = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const { t } = useTranslation();
+
+  const { itemCount: cartItemCount } = useCartContext();
+  console.log('cartItemCount', cartItemCount);
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -49,6 +53,7 @@ const ShowMenu = () => {
             {t('Catalog')}
           </MenuItem>
           <MenuItem onClick={handleMenuClose} component={Link} to={Path.BASKET}>
+            <ShoppingCartIcon sx={{ mr: 1 }} />
             {t('Basket')}
           </MenuItem>
 
@@ -75,7 +80,7 @@ const ShowMenu = () => {
                   {t('Logout')}
                 </MenuItem>,
                 <MenuItem
-                  key="logout"
+                  key="about"
                   onClick={() => {
                     handleMenuClose();
                     navigate(Path.ABOUTUS);
@@ -92,7 +97,7 @@ const ShowMenu = () => {
                   {t('Registration')}
                 </MenuItem>,
                 <MenuItem
-                  key="register"
+                  key="about"
                   onClick={() => {
                     handleMenuClose();
                     navigate(Path.ABOUTUS);
@@ -111,9 +116,12 @@ const ShowMenu = () => {
       <Button component={Link} to={Path.CATALOG} color="inherit" variant="outlined">
         {t('Catalog')}
       </Button>
-      <Button component={Link} to={Path.BASKET} color="inherit" variant="outlined">
-        {t('Basket')}
-      </Button>
+
+      <IconButton component={Link} to={Path.BASKET} color="inherit">
+        <Badge badgeContent={cartItemCount} color="secondary">
+          <ShoppingCartIcon />
+        </Badge>
+      </IconButton>
 
       {auth ? (
         <>
@@ -132,7 +140,6 @@ const ShowMenu = () => {
           >
             {t('Logout')}
           </Button>
-
           <Button component={Link} to={Path.ABOUTUS} color="inherit" variant="outlined">
             {t('About us')}
           </Button>

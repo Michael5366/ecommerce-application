@@ -8,6 +8,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { Link } from 'react-router-dom';
 //import { addTestItemsToAnonCart } from '../../services/Basket/testAnonAddProduct';
 //import { addTestItemsToCart } from '../../services/Basket/temporalBasket';
+import { useCartContext } from '../../hooks/CartContext';
 
 type CartAction =
   | { action: 'removeDiscountCode'; discountCode: { typeId: 'discount-code'; id: string } }
@@ -68,6 +69,7 @@ export function BasketCompClient() {
   const [promoError, setPromoError] = useState<string | null>(null);
   const [promoSuccess, setPromoSuccess] = useState<string | null>(null);
   const [showClearCartModal, setShowClearCartModal] = useState(false);
+  const { setItemCount } = useCartContext();
 
   useEffect(() => {
     async function initialize() {
@@ -78,6 +80,11 @@ export function BasketCompClient() {
         }
         cartData = await getOrUpdateCustomerCart();
         setCart(cartData);
+        const totalQuantity = cartData.lineItems.reduce(
+          (sum: number, item: { quantity: number }) => sum + item.quantity,
+          0
+        );
+        setItemCount(totalQuantity);
         //console.log(cartData);
       } catch {
         setError(t('Failed to load cart'));
@@ -122,6 +129,11 @@ export function BasketCompClient() {
       if (response.ok) {
         const updatedCart = await response.json();
         setCart(updatedCart);
+        const totalQuantity = updatedCart.lineItems.reduce(
+          (sum: number, item: { quantity: number }) => sum + item.quantity,
+          0
+        );
+        setItemCount(totalQuantity);
       } else {
         throw new Error('Failed to remove item');
       }
@@ -170,6 +182,11 @@ export function BasketCompClient() {
       if (response.ok) {
         const updatedCart = await response.json();
         setCart(updatedCart);
+        const totalQuantity = updatedCart.lineItems.reduce(
+          (sum: number, item: { quantity: number }) => sum + item.quantity,
+          0
+        );
+        setItemCount(totalQuantity);
       } else {
         throw new Error('Failed to update quantity');
       }
@@ -212,6 +229,11 @@ export function BasketCompClient() {
       if (response.ok) {
         const updatedCart = await response.json();
         setCart(updatedCart);
+        const totalQuantity = updatedCart.lineItems.reduce(
+          (sum: number, item: { quantity: number }) => sum + item.quantity,
+          0
+        );
+        setItemCount(totalQuantity);
         setPromoSuccess(t('Promo code applied successfully'));
         setPromoCode('');
       } else {
@@ -257,6 +279,11 @@ export function BasketCompClient() {
       if (response.ok) {
         const updatedCart = await response.json();
         setCart(updatedCart);
+        const totalQuantity = updatedCart.lineItems.reduce(
+          (sum: number, item: { quantity: number }) => sum + item.quantity,
+          0
+        );
+        setItemCount(totalQuantity);
         setPromoSuccess(t('Promo code removed successfully'));
       } else {
         throw new Error('Failed to remove promo code');
@@ -320,6 +347,12 @@ export function BasketCompClient() {
       if (response.ok) {
         const updatedCart = await response.json();
         setCart(updatedCart);
+        const totalQuantity = updatedCart.lineItems.reduce(
+          (sum: number, item: { quantity: number }) => sum + item.quantity,
+          0
+        );
+        console.log('totalQuantity:', totalQuantity);
+        setItemCount(totalQuantity);
       } else {
         throw new Error('Failed to clear cart');
       }
