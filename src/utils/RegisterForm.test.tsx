@@ -2,7 +2,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { BrowserRouter } from 'react-router-dom';
 
-import RegisterForm from '../components/RegisterForm';
+import RegisterForm from '../components/RegisterForm/RegisterForm';
 
 vi.mock('../context/context.tsx', () => ({
   useAuth: () => ({

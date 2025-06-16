@@ -1,5 +1,5 @@
-import { Address, AddressErrors } from '../types/form';
-import '../styles/cssRegistration.css';
+import { Address, AddressErrors } from '../../types/form';
+import './cssRegistration.css';
 
 type AddressFormProps = {
   type: 'shippingAddress' | 'billingAddress';

@@ -1,4 +1,4 @@
-import '../styles/cssRegistration.css';
+import './cssRegistration.css';
 
 type DuplicateEmailModalProps = {
   isOpen: boolean;

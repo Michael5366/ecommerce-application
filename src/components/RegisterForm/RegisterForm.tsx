@@ -1,19 +1,23 @@
 import { useState } from 'react';
-import DuplicateEmailModal from './DuplicateEmailModal';
-import { getAnonymousToken, signUpUser, getCustomerToken } from '../services/auth-registration';
-import { SignUpPayload } from '../services/auth-registration';
-import { FormErrors } from '../types/form';
-import useRegistrationForm from '../hooks/useRegistrationForm';
-import { registrationSchema } from '../utils/validateRegistration';
+import DuplicateEmailModal from './DuplicateEmailModal.tsx';
+import {
+  getAnonymousToken,
+  signUpUser,
+  getCustomerToken,
+} from '../../services/auth-registration.ts';
+import { SignUpPayload } from '../../services/auth-registration.ts';
+import { FormErrors } from '../../types/form.ts';
+import useRegistrationForm from '../../hooks/useRegistrationForm.ts';
+import { registrationSchema } from '../../utils/validateRegistration.ts';
 import { ZodError } from 'zod';
-import AddressForm from './AddressForm';
-import '../styles/cssRegistration.css';
+import AddressForm from './AddressForm.tsx';
+import './cssRegistration.css';
 import Toastify from 'toastify-js';
 import 'toastify-js/src/toastify.css';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/context.tsx';
+import { useAuth } from '../../context/context.tsx';
 import { useLocation } from 'react-router-dom';
-import { Path } from '../types/paths.ts';
+import { Path } from '../../types/paths.ts';
 import { useEffect } from 'react';
 
 export default function RegisterForm() {
