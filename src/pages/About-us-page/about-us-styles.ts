@@ -7,7 +7,6 @@ const aboutPageStyles = makeStyles({
   },
 
   'about-us': {
-    // outline: '1px solid red',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -57,7 +56,6 @@ const aboutPageStyles = makeStyles({
   },
 
   content__card: {
-    // outline: '1px solid red',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
