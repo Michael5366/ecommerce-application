@@ -10,6 +10,7 @@ import ProductPage from '../pages/product-page/ProductPage';
 import fetchProductsData from '../loaders/catalogLoader';
 import CatalogPage from '../pages/CatalogPage';
 import AboutUsPage from '../pages/About-us-page/AboutUsPage';
+import { BasketPage } from '../pages/BasketPage';
 
 export const routesArray: Routes = [
   {
@@ -44,6 +45,7 @@ export const routesArray: Routes = [
       { path: 'profile', element: <ProfilePage /> },
       { path: 'about-us', element: <AboutUsPage /> },
       { path: '*', element: <NotFoundPage /> },
+      { path: 'basket', element: <BasketPage /> },
     ],
   },
 ];

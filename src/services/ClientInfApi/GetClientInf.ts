@@ -20,6 +20,7 @@ export type CustomerData = {
 
 export async function getCustomerData(): Promise<CustomerData> {
   const token = sessionStorage.getItem('auth_token');
+  console.log('токен в запросе данных клиента', token);
   const projectKey = import.meta.env.VITE_CTP_PROJECT_KEY;
 
   if (!token) {

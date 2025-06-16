@@ -8,9 +8,17 @@ interface ProductGridProps {
   products: Product[];
   searchQuery: string;
   categories: Category[];
+  cartItems?: string[];
+  onAddToCart?: (productId: string) => Promise<void>;
 }
 
-export const ProductGrid: FC<ProductGridProps> = ({ products, searchQuery, categories }) => {
+export const ProductGrid: FC<ProductGridProps> = ({
+  products,
+  searchQuery,
+  categories,
+  cartItems = [],
+  onAddToCart,
+}) => {
   const { t } = useTranslation();
 
   if (products.length === 0) {
@@ -30,6 +38,8 @@ export const ProductGrid: FC<ProductGridProps> = ({ products, searchQuery, categ
           product={product}
           searchQuery={searchQuery}
           categories={categories}
+          isInCart={cartItems.includes(product.id)}
+          onAddToCart={onAddToCart}
         />
       ))}
     </div>
