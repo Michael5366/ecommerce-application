@@ -16,8 +16,6 @@ import { useTranslation } from 'react-i18next';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 const ShowMenu = () => {
-  // const theme = useTheme();
-  // const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const isMobile = useMediaQuery('(max-width:900px)');
 
   const { token, logout } = useAuth();
@@ -106,7 +104,6 @@ const ShowMenu = () => {
     );
   }
 
-  // 💡 Меню для desktop
   return (
     <>
       <Button component={Link} to={'/catalog'} color="inherit" variant="outlined">
