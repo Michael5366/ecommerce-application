@@ -42,7 +42,7 @@ export const ProductCardBasket: FC<CartItemCardProps> = ({ item, onRemove, onQua
   const mainImage = item.variant?.images?.[0]?.url;
   const pricePerItem = item.price.value.centAmount / 100;
   const totalPrice = item.totalPrice.centAmount / 100;
-
+  const MAX_QUANTITY = 10;
   const handleProductClick = () => {
     const productSlug = item.productSlug?.en || item.id;
     navigate(`/product/${productSlug}`);
@@ -105,11 +105,11 @@ export const ProductCardBasket: FC<CartItemCardProps> = ({ item, onRemove, onQua
           onChange={handleQuantityChange}
           className={styles.quantitySelect}
         >
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
-            <option key={num} value={num}>
-              {num}
-            </option>
-          ))}
+             {Array.from({ length: MAX_QUANTITY }, (_, index) => (
+      <option key={index + 1} value={index + 1}>
+        {index + 1}
+      </option>
+    ))}
         </select>
       </div>
 
