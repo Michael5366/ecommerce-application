@@ -1,8 +1,6 @@
 export async function addTestItemsToCart(cartId: string, version: number) {
   const token = sessionStorage.getItem('auth_token');
   if (!token) {
-    console.error('Ошибка: пользователь не авторизован');
-    console.log('Содержимое sessionStorage:', JSON.stringify(sessionStorage, null, 2));
     throw new Error('Доступ только для зарегистрированных пользователей');
   }
   const projectKey = import.meta.env.VITE_CTP_PROJECT_KEY;

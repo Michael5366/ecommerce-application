@@ -10,7 +10,7 @@ export interface Image {
 export interface ProductVariant {
   id: number;
   images?: Image[];
-  sku?: string;
+  sku: string;
 }
 
 export interface LineItemPrice {
@@ -22,18 +22,39 @@ export interface LineItemPrice {
 
 export interface LineItem {
   id: string;
-  productId: string;
   name: {
     en: string;
     ru: string;
   };
-  variant: ProductVariant;
-  price: LineItemPrice;
+  productSlug: {
+    en: string;
+    ru: string;
+  };
+  variant: {
+    id: number;
+    images?: Array<{ url: string }>;
+    sku: string;
+  };
+  price: {
+    value: {
+      centAmount: number;
+      currencyCode: string;
+    };
+    discounted?: {
+      value: {
+        centAmount: number;
+        currencyCode: string;
+      };
+    };
+  };
   quantity: number;
-  totalPrice?: Money;
+  totalPrice: {
+    centAmount: number;
+  };
 }
 
 export interface Cart {
+  type: string;
   id: string;
   version: number;
   customerEmail?: string;
@@ -69,7 +90,6 @@ export async function getOrUpdateCustomerCart(): Promise<Cart> {
 
       if (response.ok) {
         cart = await response.json();
-        console.log('We have the basket from cart_id:', cart);
       } else {
         console.warn('We coundnt get the basket grom cart_id. Deleting.');
         if (isAnonymous) {
@@ -97,7 +117,6 @@ export async function getOrUpdateCustomerCart(): Promise<Cart> {
           if (cart) {
             sessionStorage.setItem('cart_id', cart.id);
           }
-          console.log('Found existing cart:', cart);
         }
       }
     }
@@ -134,7 +153,6 @@ export async function getOrUpdateCustomerCart(): Promise<Cart> {
             sessionStorage.setItem('cart_id', cart.id);
           }
         }
-        console.log('Created new cart:', cart);
       } else {
         await response.json();
         throw new Error('Cannot create cart');

@@ -5,7 +5,6 @@ export async function addTestItemsToAnonCart() {
   const cartId = localStorage.getItem('anonymous_cart_id') || sessionStorage.getItem('cart_id');
 
   if (!cartId || !token) {
-    console.log('we havent cardId or token');
     return;
   }
 
@@ -58,7 +57,6 @@ export async function addTestItemsToAnonCart() {
     return updatedCart;
   } else {
     const error = await response.json();
-    console.log(error);
     throw error;
   }
 }
