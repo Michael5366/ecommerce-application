@@ -1,13 +1,5 @@
 import React, { useState } from 'react';
-import {
-  Button,
-  IconButton,
-  Menu,
-  MenuItem,
-  Tooltip,
-  useMediaQuery,
-  // useTheme,
-} from '@mui/material';
+import { Button, IconButton, Menu, MenuItem, Tooltip, useMediaQuery } from '@mui/material';
 
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Path } from '../../types/paths';
