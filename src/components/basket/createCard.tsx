@@ -105,11 +105,11 @@ export const ProductCardBasket: FC<CartItemCardProps> = ({ item, onRemove, onQua
           onChange={handleQuantityChange}
           className={styles.quantitySelect}
         >
-             {Array.from({ length: MAX_QUANTITY }, (_, index) => (
-      <option key={index + 1} value={index + 1}>
-        {index + 1}
-      </option>
-    ))}
+          {Array.from({ length: MAX_QUANTITY }, (_, index) => (
+            <option key={index + 1} value={index + 1}>
+              {index + 1}
+            </option>
+          ))}
         </select>
       </div>
 

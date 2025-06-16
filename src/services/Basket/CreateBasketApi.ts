@@ -61,7 +61,6 @@ export async function createEmptyCart(token: string): Promise<Cart | null> {
     }
 
     return cartData;
-
   } catch {
     return null;
   }

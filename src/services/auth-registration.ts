@@ -4,10 +4,6 @@ import Toastify from 'toastify-js';
 import 'toastify-js/src/toastify.css';
 import { createEmptyCart } from './Basket/CreateBasketApi';
 
-// const clientId = 'your_client_id';
-// const clientSecret = 'your_client_secret';
-// const credentials = btoa(`${clientId}:${clientSecret}`);
-// console.log('Base64 encoded credentials:', credentials);
 
 interface ApiError {
   code: string;
