@@ -52,7 +52,7 @@ const ShowMenu = () => {
           <MenuItem onClick={handleMenuClose} component={Link} to={'/catalog'}>
             {t('Catalog')}
           </MenuItem>
-          <MenuItem onClick={handleMenuClose} component={Link} to={'/basket'}>
+          <MenuItem onClick={handleMenuClose} component={Link} to={Path.BASKET}>
             {t('Basket')}
           </MenuItem>
 

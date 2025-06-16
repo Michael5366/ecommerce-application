@@ -9,8 +9,8 @@ export async function getOrUpdateCustomerCart() {
   const isAnonymous = !sessionStorage.getItem('auth_token');
   const endpoint = isAnonymous ? 'carts' : 'me/carts';
 
- let cartId = isAnonymous 
-    ? localStorage.getItem('anonymous_cart_id') 
+  let cartId = isAnonymous
+    ? localStorage.getItem('anonymous_cart_id')
     : sessionStorage.getItem('cart_id');
   let cart = null;
 
@@ -28,7 +28,7 @@ export async function getOrUpdateCustomerCart() {
       console.log('We have the basket from cart_id:', cart);
     } else {
       console.warn('We coundnt get the basket grom cart_id. Deleting.');
-        if (isAnonymous) {
+      if (isAnonymous) {
         localStorage.removeItem('anonymous_cart_id');
       } else {
         sessionStorage.removeItem('cart_id');
@@ -36,7 +36,6 @@ export async function getOrUpdateCustomerCart() {
       cartId = null;
     }
   }
-
 
   if (!cart && !isAnonymous) {
     const response = await fetch(`${apiUrl}/${projectKey}/me/carts`, {
@@ -57,8 +56,8 @@ export async function getOrUpdateCustomerCart() {
     }
   }
 
-   if (!cart) {
-    const anonymousId = isAnonymous 
+  if (!cart) {
+    const anonymousId = isAnonymous
       ? localStorage.getItem('anonymous_id') || generateAnonymousId()
       : undefined;
 
@@ -76,7 +75,7 @@ export async function getOrUpdateCustomerCart() {
 
     if (response.ok) {
       cart = await response.json();
-      
+
       if (isAnonymous) {
         localStorage.setItem('anonymous_cart_id', cart.id);
         if (!localStorage.getItem('anonymous_id')) {
@@ -97,7 +96,7 @@ export async function getOrUpdateCustomerCart() {
 }
 
 function generateAnonymousId() {
-const newId = 'anon_' + Math.random().toString(36).substring(2, 15);
+  const newId = 'anon_' + Math.random().toString(36).substring(2, 15);
   localStorage.setItem('anonymous_id', newId);
   return newId;
 }
