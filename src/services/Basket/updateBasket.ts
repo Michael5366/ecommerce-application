@@ -9,10 +9,11 @@ export async function getOrUpdateCustomerCart() {
   const isAnonymous = !sessionStorage.getItem('auth_token');
   const endpoint = isAnonymous ? 'carts' : 'me/carts';
 
-  let cartId = sessionStorage.getItem('cart_id');
+ let cartId = isAnonymous 
+    ? localStorage.getItem('anonymous_cart_id') 
+    : sessionStorage.getItem('cart_id');
   let cart = null;
 
-  // Exist basket loading
   if (cartId) {
     const response = await fetch(`${apiUrl}/${projectKey}/${endpoint}/${cartId}`, {
       method: 'GET',
@@ -27,12 +28,16 @@ export async function getOrUpdateCustomerCart() {
       console.log('We have the basket from cart_id:', cart);
     } else {
       console.warn('We coundnt get the basket grom cart_id. Deleting.');
-      sessionStorage.removeItem('cart_id');
+        if (isAnonymous) {
+        localStorage.removeItem('anonymous_cart_id');
+      } else {
+        sessionStorage.removeItem('cart_id');
+      }
       cartId = null;
     }
   }
 
-  // find existing basket
+
   if (!cart && !isAnonymous) {
     const response = await fetch(`${apiUrl}/${projectKey}/me/carts`, {
       method: 'GET',
@@ -52,8 +57,11 @@ export async function getOrUpdateCustomerCart() {
     }
   }
 
-  // creating new basket if there isn't existing basket
-  if (!cart) {
+   if (!cart) {
+    const anonymousId = isAnonymous 
+      ? localStorage.getItem('anonymous_id') || generateAnonymousId()
+      : undefined;
+
     const response = await fetch(`${apiUrl}/${projectKey}/${endpoint}`, {
       method: 'POST',
       headers: {
@@ -62,46 +70,34 @@ export async function getOrUpdateCustomerCart() {
       },
       body: JSON.stringify({
         currency: 'USD',
-        ...(isAnonymous && {
-          anonymousId: sessionStorage.getItem('anonymousId') || generateAnonymousId(),
-        }),
+        ...(isAnonymous && { anonymousId }),
       }),
     });
 
     if (response.ok) {
       cart = await response.json();
-      sessionStorage.setItem('cart_id', cart.id);
-      if (isAnonymous && !sessionStorage.getItem('anonymousId')) {
-        sessionStorage.setItem('anonymousId', cart.anonymousId);
+      
+      if (isAnonymous) {
+        localStorage.setItem('anonymous_cart_id', cart.id);
+        if (!localStorage.getItem('anonymous_id')) {
+          localStorage.setItem('anonymous_id', cart.anonymousId);
+        }
+      } else {
+        sessionStorage.setItem('cart_id', cart.id);
       }
-      console.log('The new basket was created:', cart);
+      console.log('Created new cart:', cart);
     } else {
       const errorData = await response.json();
-      console.error('Error with creating the new basket:', errorData);
-      throw new Error('We cannot create new basket');
+      console.error('Failed to create cart:', errorData);
+      throw new Error('Cannot create cart');
     }
   }
 
-  // adding products for testing
-  /*{
-    
-  try {
-    const updatedCart = await addTestItemsToCart(cart.id, cart.version);
-    console.log('Корзина после добавления товара:', updatedCart);
-    return updatedCart;
-  } catch (error) {
-    console.error('Ошибка при добавлении товара в корзину:', error);
-    
-  }
-    
-  }*/
   return cart;
 }
 
 function generateAnonymousId() {
-  return (
-    'anon_' +
-    Math.random().toString(36).substring(2, 15) +
-    Math.random().toString(36).substring(2, 15)
-  );
+const newId = 'anon_' + Math.random().toString(36).substring(2, 15);
+  localStorage.setItem('anonymous_id', newId);
+  return newId;
 }

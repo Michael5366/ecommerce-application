@@ -1,14 +1,14 @@
 export async function addTestItemsToAnonCart() {
   const projectKey = import.meta.env.VITE_CTP_PROJECT_KEY;
   const apiUrl = import.meta.env.VITE_CTP_API_URL;
-  const token = sessionStorage.getItem('auth_token') || sessionStorage.getItem('guestToken');
-  const cartId = sessionStorage.getItem('cart_id');
+  const token = localStorage.getItem('auth_token') || sessionStorage.getItem('guestToken');
+  const cartId = localStorage.getItem('anonymous_cart_id') || sessionStorage.getItem('cart_id');
 
   if (!cartId || !token) {
+    console.log('we havent cardId or token')
     return;
   }
 
-  // The carrent cart
   const cartResponse = await fetch(`${apiUrl}/${projectKey}/carts/${cartId}`, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -21,21 +21,20 @@ export async function addTestItemsToAnonCart() {
 
   const cart = await cartResponse.json();
 
-  // Add testing cards
   const testProducts = [
     {
-      productId: '30338e91-3371-4005-a3c9-086fb27a8e3d', //product ID
+      productId: '30338e91-3371-4005-a3c9-086fb27a8e3d',
       variantId: 1,
       quantity: 2,
     },
     {
-      productId: '3aa49981-0b9e-4db5-bdff-7f8736d28cd4', //product ID
+      productId: '3aa49981-0b9e-4db5-bdff-7f8736d28cd4',
       variantId: 1,
       quantity: 1,
     },
   ];
 
-  // Actions
+
   const actions = testProducts.map((product) => ({
     action: 'addLineItem',
     productId: product.productId,
@@ -43,7 +42,6 @@ export async function addTestItemsToAnonCart() {
     quantity: product.quantity,
   }));
 
-  // Api
   const response = await fetch(`${apiUrl}/${projectKey}/carts/${cartId}`, {
     method: 'POST',
     headers: {
@@ -61,6 +59,7 @@ export async function addTestItemsToAnonCart() {
     return updatedCart;
   } else {
     const error = await response.json();
+    console.log(error)
     throw error;
   }
 }
