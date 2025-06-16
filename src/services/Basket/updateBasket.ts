@@ -22,18 +22,39 @@ export interface LineItemPrice {
 
 export interface LineItem {
   id: string;
-  productId: string;
   name: {
     en: string;
     ru: string;
   };
-  variant: ProductVariant;
-  price: LineItemPrice;
+  productSlug: {
+    en: string;
+    ru: string;
+  };
+  variant: {
+    id: number;
+    images?: Array<{ url: string }>;
+    sku: string;
+  };
+  price: {
+    value: {
+      centAmount: number;
+      currencyCode: string;
+    };
+    discounted?: {
+      value: {
+        centAmount: number;
+        currencyCode: string;
+      };
+    };
+  };
   quantity: number;
-  totalPrice?: Money;
+  totalPrice: {
+    centAmount: number;
+  };
 }
 
 export interface Cart {
+  type: string;
   id: string;
   version: number;
   customerEmail?: string;
