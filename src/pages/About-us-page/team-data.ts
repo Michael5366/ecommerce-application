@@ -36,7 +36,14 @@ const teamData: TeamMember[] = [
     description:
       'Built the product catalog page with search, filtering, sorting, and pagination. Integrated data from the commerce tools API and focused on performance optimizations such as lazy loading and infinite scroll. Worked on UI enhancements and interaction design.',
     quote: 'Where logic meets design.',
-    biography: '',
+    biography: `
+      Hi! I'm Vlad Murylev, 28 years old.
+I have a master's degree from the National Research Nuclear University MEPhI, specializing in applied mathematics and physics. Currently, I am pursuing postgraduate studies and have successfully passed my candidate minimum exams. As a junior research fellow, I have already gained solid experience in this field.
+
+About a year and a half ago, I transitioned to frontend development. Before that, I worked as a motion designer, creating commercials, Lottie animations for websites, and animated logos. At some point, I discovered frontend development—a field where I could still work with visual elements and animations, but instead of using familiar design tools, I’d be writing code. I successfully completed the RS School preparatory course and progressed to the next stage, which is why I’m here with you now.😉
+
+I’d also like to take a moment to express my deep gratitude to my incredible colleagues. Each of you is truly exceptional, and I feel incredibly lucky to have had the opportunity to work with such an outstanding team.
+    `,
     github: 'https://github.com/vlad-m28',
     photo: '/Vladislav_Murylev.jpg',
   },
