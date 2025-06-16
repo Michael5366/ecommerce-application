@@ -79,7 +79,6 @@ h2 {
   flex-direction: column;
   align-items: center;
   gap: 1vw;
-  /* background-image: url('../../public/flores-phone.jpg'); */
   background-size: cover;
 }
 .adress-block {

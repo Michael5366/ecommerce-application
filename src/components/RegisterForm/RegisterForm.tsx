@@ -1,4 +1,14 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import {
+  Box,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  TextField,
+  Typography,
+  Paper,
+  Stack,
+} from '@mui/material';
 import DuplicateEmailModal from './DuplicateEmailModal.tsx';
 import {
   getAnonymousToken,
@@ -11,14 +21,11 @@ import useRegistrationForm from '../../hooks/useRegistrationForm.ts';
 import { registrationSchema } from '../../utils/validateRegistration.ts';
 import { ZodError } from 'zod';
 import AddressForm from './AddressForm.tsx';
-import './cssRegistration.css';
 import Toastify from 'toastify-js';
 import 'toastify-js/src/toastify.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/context.tsx';
-import { useLocation } from 'react-router-dom';
 import { Path } from '../../types/paths.ts';
-import { useEffect } from 'react';
 
 export default function RegisterForm() {
   const {
@@ -35,8 +42,7 @@ export default function RegisterForm() {
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitted, setSubmitted] = useState(false);
   const navigate = useNavigate();
-  const { setToken } = useAuth();
-  const { token } = useAuth();
+  const { setToken, token } = useAuth();
   const location = useLocation();
   const from = location.state?.from || Path.MAIN;
 
@@ -50,7 +56,6 @@ export default function RegisterForm() {
 
   const handleLoginRedirect = () => {
     navigate(Path.LOGIN);
-    // console.log('Redirecting to /login');
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,7 +68,6 @@ export default function RegisterForm() {
 
     try {
       registrationSchema.parse({ ...formData, useSameAddress });
-
       setErrors({});
 
       const anonToken = await getAnonymousToken();
@@ -91,9 +95,7 @@ export default function RegisterForm() {
           defaultBillingAddress = 0;
         } else if (formData.shippingAddress.defaultShippingAddress) {
           defaultShippingAddress = 0;
-          defaultBillingAddress = undefined;
         } else if (formData.billingAddress.defaultBillingAddress) {
-          defaultShippingAddress = undefined;
           defaultBillingAddress = 0;
         }
       } else {
@@ -112,18 +114,11 @@ export default function RegisterForm() {
         ...(defaultBillingAddress !== undefined ? { defaultBillingAddress } : {}),
       };
 
-      // console.log('Registration data:', payload);
-      // console.log('Sending payload:', {
-      //   addresses: sanitizedAddresses,
-      //   defaultShippingAddress,
-      //   defaultBillingAddress,
-      // });
       await signUpUser(anonToken, payload);
 
       const customerToken = await getCustomerToken(formData.email, formData.password);
       setToken(customerToken);
       navigate(from, { replace: true });
-      // console.log('Successfully authenticated:', customerToken);
     } catch (err) {
       if (err instanceof ZodError) {
         const fieldErrors: FormErrors = {};
@@ -134,28 +129,21 @@ export default function RegisterForm() {
             fieldErrors[key] = message;
           } else if (path.length > 1) {
             const field = path[0] as 'shippingAddress' | 'billingAddress';
-            const subfield = path[1] as keyof AddressErrors;
-
-            if (!fieldErrors[field]) {
-              fieldErrors[field] = {};
-            }
-            (fieldErrors[field] as AddressErrors)[subfield] = message;
+            const subfield = path[1] as keyof typeof formData.shippingAddress;
+            if (!fieldErrors[field]) fieldErrors[field] = {};
+            fieldErrors[field][subfield] = message;
           }
         });
 
         setErrors(fieldErrors);
       } else if (err instanceof Error && err.message === 'DuplicateEmail') {
         setShowDuplicateEmailModal(true);
-      } else {
-        // console.error('Registration error:', err);
       }
     }
   };
 
   const handleAnonymousLogin = async () => {
     try {
-      // const token = await getAnonymousToken();
-      // console.log('Redirecting to main page', token);
       Toastify({
         text: 'Success! Anonymous login in progress',
         duration: 3000,
@@ -167,9 +155,7 @@ export default function RegisterForm() {
           color: '#fff',
         },
       }).showToast();
-      {
-        navigate(Path.MAIN);
-      }
+      navigate(Path.MAIN);
     } catch (error) {
       console.error('Anonymous login error:', error);
       Toastify({
@@ -186,88 +172,144 @@ export default function RegisterForm() {
     }
   };
 
+  const buttonStyle = {
+    backgroundColor: '#4D2A80',
+    color: '#fff',
+    mt: 1,
+    transition: '0.3s',
+    '&:hover': {
+      backgroundColor: '#6B3FB0',
+    },
+  };
+
   return (
     <>
-      <form onSubmit={handleSubmit} className="form-position">
-        <h1>To Good Shop</h1>
-        <h2>Sign Up</h2>
-        <input
-          name="username"
-          placeholder="First Name"
-          value={formData.username}
-          onChange={handleChange}
-        />
-        {submitted && errors.username && <p className="errors">{errors.username}</p>}
-        <input
-          name="surname"
-          placeholder="Last Name"
-          value={formData.surname}
-          onChange={handleChange}
-        />
-        {submitted && errors.surname && <p className="errors">{errors.surname}</p>}
-        <input name="email" placeholder="Email" value={formData.email} onChange={handleChange} />
-        {submitted && errors.email && <p className="errors">{errors.email}</p>}
-        <input
-          name="password"
-          type="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
-        />
-        {submitted && errors.password && <p className="errors">{errors.password}</p>}
-        <input name="birthday" type="date" value={formData.birthday} onChange={handleChange} />
-        {submitted && errors.birthday && <p className="errors">{errors.birthday}</p>}
-        <div className="address-section">
-          <AddressForm
-            type="shippingAddress"
-            title="Shipping Address"
-            address={formData.shippingAddress}
-            errors={errors.shippingAddress || {}}
-            onChange={handleAddressChange}
+      <Paper elevation={3} sx={{ p: 4, maxWidth: 600, mx: 'auto', mt: 4, backgroundColor: '#fff' }}>
+        <form onSubmit={handleSubmit}>
+          <Typography variant="h4" gutterBottom>
+            To Good Shop
+          </Typography>
+          <Typography variant="h5" gutterBottom>
+            Sign Up
+          </Typography>
+
+          <TextField
+            label="First Name"
+            name="username"
+            value={formData.username}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+            error={!!(submitted && errors.username)}
+            helperText={submitted && errors.username}
           />
-          <label>
-            <input type="checkbox" checked={useSameAddress} onChange={handleCheckboxChange} />
-            Use the same address for billing
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              checked={formData.shippingAddress.defaultShippingAddress}
-              onChange={handleDefaultShippingChange}
-            />
-            Set as default shipping address
-          </label>
-        </div>
-        <div className="address-section">
-          <AddressForm
-            type="billingAddress"
-            title="Billing Address"
-            address={formData.billingAddress}
-            errors={errors.billingAddress || {}}
-            onChange={handleAddressChange}
+
+          <TextField
+            label="Last Name"
+            name="surname"
+            value={formData.surname}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+            error={!!(submitted && errors.surname)}
+            helperText={submitted && errors.surname}
           />
-          <label>
-            <input
-              type="checkbox"
-              checked={formData.billingAddress.defaultBillingAddress}
-              onChange={handleDefaultBillingChange}
+
+          <TextField
+            label="Email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+            error={!!(submitted && errors.email)}
+            helperText={submitted && errors.email}
+          />
+
+          <TextField
+            label="Password"
+            name="password"
+            type="password"
+            value={formData.password}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+            error={!!(submitted && errors.password)}
+            helperText={submitted && errors.password}
+          />
+
+          <TextField
+            label="Birthday"
+            name="birthday"
+            type="date"
+            value={formData.birthday}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+            InputLabelProps={{ shrink: true }}
+            error={!!(submitted && errors.birthday)}
+            helperText={submitted && errors.birthday}
+          />
+
+          <Box mt={2}>
+            <AddressForm
+              type="shippingAddress"
+              title="Shipping Address"
+              address={formData.shippingAddress}
+              errors={errors.shippingAddress || {}}
+              onChange={handleAddressChange}
             />
-            Set as default billing address
-          </label>
-        </div>
-        <div className="buttons-block">
-          <button className="button-reg" type="submit">
-            Register
-          </button>
-          <button className="button-reg" type="button" onClick={handleAnonymousLogin}>
-            Continue as Guest
-          </button>
-          <button className="button-reg" type="button" onClick={handleLoginRedirect}>
-            Already have an account?
-          </button>
-        </div>
-      </form>
-      {/*{console.log('showDuplicateEmailModal =', showDuplicateEmailModal)}*/}
+
+            <FormControlLabel
+              control={<Checkbox checked={useSameAddress} onChange={handleCheckboxChange} />}
+              label="Use the same address for billing"
+            />
+
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={formData.shippingAddress.defaultShippingAddress}
+                  onChange={handleDefaultShippingChange}
+                />
+              }
+              label="Set as default shipping address"
+            />
+          </Box>
+
+          <Box mt={2}>
+            <AddressForm
+              type="billingAddress"
+              title="Billing Address"
+              address={formData.billingAddress}
+              errors={errors.billingAddress || {}}
+              onChange={handleAddressChange}
+            />
+
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={formData.billingAddress.defaultBillingAddress}
+                  onChange={handleDefaultBillingChange}
+                />
+              }
+              label="Set as default billing address"
+            />
+          </Box>
+
+          <Stack direction="column" spacing={2} mt={3}>
+            <Button type="submit" sx={buttonStyle}>
+              Register
+            </Button>
+            <Button onClick={handleAnonymousLogin} sx={buttonStyle}>
+              Continue as Guest
+            </Button>
+            <Button onClick={handleLoginRedirect} sx={buttonStyle}>
+              Already have an account?
+            </Button>
+          </Stack>
+        </form>
+      </Paper>
+
       {showDuplicateEmailModal && (
         <DuplicateEmailModal
           isOpen={showDuplicateEmailModal}
