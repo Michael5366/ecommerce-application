@@ -14,8 +14,6 @@ describe('createEmptyCart', () => {
       id: 'cart123',
       customerEmail: 'test@example.com',
     };
-
-    // Мокаем fetch
     globalThis.fetch = vi.fn().mockResolvedValue({
       ok: true,
       json: async () => mockCartResponse,

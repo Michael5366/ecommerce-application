@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useTranslation } from 'react-i18next';
 import styles from './cardsStiles.module.css';
-interface CartItemCardProps {
+export interface CartItemCardProps {
   item: {
     id: string;
     name: { en: string; ru: string };
