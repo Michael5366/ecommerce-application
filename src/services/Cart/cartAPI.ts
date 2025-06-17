@@ -54,7 +54,7 @@ export const getActiveCart = async (): Promise<Cart | null> => {
 
     return null;
   } catch (error) {
-    console.error('Error fetching active cart:', error);
+    console.debug('Error fetching active cart:', error);
     return null;
   }
 };
@@ -91,7 +91,7 @@ export const createCart = async (currency = 'USD'): Promise<Cart> => {
 
     return cart;
   } catch (error) {
-    console.error('Error creating cart:', error);
+    console.debug('Error creating cart:', error);
     throw error;
   }
 };
@@ -147,7 +147,7 @@ export const addToCart = async (productId: string, variantId = 1, quantity = 1):
 
     return response.json();
   } catch (error) {
-    console.error('Error adding to cart:', error);
+    console.debug('Error adding to cart:', error);
     throw error;
   }
 };
@@ -191,7 +191,7 @@ export const removeFromCart = async (lineItemId: string): Promise<Cart> => {
 
     return response.json();
   } catch (error) {
-    console.error('Error removing from cart:', error);
+    console.debug('Error removing from cart:', error);
     throw error;
   }
 };
