@@ -21,10 +21,8 @@ const fetchProductsData = async () => {
     }
 
     const authData = await authResponse.json();
-    // console.log('authData:', authData);
 
     const accessToken = authData.access_token;
-    // console.log('accessToken: ', accessToken);
 
     const prodResponse = await fetch(apiUrl, {
       headers: {
