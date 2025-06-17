@@ -46,7 +46,7 @@ export const getAnonymousToken = async (): Promise<string> => {
     const tokenData = await response.json();
     return tokenData.access_token;
   } catch (error) {
-    console.error('Error getting anonymous token:', error);
+    console.debug('Error getting anonymous token:', error);
     throw new Error('Failed to authenticate anonymously');
   }
 };
@@ -79,7 +79,6 @@ export const useApi = () => {
 
             if (anonymousResponse.ok) {
               const data = await anonymousResponse.json();
-              console.log('Anonymous products response:', data);
               return data as T;
             }
           } catch {}
@@ -128,7 +127,7 @@ export const useApi = () => {
 
         return response.json() as Promise<T>;
       } catch (error) {
-        console.error(`API Error in ${endpoint}:`, error);
+        console.debug(`API Error in ${endpoint}:`, error);
         throw error;
       }
     },
