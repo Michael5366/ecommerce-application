@@ -41,7 +41,7 @@ export const useCart = () => {
       const items = activeCart?.lineItems.map((item) => item.productId) || [];
       setCartItems(items);
     } catch (error) {
-      console.error('Error fetching cart:', error);
+      console.debug('Error fetching cart:', error);
       setCart(null);
       setCartItems([]);
     } finally {
@@ -58,7 +58,7 @@ export const useCart = () => {
       setCartItems(items);
       return updatedCart;
     } catch (error) {
-      console.error('Error adding to cart:', error);
+      console.debug('Error adding to cart:', error);
       throw error;
     } finally {
       setIsLoading(false);
@@ -80,7 +80,7 @@ export const useCart = () => {
         setCartItems(items);
         return updatedCart;
       } catch (error) {
-        console.error('Error removing from cart:', error);
+        console.debug('Error removing from cart:', error);
         throw error;
       } finally {
         setIsLoading(false);
