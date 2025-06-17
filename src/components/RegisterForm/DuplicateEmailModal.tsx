@@ -16,14 +16,14 @@ export default function DuplicateEmailModal({
   return (
     <div className="overlay">
       <div className="modal">
-        <h2>Пользователь с таким email уже существует</h2>
-        <p>Пожалуйста, используйте другую почту или войдите на сайт.</p>
+        <h2>A user with this email already exists</h2>
+        <p>Please use a different email or log in to the website.</p>
         <div className="buttons">
           <button onClick={onClose} className="button">
-            Использовать другую почту
+            Use a different email
           </button>
           <button onClick={onLoginRedirect} className="buttonPrimary">
-            Войти на сайт
+            Log in
           </button>
         </div>
       </div>
