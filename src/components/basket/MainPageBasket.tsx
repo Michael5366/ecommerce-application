@@ -13,9 +13,8 @@ export function CreateCardEnter() {
           await getAnonymousToken();
         }
         cartData = await getOrUpdateCustomerCart();
-        console.log(cartData);
       } catch (error) {
-        console.error('Ошибка при загрузке корзины:', error);
+        console.debug('Ошибка при загрузке корзины:', error);
       } finally {
         if (cartData) {
         }
