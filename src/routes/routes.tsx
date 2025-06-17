@@ -28,20 +28,7 @@ export const routesArray: Routes = [
         loader: fetchProductsData,
       },
       { path: 'catalog/product/:productSlug', element: <ProductPage />, loader: fetchProductsData },
-      // { path: 'catalog', element: <CatalogPage /> },
-      // {
-      //   path: 'catalog',
-      //   element: <CatalogPage />,
-      //   loader: fetchProductsData,
-      //   children: [
-      //     {
-      //       path: 'product/:productName',
-      //       element: <ProductPage />,
-      //       loader: fetchProductsData,
-      //     },
-      //   ],
-      // },
-      // { path: 'catalog/product/:productName', element: <ProductPage /> },
+
       { path: 'profile', element: <ProfilePage /> },
       { path: 'about-us', element: <AboutUsPage /> },
       { path: '*', element: <NotFoundPage /> },
