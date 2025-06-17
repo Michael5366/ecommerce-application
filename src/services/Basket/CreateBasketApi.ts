@@ -50,7 +50,8 @@ export async function createEmptyCart(token: string): Promise<Cart | null> {
     );
 
     if (!response.ok) {
-      await response.json();
+      const error = await response.json();
+      console.error('Error fo creating the basket:', error);
       return null;
     }
 
@@ -61,7 +62,8 @@ export async function createEmptyCart(token: string): Promise<Cart | null> {
     }
 
     return cartData;
-  } catch {
+  } catch (error) {
+    console.error('Error fo creating the basket:', error);
     return null;
   }
 }
