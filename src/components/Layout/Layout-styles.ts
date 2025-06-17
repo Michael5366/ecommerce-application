@@ -1,6 +1,20 @@
 import { makeStyles } from '@mui/styles';
 
 const layoutStyles = makeStyles({
+  layout: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    minHeight: '100vh',
+  },
+
+  layout__main: {
+    display: 'flex',
+    flexDirection: 'column',
+    flexGrow: 1,
+    justifyContent: 'center',
+  },
+
   layout__loader: {
     position: 'fixed',
     top: 0,

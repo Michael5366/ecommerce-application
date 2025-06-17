@@ -4,10 +4,12 @@ import { Box, Container, GlobalStyles, Stack, ThemeProvider } from '@mui/materia
 import { theme } from '../../styles/theme';
 import Footer from '../../pages/Footer/Footer';
 import LoadingIndicator from '../LoadingIndicator/LoadingIndicator';
+import layoutStyles from './Layout-styles';
 
 const Layout = () => {
   const navigation = useNavigation();
   const isLoading = navigation.state === 'loading';
+  const css = layoutStyles();
 
   return (
     <>
@@ -16,13 +18,10 @@ const Layout = () => {
       <ThemeProvider theme={theme}>
         <GlobalStyles styles={{ body: { margin: 0 } }} />
 
-        <Stack minHeight={'100vh'} direction={'column'} justifyContent={'space-between'}>
+        <Stack className={css['layout']}>
           <Header />
 
-          <Box
-            component={'main'}
-            sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, justifyContent: 'center' }}
-          >
+          <Box className={css['layout__main']} component={'main'}>
             <Container sx={{ py: 1 }} maxWidth={false}>
               <Outlet />
             </Container>
