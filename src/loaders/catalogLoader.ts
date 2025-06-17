@@ -40,7 +40,7 @@ const fetchProductsData = async () => {
     const products = await prodResponse.json();
     return products.results;
   } catch (error) {
-    console.error('Error fetching products:', error);
+    console.debug('Error fetching products:', error);
   }
 };
 
