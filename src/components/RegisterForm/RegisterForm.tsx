@@ -157,7 +157,7 @@ export default function RegisterForm() {
       }).showToast();
       navigate(Path.MAIN);
     } catch (error) {
-      console.error('Anonymous login error:', error);
+      console.debug('Anonymous login error:', error);
       Toastify({
         text: 'Anonymous login failed, please try again later',
         duration: 3000,
