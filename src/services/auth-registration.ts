@@ -39,7 +39,7 @@ export const getAnonymousToken = async () => {
   const data = await response.json();
 
   if (!response.ok) {
-    console.error('Failed to get anonymous token:', data);
+    console.debug('Failed to get anonymous token:', data);
     throw new Error(data.error_description || 'Anonymous token failed');
   }
   sessionStorage.setItem('guestToken', data.access_token);
@@ -138,7 +138,7 @@ export const signUpUser = async (token: string, payload: SignUpPayload) => {
       },
     }).showToast();
   } catch (error) {
-    console.error('Ошибка при получении токена или создании корзины:', error);
+    console.debug('Ошибка при получении токена или создании корзины:', error);
   }
 
   return successData;
