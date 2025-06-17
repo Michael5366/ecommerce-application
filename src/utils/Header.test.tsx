@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import Header from '../components/Header/Header';
-import { AuthProvider } from '../context/context'; // поправь путь под себя
+import { AuthProvider } from '../context/context';
 import { describe, expect, it } from 'vitest';
 import { Path } from '../types/paths';
 
