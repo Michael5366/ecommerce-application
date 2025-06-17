@@ -20,12 +20,9 @@ interface ApiSuccessResponse {
 }
 
 export const getAnonymousToken = async () => {
-  console.log('anon module is active');
   const clientId = import.meta.env.VITE_CTP_CLIENT_ID;
   const clientSecret = import.meta.env.VITE_CTP_CLIENT_SECRET;
   const projectKey = import.meta.env.VITE_CTP_PROJECT_KEY;
-
-  // console.log(clientId, clientSecret, projectKey);
 
   const response = await fetch(
     `https://auth.europe-west1.gcp.commercetools.com/oauth/${projectKey}/anonymous/token`,
@@ -109,7 +106,6 @@ export const signUpUser = async (token: string, payload: SignUpPayload) => {
       (err) => err.code === 'DuplicateField' && err.field === 'email'
     );
     if (duplicateEmailError) {
-      // console.log('польхователь уже зарегистриравн! Показать окощко');
       throw new Error('DuplicateEmail');
     }
     Toastify({
@@ -145,8 +141,6 @@ export const signUpUser = async (token: string, payload: SignUpPayload) => {
     console.error('Ошибка при получении токена или создании корзины:', error);
   }
 
-  // router.push('/');
-  // console.log(successData);
   return successData;
 };
 
@@ -168,7 +162,6 @@ export const getCustomerToken = async (email: string, password: string) => {
   );
 
   const data = await res.json();
-  console.log('🔥 Customer Token:', data.access_token);
   if (!res.ok) throw new Error(data.error_description || 'Login failed');
 
   return data.access_token;
