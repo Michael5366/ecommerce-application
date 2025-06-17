@@ -1,8 +1,7 @@
 export async function addTestItemsToCart(cartId: string, version: number) {
   const token = sessionStorage.getItem('auth_token');
   if (!token) {
-    console.error('Ошибка: пользователь не авторизован');
-    console.log('Содержимое sessionStorage:', JSON.stringify(sessionStorage, null, 2));
+    console.debug('Ошибка: пользователь не авторизован');
     throw new Error('Доступ только для зарегистрированных пользователей');
   }
   const projectKey = import.meta.env.VITE_CTP_PROJECT_KEY;
@@ -29,7 +28,7 @@ export async function addTestItemsToCart(cartId: string, version: number) {
 
   if (!response.ok) {
     const error = await response.json();
-    console.error('Error with adding product in the basket:', error);
+    console.debug('Error with adding product in the basket:', error);
     throw new Error(error.message || 'We cannot add the product');
   }
 
