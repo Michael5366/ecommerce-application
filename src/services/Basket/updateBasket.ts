@@ -90,9 +90,8 @@ export async function getOrUpdateCustomerCart(): Promise<Cart> {
 
       if (response.ok) {
         cart = await response.json();
-        console.log('We have the basket from cart_id:', cart);
       } else {
-        console.warn('We coundnt get the basket grom cart_id. Deleting.');
+        console.debug('We couldnt get the basket from cart_id. Deleting.');
         if (isAnonymous) {
           localStorage.removeItem('anonymous_cart_id');
         } else {
@@ -118,7 +117,6 @@ export async function getOrUpdateCustomerCart(): Promise<Cart> {
           if (cart) {
             sessionStorage.setItem('cart_id', cart.id);
           }
-          console.log('Found existing cart:', cart);
         }
       }
     }
@@ -155,7 +153,6 @@ export async function getOrUpdateCustomerCart(): Promise<Cart> {
             sessionStorage.setItem('cart_id', cart.id);
           }
         }
-        console.log('Created new cart:', cart);
       } else {
         await response.json();
         throw new Error('Cannot create cart');
@@ -166,7 +163,7 @@ export async function getOrUpdateCustomerCart(): Promise<Cart> {
     }
     return cart;
   } catch (error) {
-    console.error('Error in getOrUpdateCustomerCart:', error);
+    console.debug('Error in getOrUpdateCustomerCart:', error);
     if (error instanceof Error) {
       throw new Error(`Cart operation failed: ${error.message}`);
     }
