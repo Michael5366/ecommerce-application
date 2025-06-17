@@ -229,7 +229,7 @@ const CatalogPage = () => {
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Error loading products';
       setError(errorMessage);
-      console.error('API Error:', error);
+      console.debug('API Error:', error);
     } finally {
       setLoading(false);
       setIsSearching(false);
@@ -318,7 +318,7 @@ const CatalogPage = () => {
         setLoading(true);
         await fetchCategories();
       } catch (error) {
-        console.error('Failed to load categories:', error);
+        console.debug('Failed to load categories:', error);
       }
     };
     loadCategories();
