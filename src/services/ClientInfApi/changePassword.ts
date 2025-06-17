@@ -55,7 +55,6 @@ export async function changeUserPassword({
         color: '#fff',
       },
     }).showToast();
-    console.log('Token в смене пароля:', token);
     return data;
   } catch (error) {
     Toastify({
