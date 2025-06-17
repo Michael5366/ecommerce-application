@@ -3,8 +3,7 @@ import { CartResponse } from './BasketPageConstr';
 import { getAnonymousToken } from '../../services/auth-registration';
 import { getOrUpdateCustomerCart } from '../../services/Basket/updateBasket';
 import styles from './MainPageBasket.module.css';
-//import { addTestItemsToCart } from '../../services/Basket/temporalBasket';
-//import { addTestItemsToAnonCart } from '../../services/Basket/testAnonAddProduct';
+
 export function CreateCardEnter() {
   useEffect(() => {
     async function initialize() {
@@ -19,8 +18,6 @@ export function CreateCardEnter() {
         console.error('Ошибка при загрузке корзины:', error);
       } finally {
         if (cartData) {
-          //addTestItemsToCart(cartData.id, cartData.version)
-          //addTestItemsToAnonCart()
         }
       }
     }

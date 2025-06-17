@@ -6,8 +6,7 @@ import { getAnonymousToken } from '../../services/auth-registration';
 import styles from './cardsStiles.module.css';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Link } from 'react-router-dom';
-//import { addTestItemsToAnonCart } from '../../services/Basket/testAnonAddProduct';
-//import { addTestItemsToCart } from '../../services/Basket/temporalBasket';
+
 import { useCartContext } from '../../hooks/CartContext';
 
 type CartAction =
@@ -85,13 +84,11 @@ export function BasketCompClient() {
           0
         );
         setItemCount(totalQuantity);
-        //console.log(cartData);
       } catch {
         setError(t('Failed to load cart'));
       } finally {
         setLoading(false);
         if (cartData) {
-          //addTestItemsToCart(cartData.id, cartData.version);
         }
       }
     }
@@ -138,7 +135,6 @@ export function BasketCompClient() {
         throw new Error('Failed to remove item');
       }
     } catch {
-      //console.error('Error removing item:', error);
       setError(t('Failed to remove item'));
     }
   };
@@ -191,7 +187,6 @@ export function BasketCompClient() {
         throw new Error('Failed to update quantity');
       }
     } catch {
-      //console.error('Error updating quantity:', error);
       setError(t('Failed to update quantity'));
     }
   };
@@ -241,7 +236,6 @@ export function BasketCompClient() {
         throw new Error(errorData.message || 'Failed to apply promo code');
       }
     } catch {
-      //console.error('Error applying promo code:', error);
       setPromoError(t('Invalid or expired promo code'));
     }
   };
@@ -289,7 +283,6 @@ export function BasketCompClient() {
         throw new Error('Failed to remove promo code');
       }
     } catch {
-      //console.error('Error removing promo code:', error);
       setPromoError(t('Failed to remove promo code'));
     }
   };
@@ -313,13 +306,11 @@ export function BasketCompClient() {
       const isAnonymous = !sessionStorage.getItem('auth_token');
       const endpoint = isAnonymous ? 'carts' : 'me/carts';
 
-      // Create actions to remove all line items
       const actions: CartAction[] = cart.lineItems.map((item) => ({
         action: 'removeLineItem',
         lineItemId: item.id,
       }));
 
-      // If there are discount codes, remove them as well
       if (cart.discountCodes && cart.discountCodes.length > 0) {
         cart.discountCodes.forEach((discountCode) => {
           actions.push({
