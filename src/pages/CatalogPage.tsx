@@ -193,7 +193,7 @@ const CatalogPage = () => {
             return bPrice - aPrice;
           case 'name desc':
             return bName.localeCompare(aName);
-          default: // 'name asc'
+          default:
             return aName.localeCompare(bName);
         }
       });
