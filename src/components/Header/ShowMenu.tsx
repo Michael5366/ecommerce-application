@@ -15,7 +15,7 @@ import { useTranslation } from 'react-i18next';
 import { useCartContext } from '../../hooks/CartContext';
 
 const ShowMenu = () => {
-  const isMobile = useMediaQuery('(max-width:900px)');
+  const isMobile = useMediaQuery('(max-width:950px)');
   const { token, logout } = useAuth();
   const auth = Boolean(token);
   const navigate = useNavigate();

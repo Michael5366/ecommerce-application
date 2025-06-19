@@ -9,6 +9,13 @@
   background-color: white;
   transition: box-shadow 0.2s;
 }
+
+@media (max-width: 545px) {
+  .cardItemCard {
+    flex-direction: column;
+  }
+}
+
 .appliedPromoItem {
   display: flex;
   justify-content: space-between;
@@ -63,6 +70,13 @@
 .quantityControl {
   margin-left: auto;
 }
+
+@media (max-width: 545px) {
+  .quantityControl {
+    margin-left: 0;
+  }
+}
+
 .quantitySelect {
   padding: 6px 8px;
   border-radius: 4px;
