@@ -1,3 +1,5 @@
+import handleError from '../../utils/errorHandler';
+
 export interface Money {
   centAmount: number;
   currencyCode: string;
@@ -163,7 +165,7 @@ export async function getOrUpdateCustomerCart(): Promise<Cart> {
     }
     return cart;
   } catch (error) {
-    console.debug('Error in getOrUpdateCustomerCart:', error);
+    handleError('Error in getOrUpdateCustomerCart :', error);
     if (error instanceof Error) {
       throw new Error(`Cart operation failed: ${error.message}`);
     }
