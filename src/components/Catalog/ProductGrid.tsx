@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Category, Product } from '../../types/productTypes';
 import { ProductCard } from './ProductCard';
 import styles from './ProductGrid.module.css';
+import { useMemo } from 'react';
 
 interface ProductGridProps {
   products: Product[];
@@ -20,6 +21,8 @@ export const ProductGrid = ({
 }: ProductGridProps) => {
   const { t } = useTranslation();
 
+  const cartItemSet = useMemo(() => new Set(cartItems), [cartItems]);
+
   if (products.length === 0) {
     return (
       <div className={styles.noResults}>
@@ -37,7 +40,7 @@ export const ProductGrid = ({
           product={product}
           searchQuery={searchQuery}
           categories={categories}
-          isInCart={cartItems.includes(product.id)}
+          isInCart={cartItemSet.has(product.id)}
           onAddToCart={onAddToCart}
         />
       ))}
