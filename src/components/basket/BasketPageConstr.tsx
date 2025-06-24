@@ -88,8 +88,6 @@ export function BasketCompClient() {
         setError(t('Failed to load cart'));
       } finally {
         setLoading(false);
-        if (cartData) {
-        }
       }
     }
 
