@@ -5,6 +5,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import styles from './ProductCard.module.css';
 import { useTranslation } from 'react-i18next';
 import { useCartContext } from '../../hooks/CartContext';
+import handleError from '../../utils/errorHandler';
 
 interface ProductCardProps {
   product: Product;
@@ -119,7 +120,7 @@ export const ProductCard: FC<ProductCardProps> = ({
       }
     } catch (err) {
       setLocalIsInCart(false);
-      console.error('Error adding to cart:', err);
+      handleError('Error adding to cart: ', err);
     } finally {
       setIsAdding(false);
     }

@@ -1,5 +1,5 @@
-const handleError = (error: unknown, context: string) => {
-  console.debug(`Error in ${context}:`, error);
+const handleError = (context: string, error: unknown) => {
+  console.debug(context, error);
 };
 
 export default handleError;
