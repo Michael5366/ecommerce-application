@@ -172,7 +172,10 @@ export async function getOrUpdateCustomerCart(): Promise<Cart> {
 }
 
 function generateAnonymousId() {
-  const newId = 'anon_' + Math.random().toString(36).substring(2, 15);
-  localStorage.setItem('anonymous_id', newId);
-  return newId;
+  const array = new Uint8Array(16);
+  crypto.getRandomValues(array);
+  const randomId = Array.from(array, (byte) => byte.toString(16).padStart(2, '0')).join('');
+  const anonId = `anon_${randomId}`;
+  localStorage.setItem('anonymous_id', anonId);
+  return anonId;
 }
