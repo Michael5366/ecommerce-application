@@ -1,24 +1,17 @@
 import { useEffect } from 'react';
-import { CartResponse } from './BasketPageConstr';
 import { getAnonymousToken } from '../../services/auth-registration';
-import { getOrUpdateCustomerCart } from '../../services/Basket/updateBasket';
 import styles from './MainPageBasket.module.css';
 import handleError from '../../utils/errorHandler';
 
 export function CreateCardEnter() {
   useEffect(() => {
     async function initialize() {
-      let cartData: CartResponse | null = null;
       try {
         if (!sessionStorage.getItem('auth_token')) {
           await getAnonymousToken();
         }
-        cartData = await getOrUpdateCustomerCart();
       } catch (error) {
         handleError('Error loading cart: ', error);
-      } finally {
-        if (cartData) {
-        }
       }
     }
 
