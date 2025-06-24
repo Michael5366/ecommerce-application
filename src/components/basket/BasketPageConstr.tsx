@@ -70,6 +70,12 @@ export function BasketCompClient() {
   const [showClearCartModal, setShowClearCartModal] = useState(false);
   const { setItemCount } = useCartContext();
 
+  const projectKey = import.meta.env.VITE_CTP_PROJECT_KEY;
+  const apiUrl = import.meta.env.VITE_CTP_API_URL;
+  const token = sessionStorage.getItem('auth_token') || sessionStorage.getItem('guestToken');
+  const isAnonymous = !sessionStorage.getItem('auth_token');
+  const endpoint = isAnonymous ? 'carts' : 'me/carts';
+
   useEffect(() => {
     async function initialize() {
       let cartData: CartResponse | null = null;
@@ -97,12 +103,6 @@ export function BasketCompClient() {
   const handleRemoveItem = async (itemId: string) => {
     try {
       if (!cart) return;
-
-      const projectKey = import.meta.env.VITE_CTP_PROJECT_KEY;
-      const apiUrl = import.meta.env.VITE_CTP_API_URL;
-      const token = sessionStorage.getItem('auth_token') || sessionStorage.getItem('guestToken');
-      const isAnonymous = !sessionStorage.getItem('auth_token');
-      const endpoint = isAnonymous ? 'carts' : 'me/carts';
 
       const response = await fetch(`${apiUrl}/${projectKey}/${endpoint}/${cart.id}`, {
         method: 'POST',
@@ -149,12 +149,6 @@ export function BasketCompClient() {
         return;
       }
 
-      const projectKey = import.meta.env.VITE_CTP_PROJECT_KEY;
-      const apiUrl = import.meta.env.VITE_CTP_API_URL;
-      const token = sessionStorage.getItem('auth_token') || sessionStorage.getItem('guestToken');
-      const isAnonymous = !sessionStorage.getItem('auth_token');
-      const endpoint = isAnonymous ? 'carts' : 'me/carts';
-
       const response = await fetch(`${apiUrl}/${projectKey}/${endpoint}/${cart.id}`, {
         method: 'POST',
         headers: {
@@ -196,12 +190,6 @@ export function BasketCompClient() {
       setPromoError(null);
       setPromoSuccess(null);
 
-      const projectKey = import.meta.env.VITE_CTP_PROJECT_KEY;
-      const apiUrl = import.meta.env.VITE_CTP_API_URL;
-      const token = sessionStorage.getItem('auth_token') || sessionStorage.getItem('guestToken');
-      const isAnonymous = !sessionStorage.getItem('auth_token');
-      const endpoint = isAnonymous ? 'carts' : 'me/carts';
-
       const response = await fetch(`${apiUrl}/${projectKey}/${endpoint}/${cart.id}`, {
         method: 'POST',
         headers: {
@@ -241,12 +229,6 @@ export function BasketCompClient() {
   const handleRemovePromoCode = async (discountCodeId: string) => {
     try {
       if (!cart) return;
-
-      const projectKey = import.meta.env.VITE_CTP_PROJECT_KEY;
-      const apiUrl = import.meta.env.VITE_CTP_API_URL;
-      const token = sessionStorage.getItem('auth_token') || sessionStorage.getItem('guestToken');
-      const isAnonymous = !sessionStorage.getItem('auth_token');
-      const endpoint = isAnonymous ? 'carts' : 'me/carts';
 
       const response = await fetch(`${apiUrl}/${projectKey}/${endpoint}/${cart.id}`, {
         method: 'POST',
@@ -297,12 +279,6 @@ export function BasketCompClient() {
   const handleClearCart = async () => {
     try {
       if (!cart || cart.lineItems.length === 0) return;
-
-      const projectKey = import.meta.env.VITE_CTP_PROJECT_KEY;
-      const apiUrl = import.meta.env.VITE_CTP_API_URL;
-      const token = sessionStorage.getItem('auth_token') || sessionStorage.getItem('guestToken');
-      const isAnonymous = !sessionStorage.getItem('auth_token');
-      const endpoint = isAnonymous ? 'carts' : 'me/carts';
 
       const actions: CartAction[] = cart.lineItems.map((item) => ({
         action: 'removeLineItem',
