@@ -90,7 +90,7 @@ const ShowMenu = () => {
                   key="about"
                   onClick={() => {
                     handleMenuClose();
-                    navigate(Path.ABOUTUS);
+                    navigate(Path.ABOUT_US);
                   }}
                 >
                   <InfoIcon sx={{ mr: 1 }} />
@@ -110,7 +110,7 @@ const ShowMenu = () => {
                   key="about"
                   onClick={() => {
                     handleMenuClose();
-                    navigate(Path.ABOUTUS);
+                    navigate(Path.ABOUT_US);
                   }}
                 >
                   <InfoIcon sx={{ mr: 1 }} />
@@ -190,7 +190,7 @@ const ShowMenu = () => {
           <Tooltip title={t('About our project')} arrow placement="bottom-start" enterDelay={500}>
             <Button
               component={Link}
-              to={Path.ABOUTUS}
+              to={Path.ABOUT_US}
               color="inherit"
               variant="outlined"
               startIcon={<InfoIcon />}
@@ -237,7 +237,7 @@ const ShowMenu = () => {
           <Tooltip title={t('About our project')} arrow placement="bottom-start" enterDelay={500}>
             <Button
               component={Link}
-              to={Path.ABOUTUS}
+              to={Path.ABOUT_US}
               color="inherit"
               variant="outlined"
               startIcon={<InfoIcon />}
