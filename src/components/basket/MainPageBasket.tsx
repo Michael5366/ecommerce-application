@@ -3,6 +3,7 @@ import { CartResponse } from './BasketPageConstr';
 import { getAnonymousToken } from '../../services/auth-registration';
 import { getOrUpdateCustomerCart } from '../../services/Basket/updateBasket';
 import styles from './MainPageBasket.module.css';
+import handleError from '../../utils/errorHandler';
 
 export function CreateCardEnter() {
   useEffect(() => {
@@ -14,7 +15,7 @@ export function CreateCardEnter() {
         }
         cartData = await getOrUpdateCustomerCart();
       } catch (error) {
-        console.debug('Ошибка при загрузке корзины:', error);
+        handleError('Error loading cart: ', error);
       } finally {
         if (cartData) {
         }
