@@ -276,25 +276,27 @@ export default function RegisterForm() {
             />
           </Box>
 
-          <Box mt={2}>
-            <AddressForm
-              type="billingAddress"
-              title="Billing Address"
-              address={formData.billingAddress}
-              errors={errors.billingAddress || {}}
-              onChange={handleAddressChange}
-            />
+          {!useSameAddress && (
+            <Box mt={2}>
+              <AddressForm
+                type="billingAddress"
+                title="Billing Address"
+                address={formData.billingAddress}
+                errors={errors.billingAddress || {}}
+                onChange={handleAddressChange}
+              />
 
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={formData.billingAddress.defaultBillingAddress}
-                  onChange={handleDefaultBillingChange}
-                />
-              }
-              label="Set as default billing address"
-            />
-          </Box>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={formData.billingAddress.defaultBillingAddress}
+                    onChange={handleDefaultBillingChange}
+                  />
+                }
+                label="Set as default billing address"
+              />
+            </Box>
+          )}
 
           <Stack direction="column" spacing={2} mt={3}>
             <Button type="submit" sx={buttonStyle}>
