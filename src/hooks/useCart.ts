@@ -18,6 +18,12 @@ export const useCart = () => {
   });
   const [isLoading, setIsLoading] = useState(true);
 
+  const updateCartState = (cart: Cart) => {
+    setCart(cart);
+    const items = cart.lineItems.map((item) => item.productId);
+    setCartItems(items);
+  };
+
   useEffect(() => {
     localStorage.setItem(CART_ITEMS_KEY, JSON.stringify(cartItems));
   }, [cartItems]);
@@ -53,9 +59,7 @@ export const useCart = () => {
     try {
       setIsLoading(true);
       const updatedCart = await apiAddToCart(productId);
-      setCart(updatedCart);
-      const items = updatedCart.lineItems.map((item) => item.productId);
-      setCartItems(items);
+      updateCartState(updatedCart);
       return updatedCart;
     } catch (error) {
       console.debug('Error adding to cart:', error);
@@ -75,9 +79,7 @@ export const useCart = () => {
         if (!lineItemId) throw new Error('Product not in cart');
 
         const updatedCart = await apiRemoveFromCart(lineItemId);
-        setCart(updatedCart);
-        const items = updatedCart.lineItems.map((item) => item.productId);
-        setCartItems(items);
+        updateCartState(updatedCart);
         return updatedCart;
       } catch (error) {
         console.debug('Error removing from cart:', error);
