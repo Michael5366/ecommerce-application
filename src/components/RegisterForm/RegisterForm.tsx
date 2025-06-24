@@ -48,7 +48,7 @@ export default function RegisterForm() {
 
   useEffect(() => {
     if (token) {
-      navigate(Path.MAIN, { replace: true });
+      navigate(from, { replace: true });
     }
   }, [token, navigate]);
 
