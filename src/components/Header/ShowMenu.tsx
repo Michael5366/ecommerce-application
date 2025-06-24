@@ -86,13 +86,7 @@ const ShowMenu = () => {
                   <LogoutIcon sx={{ mr: 1 }} />
                   {t('Logout')}
                 </MenuItem>,
-                <MenuItem
-                  key="about"
-                  onClick={() => {
-                    handleMenuClose();
-                    navigate(Path.ABOUT_US);
-                  }}
-                >
+                <MenuItem key="about" onClick={handleMenuClose} component={Link} to={Path.ABOUT_US}>
                   <InfoIcon sx={{ mr: 1 }} />
                   {t('About us')}
                 </MenuItem>,
