@@ -1,4 +1,3 @@
-import { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useTranslation } from 'react-i18next';
@@ -34,7 +33,7 @@ export interface CartItemCardProps {
   onQuantityChange?: (itemId: string, newQuantity: number) => void;
 }
 
-export const ProductCardBasket: FC<CartItemCardProps> = ({ item, onRemove, onQuantityChange }) => {
+export const ProductCardBasket = ({ item, onRemove, onQuantityChange }: CartItemCardProps) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
