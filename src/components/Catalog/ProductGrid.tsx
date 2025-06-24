@@ -1,4 +1,3 @@
-import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Category, Product } from '../../types/productTypes';
 import { ProductCard } from './ProductCard';
@@ -12,13 +11,13 @@ interface ProductGridProps {
   onAddToCart?: (productId: string) => Promise<void>;
 }
 
-export const ProductGrid: FC<ProductGridProps> = ({
+export const ProductGrid = ({
   products,
   searchQuery,
   categories,
   cartItems = [],
   onAddToCart,
-}) => {
+}: ProductGridProps) => {
   const { t } = useTranslation();
 
   if (products.length === 0) {
