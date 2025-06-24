@@ -7,6 +7,7 @@ import {
   getLineItemId,
 } from '../services/Cart/cartAPI';
 import { Cart } from '../services/Cart/cartAPI.types';
+import handleError from '../utils/errorHandler';
 
 const CART_ITEMS_KEY = 'cart_items';
 
@@ -47,7 +48,7 @@ export const useCart = () => {
       const items = activeCart?.lineItems.map((item) => item.productId) || [];
       setCartItems(items);
     } catch (error) {
-      console.debug('Error fetching cart:', error);
+      handleError('Error removing from cart:', error);
       setCart(null);
       setCartItems([]);
     } finally {
@@ -62,7 +63,7 @@ export const useCart = () => {
       updateCartState(updatedCart);
       return updatedCart;
     } catch (error) {
-      console.debug('Error adding to cart:', error);
+      handleError('Error removing from cart:', error);
       throw error;
     } finally {
       setIsLoading(false);
@@ -82,7 +83,7 @@ export const useCart = () => {
         updateCartState(updatedCart);
         return updatedCart;
       } catch (error) {
-        console.debug('Error removing from cart:', error);
+        handleError('Error removing from cart:', error);
         throw error;
       } finally {
         setIsLoading(false);
