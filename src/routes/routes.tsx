@@ -33,6 +33,7 @@ export const routesArray: Routes = [
       { path: 'about-us', element: <AboutUsPage /> },
       { path: '*', element: <NotFoundPage /> },
       { path: 'basket', element: <BasketPage /> },
+      { path: 'basket/product/:productSlug', element: <ProductPage />, loader: fetchProductsData },
     ],
   },
 ];

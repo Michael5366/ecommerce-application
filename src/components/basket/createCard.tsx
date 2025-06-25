@@ -43,8 +43,8 @@ export const ProductCardBasket = ({ item, onRemove, onQuantityChange }: CartItem
   const totalPrice = item.totalPrice.centAmount / 100;
   const MAX_QUANTITY = 10;
   const handleProductClick = () => {
-    const productSlug = item.productSlug?.en || item.id;
-    navigate(`/product/${productSlug}`);
+    const productSlug = item.name?.en?.toLowerCase().replace(/\s+/g, '-');
+    navigate(`/basket/product/${productSlug}`);
   };
 
   const handleRemoveClick = (e: React.MouseEvent) => {
