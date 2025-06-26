@@ -1,32 +1,29 @@
 import React, { useState } from 'react';
-import {
-  Button,
-  IconButton,
-  Menu,
-  MenuItem,
-  Tooltip,
-  useMediaQuery,
-  // useTheme,
-} from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
+import { Button, IconButton, Menu, MenuItem, Tooltip, useMediaQuery, Badge } from '@mui/material';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import MenuBookIcon from '@mui/icons-material/MenuBook';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import LogoutIcon from '@mui/icons-material/Logout';
+import LoginIcon from '@mui/icons-material/Login';
+import HowToRegIcon from '@mui/icons-material/HowToReg';
+import InfoIcon from '@mui/icons-material/Info';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Path } from '../../types/paths';
 import { useAuth } from '../../context/context';
 import { useTranslation } from 'react-i18next';
+import { useCartContext } from '../../hooks/CartContext';
 
 const ShowMenu = () => {
-  // const theme = useTheme();
-  // const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const isMobile = useMediaQuery('(max-width:860px)');
-
+  const isMobile = useMediaQuery('(max-width:950px)');
   const { token, logout } = useAuth();
   const auth = Boolean(token);
   const navigate = useNavigate();
   const location = useLocation();
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-
   const { t } = useTranslation();
+  const { itemCount: cartItemCount } = useCartContext();
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -44,37 +41,74 @@ const ShowMenu = () => {
   if (isMobile) {
     return (
       <>
-        <IconButton onClick={handleMenuOpen}>
-          <MenuIcon />
+        <IconButton
+          aria-label="more"
+          aria-controls="long-menu"
+          aria-haspopup="true"
+          onClick={handleMenuOpen}
+        >
+          <MoreVertIcon />
         </IconButton>
 
         <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
-          <MenuItem onClick={handleMenuClose} component={Link} to={'/catalog'}>
+          <MenuItem onClick={handleMenuClose} component={Link} to={Path.CATALOG}>
+            <MenuBookIcon sx={{ mr: 1 }} />
             {t('Catalog')}
+          </MenuItem>
+          <MenuItem onClick={handleMenuClose} component={Link} to={Path.BASKET}>
+            <Badge badgeContent={cartItemCount} color="secondary">
+              <ShoppingCartIcon sx={{ mr: 1 }} />
+            </Badge>
+            {t('Basket')}
           </MenuItem>
 
           {auth
             ? [
-                <MenuItem key="profile" onClick={handleMenuClose} component={Link} to="/profile">
+                <MenuItem
+                  key="profile"
+                  onClick={handleMenuClose}
+                  component={Link}
+                  to={Path.PROFILE}
+                >
+                  <AccountCircleIcon sx={{ mr: 1 }} />
                   {t('Profile')}
                 </MenuItem>,
                 <MenuItem
                   key="logout"
                   onClick={() => {
                     handleMenuClose();
+                    sessionStorage.removeItem('guestToken');
+                    sessionStorage.removeItem('cart_id');
                     logout();
                     navigate(Path.LOGIN);
                   }}
                 >
+                  <LogoutIcon sx={{ mr: 1 }} />
                   {t('Logout')}
+                </MenuItem>,
+                <MenuItem key="about" onClick={handleMenuClose} component={Link} to={Path.ABOUT_US}>
+                  <InfoIcon sx={{ mr: 1 }} />
+                  {t('About us')}
                 </MenuItem>,
               ]
             : [
                 <MenuItem key="login" onClick={handleMenuClose} component={Link} to={Path.LOGIN}>
+                  <LoginIcon sx={{ mr: 1 }} />
                   {t('Login')}
                 </MenuItem>,
                 <MenuItem key="register" onClick={goToRegister}>
+                  <HowToRegIcon sx={{ mr: 1 }} />
                   {t('Registration')}
+                </MenuItem>,
+                <MenuItem
+                  key="about"
+                  onClick={() => {
+                    handleMenuClose();
+                    navigate(Path.ABOUT_US);
+                  }}
+                >
+                  <InfoIcon sx={{ mr: 1 }} />
+                  {t('About us')}
                 </MenuItem>,
               ]}
         </Menu>
@@ -82,28 +116,82 @@ const ShowMenu = () => {
     );
   }
 
-  // 💡 Меню для desktop
   return (
     <>
-      <Button component={Link} to={'/catalog'} color="inherit" variant="outlined">
-        {t('Catalog')}
-      </Button>
+      <Tooltip title={t('Browse our catalog')} arrow placement="bottom-start" enterDelay={500}>
+        <Button
+          component={Link}
+          to={Path.CATALOG}
+          color="inherit"
+          variant="outlined"
+          startIcon={<MenuBookIcon />}
+        >
+          {t('Catalog')}
+        </Button>
+      </Tooltip>
+
+      <Tooltip title={t('View your basket')} arrow placement="bottom-start" enterDelay={500}>
+        <Button
+          component={Link}
+          to={Path.BASKET}
+          color="inherit"
+          variant="outlined"
+          startIcon={
+            <Badge badgeContent={cartItemCount} color="secondary">
+              <ShoppingCartIcon />
+            </Badge>
+          }
+        >
+          {t('Basket')}
+        </Button>
+      </Tooltip>
 
       {auth ? (
         <>
-          <Button component={Link} to="/profile" color="inherit" variant="outlined">
-            {t('Profile')}
-          </Button>
-          <Button
-            variant="outlined"
-            color="inherit"
-            onClick={() => {
-              logout();
-              navigate(Path.LOGIN);
-            }}
+          <Tooltip title={t('Your profile')} arrow placement="bottom-start" enterDelay={500}>
+            <Button
+              component={Link}
+              to={Path.PROFILE}
+              color="inherit"
+              variant="outlined"
+              startIcon={<AccountCircleIcon />}
+            >
+              {t('Profile')}
+            </Button>
+          </Tooltip>
+
+          <Tooltip
+            title={t('Log out from your account')}
+            arrow
+            placement="bottom-start"
+            enterDelay={500}
           >
-            {t('Logout')}
-          </Button>
+            <Button
+              variant="outlined"
+              color="inherit"
+              startIcon={<LogoutIcon />}
+              onClick={() => {
+                sessionStorage.removeItem('guestToken');
+                sessionStorage.removeItem('cart_id');
+                logout();
+                navigate(Path.LOGIN);
+              }}
+            >
+              {t('Logout')}
+            </Button>
+          </Tooltip>
+
+          <Tooltip title={t('About our project')} arrow placement="bottom-start" enterDelay={500}>
+            <Button
+              component={Link}
+              to={Path.ABOUT_US}
+              color="inherit"
+              variant="outlined"
+              startIcon={<InfoIcon />}
+            >
+              {t('About us')}
+            </Button>
+          </Tooltip>
         </>
       ) : (
         <>
@@ -113,7 +201,13 @@ const ShowMenu = () => {
             placement="bottom-start"
             enterDelay={500}
           >
-            <Button variant="outlined" color="inherit" component={Link} to={Path.LOGIN}>
+            <Button
+              variant="outlined"
+              color="inherit"
+              component={Link}
+              to={Path.LOGIN}
+              startIcon={<LoginIcon />}
+            >
               {t('Login')}
             </Button>
           </Tooltip>
@@ -124,8 +218,25 @@ const ShowMenu = () => {
             placement="bottom-start"
             enterDelay={500}
           >
-            <Button variant="outlined" color="inherit" onClick={goToRegister}>
+            <Button
+              variant="outlined"
+              color="inherit"
+              onClick={goToRegister}
+              startIcon={<HowToRegIcon />}
+            >
               {t('Registration')}
+            </Button>
+          </Tooltip>
+
+          <Tooltip title={t('About our project')} arrow placement="bottom-start" enterDelay={500}>
+            <Button
+              component={Link}
+              to={Path.ABOUT_US}
+              color="inherit"
+              variant="outlined"
+              startIcon={<InfoIcon />}
+            >
+              {t('About us')}
             </Button>
           </Tooltip>
         </>

@@ -1,28 +1,43 @@
-import { FC } from 'react';
+import { FC, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Product, ProductPriceInfo, Category } from '../../types/productTypes';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import styles from './ProductCard.module.css';
 import { useTranslation } from 'react-i18next';
+import { useCartContext } from '../../hooks/CartContext';
+import handleError from '../../utils/errorHandler';
 
 interface ProductCardProps {
   product: Product;
   categories: Category[];
   searchQuery: string;
-  onAddToCart?: (productId: string) => void;
+  isInCart?: boolean;
+  onAddToCart?: (productId: string) => Promise<void>;
+  isLoading?: boolean;
 }
 
 export const ProductCard: FC<ProductCardProps> = ({
   product,
   categories,
   searchQuery,
+  isInCart: initialIsInCart = false,
   onAddToCart,
+  isLoading: globalLoading = false,
 }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const [localIsInCart, setLocalIsInCart] = useState(initialIsInCart);
+  const [isAdding, setIsAdding] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
   const productName = product.masterData?.current?.name?.en || product.id;
   const productDescription = product.masterData?.current?.description?.en;
   const mainImage = product.masterData?.current?.masterVariant?.images?.[0]?.url;
+  const { setItemCount, itemCount } = useCartContext();
+
+  useEffect(() => {
+    setLocalIsInCart(initialIsInCart);
+  }, [initialIsInCart]);
 
   const generateSlug = (text: string) =>
     text
@@ -50,7 +65,7 @@ export const ProductCard: FC<ProductCardProps> = ({
   };
 
   const highlightText = (text: string, highlight: string) => {
-    if (!highlight.trim()) {
+    if (!highlight.trim() || !text) {
       return <>{text}</>;
     }
 
@@ -91,9 +106,24 @@ export const ProductCard: FC<ProductCardProps> = ({
   const priceInfo = getProductPrice(product);
   const hasDiscount = priceInfo?.hasDiscount || false;
 
-  const handleAddToCart = (e: React.MouseEvent) => {
+  const handleAddToCart = async (e: React.MouseEvent) => {
     e.stopPropagation();
-    onAddToCart?.(product.id);
+    if (localIsInCart || isAdding || globalLoading) return;
+
+    setIsAdding(true);
+    setError(null);
+    try {
+      setLocalIsInCart(true);
+      if (onAddToCart) {
+        await onAddToCart(product.id);
+        setItemCount(itemCount + 1);
+      }
+    } catch (err) {
+      setLocalIsInCart(false);
+      handleError('Error adding to cart: ', err);
+    } finally {
+      setIsAdding(false);
+    }
   };
 
   return (
@@ -138,14 +168,25 @@ export const ProductCard: FC<ProductCardProps> = ({
         </div>
       </div>
 
-      <div
-        className={styles.cartIcon}
+      <button
+        className={`${styles.addToCartButton} ${localIsInCart ? styles.inCart : ''}`}
         onClick={handleAddToCart}
-        title={t('Add to cart')}
-        aria-label={t('Add to cart')}
+        disabled={localIsInCart || isAdding || globalLoading}
+        aria-label={localIsInCart ? t('In cart') : t('Add to cart')}
       >
-        <ShoppingCartIcon fontSize="small" />
-      </div>
+        {isAdding ? (
+          <span className={styles.spinner}></span>
+        ) : localIsInCart ? (
+          t('In cart')
+        ) : (
+          <>
+            <ShoppingCartIcon fontSize="small" />
+            <span>{t('Add to cart')}</span>
+          </>
+        )}
+      </button>
+
+      {error && <div className={styles.errorMessage}>{error}</div>}
     </div>
   );
 };

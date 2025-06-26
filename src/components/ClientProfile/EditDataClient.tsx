@@ -6,8 +6,6 @@ import Toastify from 'toastify-js';
 import 'toastify-js/src/toastify.css';
 import styles from './ModalPersonalData.module.css';
 
-//import { string } from "zod/v4";
-
 import { Address } from '../../services/ClientInfApi/GetClientInf';
 export interface Props {
   isOpen: boolean;

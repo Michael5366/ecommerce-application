@@ -1,17 +1,27 @@
-import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Category, Product } from '../../types/productTypes';
 import { ProductCard } from './ProductCard';
 import styles from './ProductGrid.module.css';
+import { useMemo } from 'react';
 
 interface ProductGridProps {
   products: Product[];
   searchQuery: string;
   categories: Category[];
+  cartItems?: string[];
+  onAddToCart?: (productId: string) => Promise<void>;
 }
 
-export const ProductGrid: FC<ProductGridProps> = ({ products, searchQuery, categories }) => {
+export const ProductGrid = ({
+  products,
+  searchQuery,
+  categories,
+  cartItems = [],
+  onAddToCart,
+}: ProductGridProps) => {
   const { t } = useTranslation();
+
+  const cartItemSet = useMemo(() => new Set(cartItems), [cartItems]);
 
   if (products.length === 0) {
     return (
@@ -30,6 +40,8 @@ export const ProductGrid: FC<ProductGridProps> = ({ products, searchQuery, categ
           product={product}
           searchQuery={searchQuery}
           categories={categories}
+          isInCart={cartItemSet.has(product.id)}
+          onAddToCart={onAddToCart}
         />
       ))}
     </div>

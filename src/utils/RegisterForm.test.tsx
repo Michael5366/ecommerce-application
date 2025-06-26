@@ -2,7 +2,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { BrowserRouter } from 'react-router-dom';
 
-import RegisterForm from '../components/RegisterForm';
+import RegisterForm from '../components/RegisterForm/RegisterForm';
 
 vi.mock('../context/context.tsx', () => ({
   useAuth: () => ({
@@ -29,10 +29,10 @@ describe('RegisterForm', () => {
       </BrowserRouter>
     );
 
-    expect(screen.getByPlaceholderText('First Name')).toBeInTheDocument();
-    expect(screen.getByPlaceholderText('Last Name')).toBeInTheDocument();
-    expect(screen.getByPlaceholderText('Email')).toBeInTheDocument();
-    expect(screen.getByPlaceholderText('Password')).toBeInTheDocument();
+    expect(screen.getByLabelText('First Name')).toBeInTheDocument();
+    expect(screen.getByLabelText('Last Name')).toBeInTheDocument();
+    expect(screen.getByLabelText('Email')).toBeInTheDocument();
+    expect(screen.getByLabelText('Password')).toBeInTheDocument();
     expect(screen.getByLabelText(/Use the same address for billing/i)).toBeInTheDocument();
   });
 

@@ -21,10 +21,8 @@ const fetchProductsData = async () => {
     }
 
     const authData = await authResponse.json();
-    // console.log('authData:', authData);
 
     const accessToken = authData.access_token;
-    // console.log('accessToken: ', accessToken);
 
     const prodResponse = await fetch(apiUrl, {
       headers: {
@@ -40,7 +38,7 @@ const fetchProductsData = async () => {
     const products = await prodResponse.json();
     return products.results;
   } catch (error) {
-    console.error('Error fetching products:', error);
+    console.debug('Error fetching products:', error);
   }
 };
 

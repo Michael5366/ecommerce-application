@@ -1,6 +1,9 @@
 import { Box, Container, Typography } from '@mui/material';
+import footerStyles from './footer-styles';
 
 const Footer = () => {
+  const css = footerStyles();
+
   return (
     <Box
       component="footer"
@@ -11,8 +14,11 @@ const Footer = () => {
       }}
     >
       <Container maxWidth="lg">
-        <Typography variant="body2" color="#333" align="center">
+        <Typography className={css.footer__text} component={'div'} variant="body2">
           © {new Date().getFullYear()} This is an educational project. All rights reserved.
+          <a className={css.footer__logo} href="https://rs.school/" target="blank">
+            <img src="/rss-logo.svg" alt="logo" />
+          </a>
         </Typography>
       </Container>
     </Box>

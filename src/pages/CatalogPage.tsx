@@ -18,6 +18,7 @@ import styles from './CatalogPage.module.css';
 import { Pagination } from '../components/Catalog/Pagination';
 import { Breadcrumbs } from '../components/Catalog/Breadcrumbs';
 import { useTranslation } from 'react-i18next';
+import { useCart } from '../hooks/useCart';
 
 const CatalogPage = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -43,12 +44,17 @@ const CatalogPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(9);
   const isFirstRender = useRef(true);
+  const { cartItems, addToCart, refreshCart } = useCart();
 
   const { categoryName } = useParams();
   const navigate = useNavigate();
   const { makeApiRequest } = useApi();
 
   const { t } = useTranslation();
+
+  useEffect(() => {
+    refreshCart();
+  }, [refreshCart]);
 
   const fetchCategories = useCallback(async (): Promise<void> => {
     try {
@@ -187,7 +193,7 @@ const CatalogPage = () => {
             return bPrice - aPrice;
           case 'name desc':
             return bName.localeCompare(aName);
-          default: // 'name asc'
+          default:
             return aName.localeCompare(bName);
         }
       });
@@ -223,7 +229,7 @@ const CatalogPage = () => {
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Error loading products';
       setError(errorMessage);
-      console.error('API Error:', error);
+      console.debug('API Error:', error);
     } finally {
       setLoading(false);
       setIsSearching(false);
@@ -312,7 +318,7 @@ const CatalogPage = () => {
         setLoading(true);
         await fetchCategories();
       } catch (error) {
-        console.error('Failed to load categories:', error);
+        console.debug('Failed to load categories:', error);
       }
     };
     loadCategories();
@@ -418,6 +424,10 @@ const CatalogPage = () => {
             products={getCurrentProducts}
             searchQuery={appliedSearch}
             categories={categories}
+            cartItems={cartItems}
+            onAddToCart={async (productId) => {
+              await addToCart(productId);
+            }}
           />
           <Pagination
             totalItems={products.length}

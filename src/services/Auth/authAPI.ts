@@ -46,9 +46,14 @@ const fetchAuthTokens = async (email: string, password: string): Promise<AuthRes
   const scopes = [
     `manage_customers:${PROJECT_KEY}`,
     `manage_my_profile:${PROJECT_KEY}`,
+    `manage_my_orders:${PROJECT_KEY}`,
+    `manage_my_shopping_lists:${PROJECT_KEY}`,
+    `manage_my_payments:${PROJECT_KEY}`,
     `view_published_products:${PROJECT_KEY}`,
     `view_products:${PROJECT_KEY}`,
     `view_categories:${PROJECT_KEY}`,
+    `manage_my_orders:${PROJECT_KEY}`,
+    `view_orders:${PROJECT_KEY}`,
   ].join(' ');
 
   const response = await fetch(`${AUTH_URL}/oauth/${PROJECT_KEY}/customers/token`, {
